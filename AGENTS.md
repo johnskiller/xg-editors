@@ -83,8 +83,8 @@ python3 -m http.server 8090 --directory www
 ## 5. 版本发布惯例 (用户点名要求)
 
 每次发版必须 bump **三处同步**:
-1. `app/www/index.html` 的 `const APP_VERSION = "NN";`
-2. `app/www/index.html` 的 `import ... xg-editor.js?v=NN` (缓存刷新参数! 漏了会 404 或旧缓存)
+1. `www/index.html` 的 `const APP_VERSION = "NN";`
+2. `www/index.html` 的 `import ... xg-editor.js?v=NN` (缓存刷新参数! 漏了会 404 或旧缓存)
 3. 标题自动来自 APP_VERSION → "XG Editor vNN"
 
 改完 build + deploy + 浏览器验证 title 含 vNN。提交 git。
@@ -112,7 +112,7 @@ python3 -m http.server 8090 --directory www
 ```
 - **符号依赖/blast radius** 查询有效 (省 token): 问"X 被谁依赖"、"改 X 影响哪些"。
 - **局限性**: 对 lib.rs 索引偏旧 (更多是 lcd.js 那套) — 大函数行区间切割仍靠精确 `read_file`/`scripts/plines.py` (+行号)。
-- 精确看某段代码: `python3 scripts/plrange.py app/src/xxx.rs 起始行 结束行` (read_file 会把大文件判为 binary, 用这个脚本)。
+- 精确看某段代码: `python3 scripts/plrange.py src/xxx.rs 起始行 结束行` (read_file 会把大文件判为 binary, 用这个脚本)。
 
 ## 9. 其余关键坑 (踩过的)
 
