@@ -2,7 +2,6 @@
 target/
 **/target/
 *.ppm
-*.rgba
 
 # Node modules
 node_modules/
