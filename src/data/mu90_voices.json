@@ -1,0 +1,3641 @@
+{
+ "device": "MU90",
+ "voices": [
+  {
+   "msb": 0,
+   "prg": 0,
+   "lsb": 0,
+   "name": "GrandPno"
+  },
+  {
+   "msb": 0,
+   "prg": 0,
+   "lsb": 1,
+   "name": "GrndPnoK"
+  },
+  {
+   "msb": 0,
+   "prg": 0,
+   "lsb": 18,
+   "name": "MelloGrP"
+  },
+  {
+   "msb": 0,
+   "prg": 0,
+   "lsb": 40,
+   "name": "PianoStr"
+  },
+  {
+   "msb": 0,
+   "prg": 0,
+   "lsb": 41,
+   "name": "Dream"
+  },
+  {
+   "msb": 0,
+   "prg": 1,
+   "lsb": 0,
+   "name": "BritePno"
+  },
+  {
+   "msb": 0,
+   "prg": 1,
+   "lsb": 1,
+   "name": "BritPnoK"
+  },
+  {
+   "msb": 0,
+   "prg": 2,
+   "lsb": 0,
+   "name": "El.Grand"
+  },
+  {
+   "msb": 0,
+   "prg": 2,
+   "lsb": 1,
+   "name": "ElGrPnoK"
+  },
+  {
+   "msb": 0,
+   "prg": 2,
+   "lsb": 32,
+   "name": "Det.CP80"
+  },
+  {
+   "msb": 0,
+   "prg": 2,
+   "lsb": 40,
+   "name": "ElGrPno2"
+  },
+  {
+   "msb": 0,
+   "prg": 2,
+   "lsb": 41,
+   "name": "ElGrPno3"
+  },
+  {
+   "msb": 0,
+   "prg": 3,
+   "lsb": 0,
+   "name": "HnkyTonk"
+  },
+  {
+   "msb": 0,
+   "prg": 3,
+   "lsb": 1,
+   "name": "HnkyTnkK"
+  },
+  {
+   "msb": 0,
+   "prg": 4,
+   "lsb": 0,
+   "name": "E.Piano1"
+  },
+  {
+   "msb": 0,
+   "prg": 4,
+   "lsb": 1,
+   "name": "El.Pno1K"
+  },
+  {
+   "msb": 0,
+   "prg": 4,
+   "lsb": 18,
+   "name": "MelloEP1"
+  },
+  {
+   "msb": 0,
+   "prg": 4,
+   "lsb": 32,
+   "name": "Chor.EP1"
+  },
+  {
+   "msb": 0,
+   "prg": 4,
+   "lsb": 40,
+   "name": "HardEl.P"
+  },
+  {
+   "msb": 0,
+   "prg": 4,
+   "lsb": 45,
+   "name": "VX El.P1"
+  },
+  {
+   "msb": 0,
+   "prg": 4,
+   "lsb": 64,
+   "name": "60sEl.P1"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 0,
+   "name": "E.Piano2"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 1,
+   "name": "El.Pno2K"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 32,
+   "name": "Chor.EP2"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 33,
+   "name": "DX Hard"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 34,
+   "name": "DXLegend"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 40,
+   "name": "DX Phase"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 41,
+   "name": "DX+Analg"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 42,
+   "name": "DXKotoEP"
+  },
+  {
+   "msb": 0,
+   "prg": 5,
+   "lsb": 45,
+   "name": "VX El.P2"
+  },
+  {
+   "msb": 0,
+   "prg": 6,
+   "lsb": 0,
+   "name": "Harpsi."
+  },
+  {
+   "msb": 0,
+   "prg": 6,
+   "lsb": 1,
+   "name": "Harpsi.K"
+  },
+  {
+   "msb": 0,
+   "prg": 6,
+   "lsb": 25,
+   "name": "Harpsi.2"
+  },
+  {
+   "msb": 0,
+   "prg": 6,
+   "lsb": 35,
+   "name": "Harpsi.3"
+  },
+  {
+   "msb": 0,
+   "prg": 7,
+   "lsb": 0,
+   "name": "Clavi"
+  },
+  {
+   "msb": 0,
+   "prg": 7,
+   "lsb": 1,
+   "name": "Clavi K"
+  },
+  {
+   "msb": 0,
+   "prg": 7,
+   "lsb": 27,
+   "name": "ClaviWah"
+  },
+  {
+   "msb": 0,
+   "prg": 7,
+   "lsb": 64,
+   "name": "PulseClv"
+  },
+  {
+   "msb": 0,
+   "prg": 7,
+   "lsb": 65,
+   "name": "PierceCl"
+  },
+  {
+   "msb": 0,
+   "prg": 8,
+   "lsb": 0,
+   "name": "Celesta"
+  },
+  {
+   "msb": 0,
+   "prg": 9,
+   "lsb": 0,
+   "name": "Glocken"
+  },
+  {
+   "msb": 0,
+   "prg": 10,
+   "lsb": 0,
+   "name": "MusicBox"
+  },
+  {
+   "msb": 0,
+   "prg": 10,
+   "lsb": 64,
+   "name": "Orgel"
+  },
+  {
+   "msb": 0,
+   "prg": 11,
+   "lsb": 0,
+   "name": "Vibes"
+  },
+  {
+   "msb": 0,
+   "prg": 11,
+   "lsb": 1,
+   "name": "Vibes K"
+  },
+  {
+   "msb": 0,
+   "prg": 11,
+   "lsb": 45,
+   "name": "HardVibe"
+  },
+  {
+   "msb": 0,
+   "prg": 12,
+   "lsb": 0,
+   "name": "Marimba"
+  },
+  {
+   "msb": 0,
+   "prg": 12,
+   "lsb": 1,
+   "name": "MarimbaK"
+  },
+  {
+   "msb": 0,
+   "prg": 12,
+   "lsb": 64,
+   "name": "SineMrmb"
+  },
+  {
+   "msb": 0,
+   "prg": 12,
+   "lsb": 96,
+   "name": "Balafon"
+  },
+  {
+   "msb": 0,
+   "prg": 12,
+   "lsb": 97,
+   "name": "Balimba"
+  },
+  {
+   "msb": 0,
+   "prg": 12,
+   "lsb": 98,
+   "name": "Log Drum"
+  },
+  {
+   "msb": 0,
+   "prg": 13,
+   "lsb": 0,
+   "name": "Xylophon"
+  },
+  {
+   "msb": 0,
+   "prg": 14,
+   "lsb": 0,
+   "name": "TubulBel"
+  },
+  {
+   "msb": 0,
+   "prg": 14,
+   "lsb": 96,
+   "name": "ChrchBel"
+  },
+  {
+   "msb": 0,
+   "prg": 14,
+   "lsb": 97,
+   "name": "Carillon"
+  },
+  {
+   "msb": 0,
+   "prg": 15,
+   "lsb": 0,
+   "name": "Dulcimer"
+  },
+  {
+   "msb": 0,
+   "prg": 15,
+   "lsb": 35,
+   "name": "Dulcimr2"
+  },
+  {
+   "msb": 0,
+   "prg": 15,
+   "lsb": 96,
+   "name": "Cimbalom"
+  },
+  {
+   "msb": 0,
+   "prg": 15,
+   "lsb": 97,
+   "name": "Santur"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 0,
+   "name": "DrawOrgn"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 32,
+   "name": "DetDrwOr"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 33,
+   "name": "60sDrOr1"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 34,
+   "name": "60sDrOr2"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 35,
+   "name": "70sDrOr1"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 36,
+   "name": "DrawOrg2"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 37,
+   "name": "60sDrOr3"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 38,
+   "name": "Even Bar"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 40,
+   "name": "16+2\"2/3"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 64,
+   "name": "Organ Ba"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 65,
+   "name": "70sDrOr2"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 66,
+   "name": "CheezOrg"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 67,
+   "name": "DrawOrg3"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 68,
+   "name": "StdiumOr"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 69,
+   "name": "StdiumO2"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 70,
+   "name": "GospelOr"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 71,
+   "name": "ClkGsplO"
+  },
+  {
+   "msb": 0,
+   "prg": 16,
+   "lsb": 72,
+   "name": "ChapelOr"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 0,
+   "name": "PercOrgn"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 24,
+   "name": "70sPcOr1"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 32,
+   "name": "DetPrcOr"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 33,
+   "name": "Lite Org"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 37,
+   "name": "PercOrg2"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 64,
+   "name": "JazOrgan"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 65,
+   "name": "WarmJzOr"
+  },
+  {
+   "msb": 0,
+   "prg": 17,
+   "lsb": 66,
+   "name": "ClikOrgn"
+  },
+  {
+   "msb": 0,
+   "prg": 18,
+   "lsb": 0,
+   "name": "RockOrgn"
+  },
+  {
+   "msb": 0,
+   "prg": 18,
+   "lsb": 64,
+   "name": "RotaryOr"
+  },
+  {
+   "msb": 0,
+   "prg": 18,
+   "lsb": 65,
+   "name": "SloRotar"
+  },
+  {
+   "msb": 0,
+   "prg": 18,
+   "lsb": 66,
+   "name": "FstRotar"
+  },
+  {
+   "msb": 0,
+   "prg": 19,
+   "lsb": 0,
+   "name": "ChrchOrg"
+  },
+  {
+   "msb": 0,
+   "prg": 19,
+   "lsb": 32,
+   "name": "ChurOrg3"
+  },
+  {
+   "msb": 0,
+   "prg": 19,
+   "lsb": 35,
+   "name": "ChurOrg2"
+  },
+  {
+   "msb": 0,
+   "prg": 19,
+   "lsb": 40,
+   "name": "NotreDam"
+  },
+  {
+   "msb": 0,
+   "prg": 19,
+   "lsb": 64,
+   "name": "OrgFlute"
+  },
+  {
+   "msb": 0,
+   "prg": 19,
+   "lsb": 65,
+   "name": "TrmOrgFl"
+  },
+  {
+   "msb": 0,
+   "prg": 20,
+   "lsb": 0,
+   "name": "ReedOrgn"
+  },
+  {
+   "msb": 0,
+   "prg": 20,
+   "lsb": 40,
+   "name": "Puff Org"
+  },
+  {
+   "msb": 0,
+   "prg": 21,
+   "lsb": 0,
+   "name": "Acordion"
+  },
+  {
+   "msb": 0,
+   "prg": 21,
+   "lsb": 32,
+   "name": "AccordIt"
+  },
+  {
+   "msb": 0,
+   "prg": 22,
+   "lsb": 0,
+   "name": "Harmnica"
+  },
+  {
+   "msb": 0,
+   "prg": 22,
+   "lsb": 32,
+   "name": "Harmo. 2"
+  },
+  {
+   "msb": 0,
+   "prg": 23,
+   "lsb": 0,
+   "name": "TangoAcd"
+  },
+  {
+   "msb": 0,
+   "prg": 23,
+   "lsb": 64,
+   "name": "TngoAcd2"
+  },
+  {
+   "msb": 0,
+   "prg": 24,
+   "lsb": 0,
+   "name": "NylonGtr"
+  },
+  {
+   "msb": 0,
+   "prg": 24,
+   "lsb": 16,
+   "name": "NylonGt2"
+  },
+  {
+   "msb": 0,
+   "prg": 24,
+   "lsb": 25,
+   "name": "NylonGt3"
+  },
+  {
+   "msb": 0,
+   "prg": 24,
+   "lsb": 43,
+   "name": "VelGtHrm"
+  },
+  {
+   "msb": 0,
+   "prg": 24,
+   "lsb": 96,
+   "name": "Ukulele"
+  },
+  {
+   "msb": 0,
+   "prg": 25,
+   "lsb": 0,
+   "name": "SteelGtr"
+  },
+  {
+   "msb": 0,
+   "prg": 25,
+   "lsb": 16,
+   "name": "SteelGt2"
+  },
+  {
+   "msb": 0,
+   "prg": 25,
+   "lsb": 35,
+   "name": "12StrGtr"
+  },
+  {
+   "msb": 0,
+   "prg": 25,
+   "lsb": 40,
+   "name": "Nyln&Stl"
+  },
+  {
+   "msb": 0,
+   "prg": 25,
+   "lsb": 41,
+   "name": "Stl&Body"
+  },
+  {
+   "msb": 0,
+   "prg": 25,
+   "lsb": 96,
+   "name": "Mandolin"
+  },
+  {
+   "msb": 0,
+   "prg": 26,
+   "lsb": 0,
+   "name": "Jazz Gtr"
+  },
+  {
+   "msb": 0,
+   "prg": 26,
+   "lsb": 18,
+   "name": "MelloGtr"
+  },
+  {
+   "msb": 0,
+   "prg": 26,
+   "lsb": 32,
+   "name": "Jazz Amp"
+  },
+  {
+   "msb": 0,
+   "prg": 26,
+   "lsb": 96,
+   "name": "PdlSteel"
+  },
+  {
+   "msb": 0,
+   "prg": 27,
+   "lsb": 0,
+   "name": "CleanGtr"
+  },
+  {
+   "msb": 0,
+   "prg": 27,
+   "lsb": 32,
+   "name": "ChorusGt"
+  },
+  {
+   "msb": 0,
+   "prg": 27,
+   "lsb": 64,
+   "name": "CleanGt2"
+  },
+  {
+   "msb": 0,
+   "prg": 27,
+   "lsb": 65,
+   "name": "MidT.Gtr"
+  },
+  {
+   "msb": 0,
+   "prg": 27,
+   "lsb": 66,
+   "name": "MidTGtSt"
+  },
+  {
+   "msb": 0,
+   "prg": 27,
+   "lsb": 67,
+   "name": "NasalGtr"
+  },
+  {
+   "msb": 0,
+   "prg": 27,
+   "lsb": 68,
+   "name": "NaslGtSt"
+  },
+  {
+   "msb": 0,
+   "prg": 28,
+   "lsb": 0,
+   "name": "Mute Gtr"
+  },
+  {
+   "msb": 0,
+   "prg": 28,
+   "lsb": 40,
+   "name": "FunkGtr1"
+  },
+  {
+   "msb": 0,
+   "prg": 28,
+   "lsb": 41,
+   "name": "MuteStlG"
+  },
+  {
+   "msb": 0,
+   "prg": 28,
+   "lsb": 43,
+   "name": "FunkGtr2"
+  },
+  {
+   "msb": 0,
+   "prg": 28,
+   "lsb": 45,
+   "name": "Jazz Man"
+  },
+  {
+   "msb": 0,
+   "prg": 28,
+   "lsb": 96,
+   "name": "Mu.DstGt"
+  },
+  {
+   "msb": 0,
+   "prg": 29,
+   "lsb": 0,
+   "name": "Ovrdrive"
+  },
+  {
+   "msb": 0,
+   "prg": 29,
+   "lsb": 43,
+   "name": "Gt.Pinch"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 0,
+   "name": "Dist.Gtr"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 12,
+   "name": "DstRthmG"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 24,
+   "name": "DistGtr2"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 35,
+   "name": "DistGtr3"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 36,
+   "name": "PowerGt2"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 37,
+   "name": "PowerGt1"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 38,
+   "name": "Dst.5ths"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 40,
+   "name": "FeedbkGt"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 41,
+   "name": "FeedbGt2"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 43,
+   "name": "RckRthm2"
+  },
+  {
+   "msb": 0,
+   "prg": 30,
+   "lsb": 45,
+   "name": "RckRthm1"
+  },
+  {
+   "msb": 0,
+   "prg": 31,
+   "lsb": 0,
+   "name": "GtrHarmo"
+  },
+  {
+   "msb": 0,
+   "prg": 31,
+   "lsb": 64,
+   "name": "AcoHarmo"
+  },
+  {
+   "msb": 0,
+   "prg": 31,
+   "lsb": 65,
+   "name": "GtFeedbk"
+  },
+  {
+   "msb": 0,
+   "prg": 31,
+   "lsb": 66,
+   "name": "GtrHrmo2"
+  },
+  {
+   "msb": 0,
+   "prg": 32,
+   "lsb": 0,
+   "name": "Aco.Bass"
+  },
+  {
+   "msb": 0,
+   "prg": 32,
+   "lsb": 40,
+   "name": "JazzRthm"
+  },
+  {
+   "msb": 0,
+   "prg": 32,
+   "lsb": 45,
+   "name": "VXUprght"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 0,
+   "name": "FngrBass"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 18,
+   "name": "FingrDrk"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 27,
+   "name": "FlangeBa"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 40,
+   "name": "Ba&DstEG"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 43,
+   "name": "FngrSlap"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 45,
+   "name": "FngBass2"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 64,
+   "name": "Jazzy Ba"
+  },
+  {
+   "msb": 0,
+   "prg": 33,
+   "lsb": 65,
+   "name": "Mod.Bass"
+  },
+  {
+   "msb": 0,
+   "prg": 34,
+   "lsb": 0,
+   "name": "PickBass"
+  },
+  {
+   "msb": 0,
+   "prg": 34,
+   "lsb": 28,
+   "name": "MutePkBa"
+  },
+  {
+   "msb": 0,
+   "prg": 35,
+   "lsb": 0,
+   "name": "Fretless"
+  },
+  {
+   "msb": 0,
+   "prg": 35,
+   "lsb": 32,
+   "name": "Fretles2"
+  },
+  {
+   "msb": 0,
+   "prg": 35,
+   "lsb": 33,
+   "name": "Fretles3"
+  },
+  {
+   "msb": 0,
+   "prg": 35,
+   "lsb": 34,
+   "name": "Fretles4"
+  },
+  {
+   "msb": 0,
+   "prg": 35,
+   "lsb": 96,
+   "name": "SynFretl"
+  },
+  {
+   "msb": 0,
+   "prg": 35,
+   "lsb": 97,
+   "name": "SmthFrtl"
+  },
+  {
+   "msb": 0,
+   "prg": 36,
+   "lsb": 0,
+   "name": "SlapBas1"
+  },
+  {
+   "msb": 0,
+   "prg": 36,
+   "lsb": 27,
+   "name": "ResoSlap"
+  },
+  {
+   "msb": 0,
+   "prg": 36,
+   "lsb": 32,
+   "name": "PunchThm"
+  },
+  {
+   "msb": 0,
+   "prg": 36,
+   "lsb": 64,
+   "name": "Slapper"
+  },
+  {
+   "msb": 0,
+   "prg": 36,
+   "lsb": 65,
+   "name": "Thum&Slp"
+  },
+  {
+   "msb": 0,
+   "prg": 37,
+   "lsb": 0,
+   "name": "SlapBas2"
+  },
+  {
+   "msb": 0,
+   "prg": 37,
+   "lsb": 43,
+   "name": "VeloSlap"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 0,
+   "name": "SynBass1"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 18,
+   "name": "SynBa1Dk"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 20,
+   "name": "FastResB"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 24,
+   "name": "AcidBass"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 27,
+   "name": "ResoBass"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 35,
+   "name": "Clv Bass"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 40,
+   "name": "TechnoBa"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 64,
+   "name": "Orbiter"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 65,
+   "name": "Sqr.Bass"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 66,
+   "name": "RubberBa"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 67,
+   "name": "Fish"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 68,
+   "name": "HardReso"
+  },
+  {
+   "msb": 0,
+   "prg": 38,
+   "lsb": 96,
+   "name": "Hammer"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 0,
+   "name": "SynBass2"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 6,
+   "name": "MelloSB1"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 12,
+   "name": "Seq Bass"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 18,
+   "name": "ClkSynBa"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 19,
+   "name": "SynBa2Dk"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 32,
+   "name": "SmthSynB"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 40,
+   "name": "ModulrBa"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 41,
+   "name": "DX Bass"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 64,
+   "name": "X WireBa"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 65,
+   "name": "AtkPulse"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 66,
+   "name": "CS Light"
+  },
+  {
+   "msb": 0,
+   "prg": 39,
+   "lsb": 67,
+   "name": "MetlBass"
+  },
+  {
+   "msb": 0,
+   "prg": 40,
+   "lsb": 0,
+   "name": "Violin"
+  },
+  {
+   "msb": 0,
+   "prg": 40,
+   "lsb": 8,
+   "name": "Slow Vln"
+  },
+  {
+   "msb": 0,
+   "prg": 41,
+   "lsb": 0,
+   "name": "Viola"
+  },
+  {
+   "msb": 0,
+   "prg": 42,
+   "lsb": 0,
+   "name": "Cello"
+  },
+  {
+   "msb": 0,
+   "prg": 43,
+   "lsb": 0,
+   "name": "Contrabs"
+  },
+  {
+   "msb": 0,
+   "prg": 44,
+   "lsb": 0,
+   "name": "Trem.Str"
+  },
+  {
+   "msb": 0,
+   "prg": 44,
+   "lsb": 8,
+   "name": "SlwTrStr"
+  },
+  {
+   "msb": 0,
+   "prg": 44,
+   "lsb": 40,
+   "name": "Susp.Str"
+  },
+  {
+   "msb": 0,
+   "prg": 45,
+   "lsb": 0,
+   "name": "Pizz.Str"
+  },
+  {
+   "msb": 0,
+   "prg": 46,
+   "lsb": 0,
+   "name": "Harp"
+  },
+  {
+   "msb": 0,
+   "prg": 46,
+   "lsb": 40,
+   "name": "YangChin"
+  },
+  {
+   "msb": 0,
+   "prg": 47,
+   "lsb": 0,
+   "name": "Timpani"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 0,
+   "name": "Strings1"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 3,
+   "name": "S.Strngs"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 8,
+   "name": "Slow Str"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 24,
+   "name": "Arco Str"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 35,
+   "name": "60sStrng"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 40,
+   "name": "Orchestr"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 41,
+   "name": "Orchstr2"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 42,
+   "name": "TremOrch"
+  },
+  {
+   "msb": 0,
+   "prg": 48,
+   "lsb": 45,
+   "name": "Velo.Str"
+  },
+  {
+   "msb": 0,
+   "prg": 49,
+   "lsb": 0,
+   "name": "Strings2"
+  },
+  {
+   "msb": 0,
+   "prg": 49,
+   "lsb": 3,
+   "name": "S.SlwStr"
+  },
+  {
+   "msb": 0,
+   "prg": 49,
+   "lsb": 8,
+   "name": "LegatoSt"
+  },
+  {
+   "msb": 0,
+   "prg": 49,
+   "lsb": 40,
+   "name": "Warm Str"
+  },
+  {
+   "msb": 0,
+   "prg": 49,
+   "lsb": 41,
+   "name": "Kingdom"
+  },
+  {
+   "msb": 0,
+   "prg": 49,
+   "lsb": 64,
+   "name": "70s Str"
+  },
+  {
+   "msb": 0,
+   "prg": 49,
+   "lsb": 65,
+   "name": "Strings3"
+  },
+  {
+   "msb": 0,
+   "prg": 50,
+   "lsb": 0,
+   "name": "Syn Str1"
+  },
+  {
+   "msb": 0,
+   "prg": 50,
+   "lsb": 27,
+   "name": "Reso Str"
+  },
+  {
+   "msb": 0,
+   "prg": 50,
+   "lsb": 35,
+   "name": "Syn Str3"
+  },
+  {
+   "msb": 0,
+   "prg": 50,
+   "lsb": 40,
+   "name": "GrandPad"
+  },
+  {
+   "msb": 0,
+   "prg": 50,
+   "lsb": 64,
+   "name": "Syn Str4"
+  },
+  {
+   "msb": 0,
+   "prg": 50,
+   "lsb": 65,
+   "name": "Syn Str5"
+  },
+  {
+   "msb": 0,
+   "prg": 51,
+   "lsb": 0,
+   "name": "Syn Str2"
+  },
+  {
+   "msb": 0,
+   "prg": 52,
+   "lsb": 0,
+   "name": "ChoirAah"
+  },
+  {
+   "msb": 0,
+   "prg": 52,
+   "lsb": 3,
+   "name": "S.Choir"
+  },
+  {
+   "msb": 0,
+   "prg": 52,
+   "lsb": 16,
+   "name": "Ch.Aahs2"
+  },
+  {
+   "msb": 0,
+   "prg": 52,
+   "lsb": 32,
+   "name": "MelChoir"
+  },
+  {
+   "msb": 0,
+   "prg": 52,
+   "lsb": 40,
+   "name": "ChoirStr"
+  },
+  {
+   "msb": 0,
+   "prg": 52,
+   "lsb": 64,
+   "name": "StrngAah"
+  },
+  {
+   "msb": 0,
+   "prg": 52,
+   "lsb": 65,
+   "name": "Male Aah"
+  },
+  {
+   "msb": 0,
+   "prg": 53,
+   "lsb": 0,
+   "name": "VoiceOoh"
+  },
+  {
+   "msb": 0,
+   "prg": 53,
+   "lsb": 64,
+   "name": "VoiceDoo"
+  },
+  {
+   "msb": 0,
+   "prg": 53,
+   "lsb": 96,
+   "name": "VoiceHmn"
+  },
+  {
+   "msb": 0,
+   "prg": 54,
+   "lsb": 0,
+   "name": "SynVoice"
+  },
+  {
+   "msb": 0,
+   "prg": 54,
+   "lsb": 35,
+   "name": "OrchHit2"
+  },
+  {
+   "msb": 0,
+   "prg": 54,
+   "lsb": 40,
+   "name": "SyVoice2"
+  },
+  {
+   "msb": 0,
+   "prg": 54,
+   "lsb": 41,
+   "name": "Choral"
+  },
+  {
+   "msb": 0,
+   "prg": 54,
+   "lsb": 64,
+   "name": "AnaVoice"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 0,
+   "name": "Orch.Hit"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 12,
+   "name": "LoFi Hit"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 64,
+   "name": "Impact"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 65,
+   "name": "BrssStab"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 66,
+   "name": "DoublHit"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 67,
+   "name": "BrStab80"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 68,
+   "name": "Bass Hit"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 69,
+   "name": "BassHit+"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 70,
+   "name": "6th Hit"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 71,
+   "name": "6thHit +"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 72,
+   "name": "Euro Hit"
+  },
+  {
+   "msb": 0,
+   "prg": 55,
+   "lsb": 73,
+   "name": "EuroHit+"
+  },
+  {
+   "msb": 0,
+   "prg": 56,
+   "lsb": 0,
+   "name": "Trumpet"
+  },
+  {
+   "msb": 0,
+   "prg": 56,
+   "lsb": 16,
+   "name": "Trumpet2"
+  },
+  {
+   "msb": 0,
+   "prg": 56,
+   "lsb": 17,
+   "name": "BriteTrp"
+  },
+  {
+   "msb": 0,
+   "prg": 56,
+   "lsb": 32,
+   "name": "Warm Trp"
+  },
+  {
+   "msb": 0,
+   "prg": 56,
+   "lsb": 64,
+   "name": "Dark Trp"
+  },
+  {
+   "msb": 0,
+   "prg": 56,
+   "lsb": 65,
+   "name": "DrkTpSft"
+  },
+  {
+   "msb": 0,
+   "prg": 56,
+   "lsb": 96,
+   "name": "FluglHrn"
+  },
+  {
+   "msb": 0,
+   "prg": 57,
+   "lsb": 0,
+   "name": "Trombone"
+  },
+  {
+   "msb": 0,
+   "prg": 57,
+   "lsb": 18,
+   "name": "Trmbone2"
+  },
+  {
+   "msb": 0,
+   "prg": 57,
+   "lsb": 64,
+   "name": "BrghtTrb"
+  },
+  {
+   "msb": 0,
+   "prg": 57,
+   "lsb": 65,
+   "name": "MellowTb"
+  },
+  {
+   "msb": 0,
+   "prg": 58,
+   "lsb": 0,
+   "name": "Tuba"
+  },
+  {
+   "msb": 0,
+   "prg": 58,
+   "lsb": 16,
+   "name": "Tuba 2"
+  },
+  {
+   "msb": 0,
+   "prg": 59,
+   "lsb": 0,
+   "name": "Mute Trp"
+  },
+  {
+   "msb": 0,
+   "prg": 59,
+   "lsb": 64,
+   "name": "MuteTrp2"
+  },
+  {
+   "msb": 0,
+   "prg": 60,
+   "lsb": 0,
+   "name": "Fr. Horn"
+  },
+  {
+   "msb": 0,
+   "prg": 60,
+   "lsb": 6,
+   "name": "FrHrSolo"
+  },
+  {
+   "msb": 0,
+   "prg": 60,
+   "lsb": 32,
+   "name": "FrHorn 2"
+  },
+  {
+   "msb": 0,
+   "prg": 60,
+   "lsb": 37,
+   "name": "HornOrch"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 0,
+   "name": "BrssSect"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 3,
+   "name": "BrssSec3"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 14,
+   "name": "SfrzndBr"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 18,
+   "name": "MildBrss"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 35,
+   "name": "Tp&TbSec"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 36,
+   "name": "Tp&TbSc2"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 39,
+   "name": "BrssFall"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 40,
+   "name": "BrssSec2"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 41,
+   "name": "Hi Brass"
+  },
+  {
+   "msb": 0,
+   "prg": 61,
+   "lsb": 42,
+   "name": "MelloBrs"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 0,
+   "name": "SynBrss1"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 12,
+   "name": "Quack Br"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 20,
+   "name": "RezSynBr"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 24,
+   "name": "PolyBrss"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 27,
+   "name": "SynBrss3"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 32,
+   "name": "JumpBrss"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 40,
+   "name": "SyBrsSub"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 45,
+   "name": "AnVelBr1"
+  },
+  {
+   "msb": 0,
+   "prg": 62,
+   "lsb": 64,
+   "name": "AnaBrss1"
+  },
+  {
+   "msb": 0,
+   "prg": 63,
+   "lsb": 0,
+   "name": "SynBrss2"
+  },
+  {
+   "msb": 0,
+   "prg": 63,
+   "lsb": 18,
+   "name": "Soft Brs"
+  },
+  {
+   "msb": 0,
+   "prg": 63,
+   "lsb": 40,
+   "name": "SynBrss4"
+  },
+  {
+   "msb": 0,
+   "prg": 63,
+   "lsb": 41,
+   "name": "ChoirBrs"
+  },
+  {
+   "msb": 0,
+   "prg": 63,
+   "lsb": 45,
+   "name": "AnVelBr2"
+  },
+  {
+   "msb": 0,
+   "prg": 63,
+   "lsb": 64,
+   "name": "AnaBrss2"
+  },
+  {
+   "msb": 0,
+   "prg": 64,
+   "lsb": 0,
+   "name": "SprnoSax"
+  },
+  {
+   "msb": 0,
+   "prg": 65,
+   "lsb": 0,
+   "name": "Alto Sax"
+  },
+  {
+   "msb": 0,
+   "prg": 65,
+   "lsb": 40,
+   "name": "Sax Sect"
+  },
+  {
+   "msb": 0,
+   "prg": 65,
+   "lsb": 43,
+   "name": "HyprAlto"
+  },
+  {
+   "msb": 0,
+   "prg": 66,
+   "lsb": 0,
+   "name": "TenorSax"
+  },
+  {
+   "msb": 0,
+   "prg": 66,
+   "lsb": 40,
+   "name": "BrthTnSx"
+  },
+  {
+   "msb": 0,
+   "prg": 66,
+   "lsb": 41,
+   "name": "SoftTenr"
+  },
+  {
+   "msb": 0,
+   "prg": 66,
+   "lsb": 64,
+   "name": "TnrSax 2"
+  },
+  {
+   "msb": 0,
+   "prg": 67,
+   "lsb": 0,
+   "name": "Bari.Sax"
+  },
+  {
+   "msb": 0,
+   "prg": 68,
+   "lsb": 0,
+   "name": "Oboe"
+  },
+  {
+   "msb": 0,
+   "prg": 69,
+   "lsb": 0,
+   "name": "Eng.Horn"
+  },
+  {
+   "msb": 0,
+   "prg": 70,
+   "lsb": 0,
+   "name": "Bassoon"
+  },
+  {
+   "msb": 0,
+   "prg": 71,
+   "lsb": 0,
+   "name": "Clarinet"
+  },
+  {
+   "msb": 0,
+   "prg": 71,
+   "lsb": 96,
+   "name": "BassClar"
+  },
+  {
+   "msb": 0,
+   "prg": 72,
+   "lsb": 0,
+   "name": "Piccolo"
+  },
+  {
+   "msb": 0,
+   "prg": 73,
+   "lsb": 0,
+   "name": "Flute"
+  },
+  {
+   "msb": 0,
+   "prg": 74,
+   "lsb": 0,
+   "name": "Recorder"
+  },
+  {
+   "msb": 0,
+   "prg": 75,
+   "lsb": 0,
+   "name": "PanFlute"
+  },
+  {
+   "msb": 0,
+   "prg": 75,
+   "lsb": 64,
+   "name": "PanFlut2"
+  },
+  {
+   "msb": 0,
+   "prg": 75,
+   "lsb": 96,
+   "name": "Kawala"
+  },
+  {
+   "msb": 0,
+   "prg": 76,
+   "lsb": 0,
+   "name": "Bottle"
+  },
+  {
+   "msb": 0,
+   "prg": 77,
+   "lsb": 0,
+   "name": "Shakhchi"
+  },
+  {
+   "msb": 0,
+   "prg": 78,
+   "lsb": 0,
+   "name": "Whistle"
+  },
+  {
+   "msb": 0,
+   "prg": 79,
+   "lsb": 0,
+   "name": "Ocarina"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 0,
+   "name": "SquareLd"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 6,
+   "name": "SquarLd2"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 8,
+   "name": "LMSquare"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 18,
+   "name": "Hollow"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 19,
+   "name": "Shroud"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 35,
+   "name": "2 Osc"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 64,
+   "name": "Mellow"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 65,
+   "name": "SoloSine"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 66,
+   "name": "SineLead"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 67,
+   "name": "Pulse Ld"
+  },
+  {
+   "msb": 0,
+   "prg": 80,
+   "lsb": 68,
+   "name": "SyncLead"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 0,
+   "name": "Saw Ld"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 6,
+   "name": "Saw Ld 2"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 8,
+   "name": "ThickSaw"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 18,
+   "name": "Dyna Saw"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 19,
+   "name": "Digi Saw"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 20,
+   "name": "Big Lead"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 24,
+   "name": "HeavySyn"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 25,
+   "name": "WaspySyn"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 26,
+   "name": "Mondo"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 27,
+   "name": "RezzySaw"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 32,
+   "name": "DoublSaw"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 35,
+   "name": "Toy Lead"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 36,
+   "name": "Dim Saw"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 40,
+   "name": "PulseSaw"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 41,
+   "name": "Dr.Lead"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 45,
+   "name": "VeloLead"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 64,
+   "name": "Digger"
+  },
+  {
+   "msb": 0,
+   "prg": 81,
+   "lsb": 96,
+   "name": "Seq Ana."
+  },
+  {
+   "msb": 0,
+   "prg": 82,
+   "lsb": 0,
+   "name": "CaliopLd"
+  },
+  {
+   "msb": 0,
+   "prg": 82,
+   "lsb": 64,
+   "name": "Vent Syn"
+  },
+  {
+   "msb": 0,
+   "prg": 82,
+   "lsb": 65,
+   "name": "PureLead"
+  },
+  {
+   "msb": 0,
+   "prg": 83,
+   "lsb": 0,
+   "name": "Chiff Ld"
+  },
+  {
+   "msb": 0,
+   "prg": 83,
+   "lsb": 64,
+   "name": "Rubby"
+  },
+  {
+   "msb": 0,
+   "prg": 83,
+   "lsb": 65,
+   "name": "HardSync"
+  },
+  {
+   "msb": 0,
+   "prg": 84,
+   "lsb": 0,
+   "name": "CharanLd"
+  },
+  {
+   "msb": 0,
+   "prg": 84,
+   "lsb": 64,
+   "name": "DistLead"
+  },
+  {
+   "msb": 0,
+   "prg": 84,
+   "lsb": 65,
+   "name": "WireLead"
+  },
+  {
+   "msb": 0,
+   "prg": 84,
+   "lsb": 66,
+   "name": "SynPluck"
+  },
+  {
+   "msb": 0,
+   "prg": 85,
+   "lsb": 0,
+   "name": "Voice Ld"
+  },
+  {
+   "msb": 0,
+   "prg": 85,
+   "lsb": 24,
+   "name": "SynthAah"
+  },
+  {
+   "msb": 0,
+   "prg": 85,
+   "lsb": 64,
+   "name": "Vox Lead"
+  },
+  {
+   "msb": 0,
+   "prg": 85,
+   "lsb": 65,
+   "name": "Br.Layer"
+  },
+  {
+   "msb": 0,
+   "prg": 86,
+   "lsb": 0,
+   "name": "Fifth Ld"
+  },
+  {
+   "msb": 0,
+   "prg": 86,
+   "lsb": 35,
+   "name": "Big Five"
+  },
+  {
+   "msb": 0,
+   "prg": 87,
+   "lsb": 0,
+   "name": "Bass&Ld"
+  },
+  {
+   "msb": 0,
+   "prg": 87,
+   "lsb": 16,
+   "name": "Big&Low"
+  },
+  {
+   "msb": 0,
+   "prg": 87,
+   "lsb": 64,
+   "name": "Fat&Prky"
+  },
+  {
+   "msb": 0,
+   "prg": 87,
+   "lsb": 65,
+   "name": "Soft Wrl"
+  },
+  {
+   "msb": 0,
+   "prg": 88,
+   "lsb": 0,
+   "name": "NewAgePd"
+  },
+  {
+   "msb": 0,
+   "prg": 88,
+   "lsb": 64,
+   "name": "Fantasy"
+  },
+  {
+   "msb": 0,
+   "prg": 89,
+   "lsb": 0,
+   "name": "Warm Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 89,
+   "lsb": 16,
+   "name": "ThickPad"
+  },
+  {
+   "msb": 0,
+   "prg": 89,
+   "lsb": 17,
+   "name": "Soft Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 89,
+   "lsb": 18,
+   "name": "Sine Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 89,
+   "lsb": 64,
+   "name": "Horn Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 89,
+   "lsb": 65,
+   "name": "RotarStr"
+  },
+  {
+   "msb": 0,
+   "prg": 90,
+   "lsb": 0,
+   "name": "PolySyPd"
+  },
+  {
+   "msb": 0,
+   "prg": 90,
+   "lsb": 64,
+   "name": "PolyPd80"
+  },
+  {
+   "msb": 0,
+   "prg": 90,
+   "lsb": 65,
+   "name": "ClickPad"
+  },
+  {
+   "msb": 0,
+   "prg": 90,
+   "lsb": 66,
+   "name": "Ana. Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 90,
+   "lsb": 67,
+   "name": "SquarPad"
+  },
+  {
+   "msb": 0,
+   "prg": 90,
+   "lsb": 68,
+   "name": "Snow Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 91,
+   "lsb": 0,
+   "name": "ChoirPad"
+  },
+  {
+   "msb": 0,
+   "prg": 91,
+   "lsb": 64,
+   "name": "Heaven"
+  },
+  {
+   "msb": 0,
+   "prg": 91,
+   "lsb": 65,
+   "name": "Lite Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 91,
+   "lsb": 66,
+   "name": "Itopia"
+  },
+  {
+   "msb": 0,
+   "prg": 91,
+   "lsb": 67,
+   "name": "CC Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 91,
+   "lsb": 68,
+   "name": "CosmicPd"
+  },
+  {
+   "msb": 0,
+   "prg": 92,
+   "lsb": 0,
+   "name": "BowedPad"
+  },
+  {
+   "msb": 0,
+   "prg": 92,
+   "lsb": 64,
+   "name": "Glacier"
+  },
+  {
+   "msb": 0,
+   "prg": 92,
+   "lsb": 65,
+   "name": "GlassPad"
+  },
+  {
+   "msb": 0,
+   "prg": 93,
+   "lsb": 0,
+   "name": "MetalPad"
+  },
+  {
+   "msb": 0,
+   "prg": 93,
+   "lsb": 64,
+   "name": "Tine Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 93,
+   "lsb": 65,
+   "name": "Pan Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 94,
+   "lsb": 0,
+   "name": "Halo Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 95,
+   "lsb": 0,
+   "name": "SweepPad"
+  },
+  {
+   "msb": 0,
+   "prg": 95,
+   "lsb": 20,
+   "name": "Shwimmer"
+  },
+  {
+   "msb": 0,
+   "prg": 95,
+   "lsb": 27,
+   "name": "Converge"
+  },
+  {
+   "msb": 0,
+   "prg": 95,
+   "lsb": 64,
+   "name": "PolarPad"
+  },
+  {
+   "msb": 0,
+   "prg": 95,
+   "lsb": 65,
+   "name": "Sweepy"
+  },
+  {
+   "msb": 0,
+   "prg": 95,
+   "lsb": 66,
+   "name": "Celstial"
+  },
+  {
+   "msb": 0,
+   "prg": 96,
+   "lsb": 0,
+   "name": "Rain"
+  },
+  {
+   "msb": 0,
+   "prg": 96,
+   "lsb": 45,
+   "name": "ClaviPad"
+  },
+  {
+   "msb": 0,
+   "prg": 96,
+   "lsb": 64,
+   "name": "HrmoRain"
+  },
+  {
+   "msb": 0,
+   "prg": 96,
+   "lsb": 65,
+   "name": "AfrcnWnd"
+  },
+  {
+   "msb": 0,
+   "prg": 96,
+   "lsb": 66,
+   "name": "Carib"
+  },
+  {
+   "msb": 0,
+   "prg": 97,
+   "lsb": 0,
+   "name": "SoundTrk"
+  },
+  {
+   "msb": 0,
+   "prg": 97,
+   "lsb": 27,
+   "name": "Prologue"
+  },
+  {
+   "msb": 0,
+   "prg": 97,
+   "lsb": 64,
+   "name": "Ancestrl"
+  },
+  {
+   "msb": 0,
+   "prg": 97,
+   "lsb": 65,
+   "name": "Rave"
+  },
+  {
+   "msb": 0,
+   "prg": 97,
+   "lsb": 66,
+   "name": "Fairy"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 0,
+   "name": "Crystal"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 12,
+   "name": "SynDrCmp"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 14,
+   "name": "Popcorn"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 18,
+   "name": "TinyBell"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 35,
+   "name": "RndGlock"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 40,
+   "name": "GlockChi"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 41,
+   "name": "ClearBel"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 42,
+   "name": "ChorBell"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 64,
+   "name": "SynMalet"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 65,
+   "name": "SftCryst"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 66,
+   "name": "LoudGlok"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 67,
+   "name": "ChrstBel"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 68,
+   "name": "VibeBell"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 69,
+   "name": "DigiBell"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 70,
+   "name": "AirBells"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 71,
+   "name": "BellHarp"
+  },
+  {
+   "msb": 0,
+   "prg": 98,
+   "lsb": 72,
+   "name": "Gamelmba"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 0,
+   "name": "Atmosphr"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 18,
+   "name": "WarmAtms"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 19,
+   "name": "HollwRls"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 40,
+   "name": "Nylon EP"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 64,
+   "name": "NylnHarp"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 65,
+   "name": "Harp Vox"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 66,
+   "name": "AtmosPad"
+  },
+  {
+   "msb": 0,
+   "prg": 99,
+   "lsb": 67,
+   "name": "Planet"
+  },
+  {
+   "msb": 0,
+   "prg": 100,
+   "lsb": 0,
+   "name": "Bright"
+  },
+  {
+   "msb": 0,
+   "prg": 100,
+   "lsb": 64,
+   "name": "FantaBel"
+  },
+  {
+   "msb": 0,
+   "prg": 100,
+   "lsb": 96,
+   "name": "Smokey"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 0,
+   "name": "Goblins"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 64,
+   "name": "GobSynth"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 65,
+   "name": "Creeper"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 66,
+   "name": "Ring Pad"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 67,
+   "name": "Ritual"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 68,
+   "name": "ToHeaven"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 69,
+   "name": "MilkyWay"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 70,
+   "name": "Night"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 71,
+   "name": "Glisten"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 72,
+   "name": "Puffy"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 96,
+   "name": "BelChoir"
+  },
+  {
+   "msb": 0,
+   "prg": 101,
+   "lsb": 97,
+   "name": "Dharma"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 0,
+   "name": "Echoes"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 8,
+   "name": "Echoes 2"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 14,
+   "name": "Echo Pan"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 64,
+   "name": "EchoBell"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 65,
+   "name": "Big Pan"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 66,
+   "name": "SynPiano"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 67,
+   "name": "Creation"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 68,
+   "name": "StarDust"
+  },
+  {
+   "msb": 0,
+   "prg": 102,
+   "lsb": 69,
+   "name": "Reso&Pan"
+  },
+  {
+   "msb": 0,
+   "prg": 103,
+   "lsb": 0,
+   "name": "Sci-Fi"
+  },
+  {
+   "msb": 0,
+   "prg": 103,
+   "lsb": 64,
+   "name": "Starz"
+  },
+  {
+   "msb": 0,
+   "prg": 103,
+   "lsb": 65,
+   "name": "Odin"
+  },
+  {
+   "msb": 0,
+   "prg": 104,
+   "lsb": 0,
+   "name": "Sitar"
+  },
+  {
+   "msb": 0,
+   "prg": 104,
+   "lsb": 32,
+   "name": "DetSitar"
+  },
+  {
+   "msb": 0,
+   "prg": 104,
+   "lsb": 35,
+   "name": "Sitar 2"
+  },
+  {
+   "msb": 0,
+   "prg": 104,
+   "lsb": 96,
+   "name": "Tambra"
+  },
+  {
+   "msb": 0,
+   "prg": 104,
+   "lsb": 97,
+   "name": "Tamboura"
+  },
+  {
+   "msb": 0,
+   "prg": 105,
+   "lsb": 0,
+   "name": "Banjo"
+  },
+  {
+   "msb": 0,
+   "prg": 105,
+   "lsb": 28,
+   "name": "MuteBnjo"
+  },
+  {
+   "msb": 0,
+   "prg": 105,
+   "lsb": 96,
+   "name": "Rabab"
+  },
+  {
+   "msb": 0,
+   "prg": 105,
+   "lsb": 97,
+   "name": "Gopichnt"
+  },
+  {
+   "msb": 0,
+   "prg": 105,
+   "lsb": 98,
+   "name": "Oud"
+  },
+  {
+   "msb": 0,
+   "prg": 106,
+   "lsb": 0,
+   "name": "Shamisen"
+  },
+  {
+   "msb": 0,
+   "prg": 106,
+   "lsb": 96,
+   "name": "Tsugaru"
+  },
+  {
+   "msb": 0,
+   "prg": 107,
+   "lsb": 0,
+   "name": "Koto"
+  },
+  {
+   "msb": 0,
+   "prg": 107,
+   "lsb": 96,
+   "name": "Taisho-k"
+  },
+  {
+   "msb": 0,
+   "prg": 107,
+   "lsb": 97,
+   "name": "Kanoon"
+  },
+  {
+   "msb": 0,
+   "prg": 108,
+   "lsb": 0,
+   "name": "Kalimba"
+  },
+  {
+   "msb": 0,
+   "prg": 108,
+   "lsb": 64,
+   "name": "BigKalim"
+  },
+  {
+   "msb": 0,
+   "prg": 109,
+   "lsb": 0,
+   "name": "Bagpipe"
+  },
+  {
+   "msb": 0,
+   "prg": 110,
+   "lsb": 0,
+   "name": "Fiddle"
+  },
+  {
+   "msb": 0,
+   "prg": 111,
+   "lsb": 0,
+   "name": "Shanai"
+  },
+  {
+   "msb": 0,
+   "prg": 111,
+   "lsb": 64,
+   "name": "Shanai 2"
+  },
+  {
+   "msb": 0,
+   "prg": 111,
+   "lsb": 96,
+   "name": "Pungi"
+  },
+  {
+   "msb": 0,
+   "prg": 111,
+   "lsb": 97,
+   "name": "Hichriki"
+  },
+  {
+   "msb": 0,
+   "prg": 112,
+   "lsb": 0,
+   "name": "TnklBell"
+  },
+  {
+   "msb": 0,
+   "prg": 112,
+   "lsb": 96,
+   "name": "Bonang"
+  },
+  {
+   "msb": 0,
+   "prg": 112,
+   "lsb": 97,
+   "name": "Altair"
+  },
+  {
+   "msb": 0,
+   "prg": 112,
+   "lsb": 98,
+   "name": "Gamelan"
+  },
+  {
+   "msb": 0,
+   "prg": 112,
+   "lsb": 99,
+   "name": "S.Gamlan"
+  },
+  {
+   "msb": 0,
+   "prg": 112,
+   "lsb": 100,
+   "name": "Rama Cym"
+  },
+  {
+   "msb": 0,
+   "prg": 112,
+   "lsb": 101,
+   "name": "AsianBel"
+  },
+  {
+   "msb": 0,
+   "prg": 113,
+   "lsb": 0,
+   "name": "Agogo 2"
+  },
+  {
+   "msb": 0,
+   "prg": 113,
+   "lsb": 96,
+   "name": "Atrigane"
+  },
+  {
+   "msb": 0,
+   "prg": 114,
+   "lsb": 0,
+   "name": "SteelDrm"
+  },
+  {
+   "msb": 0,
+   "prg": 114,
+   "lsb": 96,
+   "name": "Tablas"
+  },
+  {
+   "msb": 0,
+   "prg": 114,
+   "lsb": 97,
+   "name": "GlasPerc"
+  },
+  {
+   "msb": 0,
+   "prg": 114,
+   "lsb": 98,
+   "name": "ThaiBell"
+  },
+  {
+   "msb": 0,
+   "prg": 115,
+   "lsb": 0,
+   "name": "Woodblok"
+  },
+  {
+   "msb": 0,
+   "prg": 115,
+   "lsb": 96,
+   "name": "Castanet"
+  },
+  {
+   "msb": 0,
+   "prg": 116,
+   "lsb": 0,
+   "name": "TaikoDrm"
+  },
+  {
+   "msb": 0,
+   "prg": 116,
+   "lsb": 96,
+   "name": "Gr.Cassa"
+  },
+  {
+   "msb": 0,
+   "prg": 117,
+   "lsb": 0,
+   "name": "MelodTom"
+  },
+  {
+   "msb": 0,
+   "prg": 117,
+   "lsb": 64,
+   "name": "Mel Tom2"
+  },
+  {
+   "msb": 0,
+   "prg": 117,
+   "lsb": 65,
+   "name": "Real Tom"
+  },
+  {
+   "msb": 0,
+   "prg": 117,
+   "lsb": 66,
+   "name": "Rock Tom"
+  },
+  {
+   "msb": 0,
+   "prg": 118,
+   "lsb": 0,
+   "name": "Syn Drum"
+  },
+  {
+   "msb": 0,
+   "prg": 118,
+   "lsb": 64,
+   "name": "Ana Tom"
+  },
+  {
+   "msb": 0,
+   "prg": 118,
+   "lsb": 65,
+   "name": "ElecPerc"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 0,
+   "name": "RevCymbl"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 64,
+   "name": "Rev Cym2"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 96,
+   "name": "RevSnar1"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 97,
+   "name": "RevSnar2"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 98,
+   "name": "RevKick1"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 99,
+   "name": "RevConBD"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 100,
+   "name": "Rev Tom1"
+  },
+  {
+   "msb": 0,
+   "prg": 119,
+   "lsb": 101,
+   "name": "Rev Tom2"
+  },
+  {
+   "msb": 0,
+   "prg": 120,
+   "lsb": 0,
+   "name": "FretNoiz"
+  },
+  {
+   "msb": 0,
+   "prg": 121,
+   "lsb": 0,
+   "name": "BrthNoiz"
+  },
+  {
+   "msb": 0,
+   "prg": 122,
+   "lsb": 0,
+   "name": "Seashore"
+  },
+  {
+   "msb": 0,
+   "prg": 123,
+   "lsb": 0,
+   "name": "Tweet"
+  },
+  {
+   "msb": 0,
+   "prg": 124,
+   "lsb": 0,
+   "name": "Telphone"
+  },
+  {
+   "msb": 0,
+   "prg": 125,
+   "lsb": 0,
+   "name": "Helicptr"
+  },
+  {
+   "msb": 0,
+   "prg": 126,
+   "lsb": 0,
+   "name": "Applause"
+  },
+  {
+   "msb": 0,
+   "prg": 127,
+   "lsb": 0,
+   "name": "Gunshot"
+  },
+  {
+   "msb": 64,
+   "prg": 0,
+   "lsb": 0,
+   "name": "CuttngNz"
+  },
+  {
+   "msb": 64,
+   "prg": 1,
+   "lsb": 0,
+   "name": "CttngNz2"
+  },
+  {
+   "msb": 64,
+   "prg": 2,
+   "lsb": 0,
+   "name": "DstCutNz"
+  },
+  {
+   "msb": 64,
+   "prg": 3,
+   "lsb": 0,
+   "name": "Str Slap"
+  },
+  {
+   "msb": 64,
+   "prg": 4,
+   "lsb": 0,
+   "name": "B.Slide"
+  },
+  {
+   "msb": 64,
+   "prg": 5,
+   "lsb": 0,
+   "name": "P.Scrape"
+  },
+  {
+   "msb": 64,
+   "prg": 16,
+   "lsb": 0,
+   "name": "Fl.KClik"
+  },
+  {
+   "msb": 64,
+   "prg": 32,
+   "lsb": 0,
+   "name": "Shower"
+  },
+  {
+   "msb": 64,
+   "prg": 33,
+   "lsb": 0,
+   "name": "Thunder"
+  },
+  {
+   "msb": 64,
+   "prg": 34,
+   "lsb": 0,
+   "name": "Wind"
+  },
+  {
+   "msb": 64,
+   "prg": 35,
+   "lsb": 0,
+   "name": "Stream"
+  },
+  {
+   "msb": 64,
+   "prg": 36,
+   "lsb": 0,
+   "name": "Bubble"
+  },
+  {
+   "msb": 64,
+   "prg": 37,
+   "lsb": 0,
+   "name": "Feed"
+  },
+  {
+   "msb": 64,
+   "prg": 48,
+   "lsb": 0,
+   "name": "Dog"
+  },
+  {
+   "msb": 64,
+   "prg": 49,
+   "lsb": 0,
+   "name": "Horse"
+  },
+  {
+   "msb": 64,
+   "prg": 50,
+   "lsb": 0,
+   "name": "Tweet 2"
+  },
+  {
+   "msb": 64,
+   "prg": 51,
+   "lsb": 0,
+   "name": "Kitty"
+  },
+  {
+   "msb": 64,
+   "prg": 52,
+   "lsb": 0,
+   "name": "Growl"
+  },
+  {
+   "msb": 64,
+   "prg": 53,
+   "lsb": 0,
+   "name": "Haunted"
+  },
+  {
+   "msb": 64,
+   "prg": 54,
+   "lsb": 0,
+   "name": "Ghost"
+  },
+  {
+   "msb": 64,
+   "prg": 55,
+   "lsb": 0,
+   "name": "Maou"
+  },
+  {
+   "msb": 64,
+   "prg": 64,
+   "lsb": 0,
+   "name": "Phon Call"
+  },
+  {
+   "msb": 64,
+   "prg": 65,
+   "lsb": 0,
+   "name": "DoorSqek"
+  },
+  {
+   "msb": 64,
+   "prg": 66,
+   "lsb": 0,
+   "name": "DoorSlam"
+  },
+  {
+   "msb": 64,
+   "prg": 67,
+   "lsb": 0,
+   "name": "ScratchC"
+  },
+  {
+   "msb": 64,
+   "prg": 68,
+   "lsb": 0,
+   "name": "ScratchS"
+  },
+  {
+   "msb": 64,
+   "prg": 69,
+   "lsb": 0,
+   "name": "WindChim"
+  },
+  {
+   "msb": 64,
+   "prg": 70,
+   "lsb": 0,
+   "name": "Telphon2"
+  },
+  {
+   "msb": 64,
+   "prg": 80,
+   "lsb": 0,
+   "name": "Car Elght"
+  },
+  {
+   "msb": 64,
+   "prg": 81,
+   "lsb": 0,
+   "name": "Car TSgel"
+  },
+  {
+   "msb": 64,
+   "prg": 82,
+   "lsb": 0,
+   "name": "Car Pass"
+  },
+  {
+   "msb": 64,
+   "prg": 83,
+   "lsb": 0,
+   "name": "Car Crash"
+  },
+  {
+   "msb": 64,
+   "prg": 84,
+   "lsb": 0,
+   "name": "Siren"
+  },
+  {
+   "msb": 64,
+   "prg": 85,
+   "lsb": 0,
+   "name": "Train"
+  },
+  {
+   "msb": 64,
+   "prg": 86,
+   "lsb": 0,
+   "name": "JetPlane"
+  },
+  {
+   "msb": 64,
+   "prg": 87,
+   "lsb": 0,
+   "name": "Starship"
+  },
+  {
+   "msb": 64,
+   "prg": 88,
+   "lsb": 0,
+   "name": "Burst"
+  },
+  {
+   "msb": 64,
+   "prg": 89,
+   "lsb": 0,
+   "name": "Coaster"
+  },
+  {
+   "msb": 64,
+   "prg": 90,
+   "lsb": 0,
+   "name": "Submarin"
+  },
+  {
+   "msb": 64,
+   "prg": 96,
+   "lsb": 0,
+   "name": "Laugh"
+  },
+  {
+   "msb": 64,
+   "prg": 97,
+   "lsb": 0,
+   "name": "Scream"
+  },
+  {
+   "msb": 64,
+   "prg": 98,
+   "lsb": 0,
+   "name": "Punch"
+  },
+  {
+   "msb": 64,
+   "prg": 99,
+   "lsb": 0,
+   "name": "Heart"
+  },
+  {
+   "msb": 64,
+   "prg": 100,
+   "lsb": 0,
+   "name": "Footstep"
+  },
+  {
+   "msb": 64,
+   "prg": 101,
+   "lsb": 0,
+   "name": "Applaus2"
+  },
+  {
+   "msb": 64,
+   "prg": 112,
+   "lsb": 0,
+   "name": "MchinGun"
+  },
+  {
+   "msb": 64,
+   "prg": 113,
+   "lsb": 0,
+   "name": "LaserGun"
+  },
+  {
+   "msb": 64,
+   "prg": 114,
+   "lsb": 0,
+   "name": "Xplosion"
+  },
+  {
+   "msb": 64,
+   "prg": 115,
+   "lsb": 0,
+   "name": "Firework"
+  },
+  {
+   "msb": 127,
+   "prg": 0,
+   "lsb": 0,
+   "name": "Standard Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 2,
+   "lsb": 0,
+   "name": "Dry Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 3,
+   "lsb": 0,
+   "name": "Bright Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 9,
+   "lsb": 0,
+   "name": "Dark Room Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 17,
+   "lsb": 0,
+   "name": "Rock Kit 2"
+  },
+  {
+   "msb": 127,
+   "prg": 26,
+   "lsb": 0,
+   "name": "Analog Kit 2"
+  },
+  {
+   "msb": 127,
+   "prg": 28,
+   "lsb": 0,
+   "name": "Hip Hop Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 29,
+   "lsb": 0,
+   "name": "Jungle Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 33,
+   "lsb": 0,
+   "name": "Jazz Kit 2"
+  },
+  {
+   "msb": 127,
+   "prg": 24,
+   "lsb": 0,
+   "name": "Electro Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 25,
+   "lsb": 0,
+   "name": "Analog Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 27,
+   "lsb": 0,
+   "name": "Dance Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 1,
+   "lsb": 0,
+   "name": "Standard Kit 2"
+  },
+  {
+   "msb": 127,
+   "prg": 16,
+   "lsb": 0,
+   "name": "Rock Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 40,
+   "lsb": 0,
+   "name": "Brush Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 48,
+   "lsb": 0,
+   "name": "Symphony Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 8,
+   "lsb": 0,
+   "name": "Room Kit"
+  },
+  {
+   "msb": 127,
+   "prg": 32,
+   "lsb": 0,
+   "name": "Jazz Kit"
+  },
+  {
+   "msb": 126,
+   "prg": 0,
+   "lsb": 0,
+   "name": "SFX Kit 1"
+  },
+  {
+   "msb": 126,
+   "prg": 1,
+   "lsb": 0,
+   "name": "SFX Kit 2"
+  }
+ ]
+}

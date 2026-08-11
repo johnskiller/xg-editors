@@ -1,0 +1,63 @@
+{
+  "source": "MU90 手册付表 1-1/1-2/1-8 (权威, 手工录入 2026-08-07)",
+  "description": "XG Editor MVP 需要的最小 SysEx 地址表。完整参数表见手册付表 1-x。",
+  "head_xg": "F0 43 10 4C", 
+  "addr_bytes": 3,
+  "checksum": "gsChecksum: (~(sum&127)+1)&127, sum=地址+数据",
+  "system": {
+    "block_base": "00 00 00",
+    "MASTER_TUNE":   { "addr": "00 00 00", "size": 4, "min": "00", "max": "0F", "init": "00040000", "unit": "cent -102.4..+102.3" },
+    "MASTER_VOLUME": { "addr": "00 00 04", "size": 1, "min": "00", "max": "7F", "init": "7F", "unit": "0..127" },
+    "MASTER_ATT":    { "addr": "00 00 05", "size": 1, "min": "00", "max": "7F", "init": "00", "unit": "0..127" },
+    "TRANSPOSE":     { "addr": "00 00 06", "size": 1, "min": "28", "max": "58", "init": "40", "unit": "-24..+24 semitones" },
+    "XG_SYSTEM_ON":  { "addr": "00 00 7E", "size": 1, "min": "00", "max": "00", "init": "--", "note": "receive only, 00=XG on" },
+    "ALL_RESET":     { "addr": "00 00 7F", "size": 1, "min": "00", "max": "00", "note": "receive only, 00=reset" }
+  },
+  "multi_part": {
+    "block_base": "08 nn 00", 
+    "note": "nn = part index (0-based, 0..31). 地址低字节再加上表偏移.",
+    "ELEMENT_RESERVE":     { "off": "00", "min": "00", "max": "40" },
+    "BANK_SELECT_MSB":     { "off": "01", "min": "00", "max": "7F" },
+    "BANK_SELECT_LSB":     { "off": "02", "min": "00", "max": "7F" },
+    "PROGRAM_NUMBER":      { "off": "03", "min": "00", "max": "7F", "note": "显示1..128, 传输减1" },
+    "RCV_CHANNEL":         { "off": "04", "min": "00", "max": "7F", "note": "00-1F=CH1..16, 7F=OFF" },
+    "MONO_POLY":           { "off": "05", "min": "00", "max": "01" },
+    "PART_MODE":           { "off": "07", "min": "00", "max": "05" },
+    "NOTE_SHIFT":          { "off": "08", "min": "28", "max": "58", "init": "40" },
+    "DETUNE":              { "off": "09", "size": 2, "min": "00", "max": "0F", "init": "0800" },
+    "VOLUME":              { "off": "0B", "min": "00", "max": "7F", "init": "64" },
+    "VELOCITY_SENSE_DEPTH": { "off": "0C", "min": "00", "max": "7F", "init": "40" },
+    "VELOCITY_SENSE_OFFSET":{ "off": "0D", "min": "00", "max": "7F", "init": "40" },
+    "PAN":                 { "off": "0E", "min": "00", "max": "7F", "init": "40", "note": "RND=00, L63=01..C=40..R63=7F" },
+    "NOTE_LIMIT_LOW":      { "off": "0F", "min": "00", "max": "7F" },
+    "NOTE_LIMIT_HIGH":     { "off": "10", "min": "00", "max": "7F" },
+    "DRY_LEVEL":           { "off": "11", "min": "00", "max": "7F", "init": "7F" },
+    "CHORUS_SEND":         { "off": "12", "min": "00", "max": "7F", "init": "00" },
+    "REVERB_SEND":         { "off": "13", "min": "00", "max": "7F", "init": "28" },
+    "VARIATION_SEND":      { "off": "14", "min": "00", "max": "7F", "init": "00" },
+    "VIBRATO_RATE":        { "off": "15", "min": "00", "max": "7F", "init": "40" },
+    "VIBRATO_DEPTH":       { "off": "16", "min": "00", "max": "7F", "init": "40" },
+    "VIBRATO_DELAY":       { "off": "17", "min": "00", "max": "7F", "init": "40" },
+    "CUTOFF_FREQ":         { "off": "18", "min": "00", "max": "7F", "init": "40" },
+    "RESONANCE":           { "off": "19", "min": "00", "max": "7F", "init": "40" },
+    "EG_ATTACK_TIME":      { "off": "1A", "min": "00", "max": "7F", "init": "40" },
+    "EG_DECAY_TIME":       { "off": "1B", "min": "00", "max": "7F", "init": "40" },
+    "EG_RELEASE_TIME":     { "off": "1C", "min": "00", "max": "7F", "init": "40" },
+    "MW_PITCH_CTRL":       { "off": "1D", "min": "28", "max": "58", "init": "40" },
+    "BEND_PITCH_CTRL":     { "off": "23", "min": "28", "max": "58", "init": "42" },
+    "RCV_PITCH_BEND":      { "off": "30", "min": "00", "max": "01", "init": "01" },
+    "RCV_CH_AFTER_TOUCH":  { "off": "31", "min": "00", "max": "01", "init": "01" },
+    "RCV_PROGRAM_CHANGE":  { "off": "32", "min": "00", "max": "01", "init": "01" },
+    "RCV_CONTROL_CHANGE":  { "off": "33", "min": "00", "max": "01", "init": "01" }
+  },
+  "drum_setup": {
+    "block_base": "30 0D 00",
+    "note": "每个鼓组 setup 有 note number 0D..5B (13..91) 的参数."
+  },
+  "effect_blocks": {
+    "EFFECT1_REVERB":   { "addr": "02 01 00", "note": "付表1-4" },
+    "EFFECT1_EQ":       { "addr": "02 40 00", "note": "付表1-5" },
+    "EFFECT2_INSERT1":  { "addr": "03 00 00", "note": "付表1-6" },
+    "EFFECT2_INSERT2":  { "addr": "03 01 00", "note": "付表1-6" }
+  }
+}

@@ -1,0 +1,31 @@
+[package]
+name = "xg-editor"
+version = "0.1.0"
+edition = "2021"
+description = "Modern Web XG Editor for Yamaha MU90/QY100 — Rust + egui"
+license = "LGPL-3.0"
+
+[dependencies]
+# eframe = egui 的官方跨平台壳(原生 + wasm 双目标),免自己写 main
+eframe = "0.29"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+
+# wasm 目标: eframe 会在 wasm 下自动用 WebGL/WebGPU 渲染
+# Web MIDI 走 web-sys
+[target.'cfg(target_arch = "wasm32")'.dependencies]
+wasm-bindgen = "0.2"
+wasm-bindgen-futures = "0.4"
+web-sys = { version = "0.3", features = ["Navigator", "MidiAccess", "MidiInput", "MidiInputMap", "MidiMessageEvent", "MidiOptions", "MidiOutput", "MidiOutputMap", "MidiPort", "HtmlCanvasElement", "Storage", "Window", "Location", "Response", "console", "Blob", "BlobPropertyBag", "Url", "HtmlAnchorElement", "Document", "Element", "HtmlTextAreaElement", "Node"] }
+js-sys = "0.3"
+console_error_panic_hook = "0.1"
+log = "0.4"
+
+# 原生目标可选的日志(非必需)
+[profile.release]
+opt-level = 2
+lto = true
+codegen-units = 1
+
+[lib]
+crate-type = ["cdylib", "rlib"]

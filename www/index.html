@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <title>XG Editor — egui (smoke test)</title>
+  <style>
+    html, body { margin: 0; padding: 0; height: 100%; background: #1e1e22; overflow: hidden; }
+    #the_canvas { width: 100vw; height: 100vh; display: block; background:#2a2a30; }
+  </style>
+</head>
+<body>
+  <canvas id="the_canvas"></canvas>
+  <div id="xg_state" style="display:none"></div>
+  <script type="module">
+    import init, { WebHandle } from './pkg/xg-editor.js?v=0.1';
+
+    // 版本号 — 唯一数据源。部署新版本时改这里 + 上面的 ?v=92 即可。
+    const APP_VERSION = "0.1";
+
+    // 诊断: 捕获所有未处理的 promise rejection, 输出来源 (定位 "Receiving end does not exist" 之类)
+    window.addEventListener('unhandledrejection', (ev) => {
+      console.error('[unhandled rejection]', ev.reason, ev.reason?.stack || '');
+    });
+
+    async function run() {
+      await init();
+      const canvas = document.getElementById('the_canvas');
+      const handle = new WebHandle();
+      // 调试/演示: ?smf=xxx.mid → 启动后自动加载该 SMF (需静态文件在 www/ 下)
+      const params = new URLSearchParams(window.location.search);
+      const smf_param = params.get('smf');
+      // 将相对路径转为绝对 URL (fetch 需要)
+      const smf_url = smf_param ? new URL(smf_param, window.location.href).href : null;
+      await handle.start(canvas, APP_VERSION, smf_url);
+    }
+    run().catch(err => {
+      console.error("SMOKE failed:", err);
+      document.body.innerHTML = `<pre style="color:#f66;padding:20px">${err}</pre>`;
+    });
+  </script>
+</body>
+</html>

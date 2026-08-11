@@ -1,0 +1,502 @@
+[
+  {
+    "idx": 0,
+    "type": "off",
+    "cat": "reverb"
+  },
+  {
+    "idx": 1,
+    "type": "hall",
+    "cat": "reverb"
+  },
+  {
+    "idx": 2,
+    "type": "room",
+    "cat": "reverb"
+  },
+  {
+    "idx": 3,
+    "type": "stage",
+    "cat": "reverb"
+  },
+  {
+    "idx": 4,
+    "type": "plate",
+    "cat": "reverb"
+  },
+  {
+    "idx": 5,
+    "type": "delay LCR",
+    "cat": "reverb"
+  },
+  {
+    "idx": 6,
+    "type": "delay LR",
+    "cat": "reverb"
+  },
+  {
+    "idx": 7,
+    "type": "echo",
+    "cat": "reverb"
+  },
+  {
+    "idx": 8,
+    "type": "cross delay",
+    "cat": "reverb"
+  },
+  {
+    "idx": 9,
+    "type": "early reflections",
+    "cat": "reverb"
+  },
+  {
+    "idx": 10,
+    "type": "gate reverb",
+    "cat": "reverb"
+  },
+  {
+    "idx": 11,
+    "type": "reverse gate",
+    "cat": "reverb"
+  },
+  {
+    "idx": 12,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 13,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 14,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 15,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 16,
+    "type": "white room",
+    "cat": "chorus"
+  },
+  {
+    "idx": 17,
+    "type": "tunnel",
+    "cat": "chorus"
+  },
+  {
+    "idx": 18,
+    "type": "canyon",
+    "cat": "chorus"
+  },
+  {
+    "idx": 19,
+    "type": "basement",
+    "cat": "chorus"
+  },
+  {
+    "idx": 20,
+    "type": "karaoke",
+    "cat": "chorus"
+  },
+  {
+    "idx": 21,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 22,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 23,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 24,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 25,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 26,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 27,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 28,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 29,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 30,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 31,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 32,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 33,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 34,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 35,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 36,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 37,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 38,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 39,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 40,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 41,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 42,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 43,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 44,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 45,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 46,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 47,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 48,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 49,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 50,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 51,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 52,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 53,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 54,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 55,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 56,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 57,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 58,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 59,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 60,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 61,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 62,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 63,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 64,
+    "type": "pass through",
+    "cat": "variation"
+  },
+  {
+    "idx": 65,
+    "type": "chorus",
+    "cat": "variation"
+  },
+  {
+    "idx": 66,
+    "type": "celeste",
+    "cat": "variation"
+  },
+  {
+    "idx": 67,
+    "type": "flanger",
+    "cat": "variation"
+  },
+  {
+    "idx": 68,
+    "type": "symphonic",
+    "cat": "variation"
+  },
+  {
+    "idx": 69,
+    "type": "rotary speaker",
+    "cat": "variation"
+  },
+  {
+    "idx": 70,
+    "type": "tremelo",
+    "cat": "variation"
+  },
+  {
+    "idx": 71,
+    "type": "auto pan",
+    "cat": "variation"
+  },
+  {
+    "idx": 72,
+    "type": "phaser",
+    "cat": "variation"
+  },
+  {
+    "idx": 73,
+    "type": "distortion",
+    "cat": "variation"
+  },
+  {
+    "idx": 74,
+    "type": "overdrive",
+    "cat": "variation"
+  },
+  {
+    "idx": 75,
+    "type": "amplifier",
+    "cat": "variation"
+  },
+  {
+    "idx": 76,
+    "type": "3-band EQ",
+    "cat": "variation"
+  },
+  {
+    "idx": 77,
+    "type": "2-band EQ",
+    "cat": "variation"
+  },
+  {
+    "idx": 78,
+    "type": "auto wah",
+    "cat": "variation"
+  },
+  {
+    "idx": 79,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 80,
+    "type": "pitch change",
+    "cat": "variation"
+  },
+  {
+    "idx": 81,
+    "type": "harmonic",
+    "cat": "variation"
+  },
+  {
+    "idx": 82,
+    "type": "touch wah",
+    "cat": "variation"
+  },
+  {
+    "idx": 83,
+    "type": "compressor",
+    "cat": "variation"
+  },
+  {
+    "idx": 84,
+    "type": "noise gate",
+    "cat": "variation"
+  },
+  {
+    "idx": 85,
+    "type": "voice channel",
+    "cat": "variation"
+  },
+  {
+    "idx": 86,
+    "type": "2-way rotary speaker",
+    "cat": "variation"
+  },
+  {
+    "idx": 87,
+    "type": "ensemble detune",
+    "cat": "variation"
+  },
+  {
+    "idx": 88,
+    "type": "ambience",
+    "cat": "variation"
+  },
+  {
+    "idx": 89,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 90,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 91,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 92,
+    "type": null,
+    "cat": "reserved"
+  },
+  {
+    "idx": 93,
+    "type": "talking mod",
+    "cat": "variation"
+  },
+  {
+    "idx": 94,
+    "type": "Lo-Fi",
+    "cat": "variation"
+  },
+  {
+    "idx": 95,
+    "type": "dist + delay",
+    "cat": "variation"
+  },
+  {
+    "idx": 96,
+    "type": "comp + dist + delay",
+    "cat": "variation"
+  },
+  {
+    "idx": 97,
+    "type": "wah + dist + delay",
+    "cat": "variation"
+  },
+  {
+    "idx": 98,
+    "type": "V dist",
+    "cat": "variation"
+  },
+  {
+    "idx": 99,
+    "type": "dual rotor speaker",
+    "cat": "variation"
+  }
+]

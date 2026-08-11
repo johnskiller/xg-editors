@@ -1,0 +1,26 @@
+<!DOCTYPE html><html><head><meta charset="utf-8"><title>MIDI probe</title></head>
+<body style="background:#111;color:#0f0;font:14px monospace;padding:20px">
+<h3>navigator.requestMIDIAccess probe</h3>
+<pre id="out">checking...</pre>
+<script>
+const out = document.getElementById('out');
+const lines = [];
+function show(m){ lines.push(m); out.textContent = lines.join('\n'); }
+
+show('navigator exists: ' + (typeof navigator !== 'undefined'));
+show('secure context: ' + (window.isSecureContext));
+show('requestMIDIAccess type: ' + typeof navigator.requestMIDIAccess);
+show('requestMIDIAccess in navigator: ' + ('requestMIDIAccess' in navigator));
+show('userAgent: ' + navigator.userAgent.slice(0,80));
+
+if (navigator.requestMIDIAccess) {
+  try {
+    navigator.requestMIDIAccess({sysex:true}).then(a => {
+      const inps = [...a.inputs.values()].map(p=>p.name);
+      show('RESOLVED. inputs: ' + JSON.stringify(inps));
+      show('outputs: ' + JSON.stringify([...a.outputs.values()].map(p=>p.name)));
+    }).catch(e => show('REJECTED: ' + e));
+  } catch(e) { show('THREW: ' + e); }
+}
+</script>
+</body></html>

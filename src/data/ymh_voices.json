@@ -1,0 +1,1604 @@
+[
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 0,
+    "name": "BrasSect"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 1,
+    "name": "Trumpet"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 2,
+    "name": "FrchHorn"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 3,
+    "name": "Saxophon"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 4,
+    "name": "Clarinet"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 5,
+    "name": "Oboe"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 6,
+    "name": "Flute"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 7,
+    "name": "Acordion"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 8,
+    "name": "Strings"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 9,
+    "name": "Violin"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 10,
+    "name": "PipeOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 11,
+    "name": "JazzOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 12,
+    "name": "GrandPno"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 13,
+    "name": "ElPiano1"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 14,
+    "name": "Hrpschrd"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 15,
+    "name": "Celesta"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 16,
+    "name": "Vibrafon"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 17,
+    "name": "Marimba"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 18,
+    "name": "Clavinet"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 19,
+    "name": "Glocken"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 20,
+    "name": "SynBrass"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 21,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 22,
+    "name": "Crystal"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 23,
+    "name": "Timpani"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 24,
+    "name": "Gut Gtr."
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 25,
+    "name": "Jazz Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 26,
+    "name": "Rock Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 27,
+    "name": "Sitar"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 28,
+    "name": "UprghtBa"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 29,
+    "name": "ElecBass"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 30,
+    "name": "E.SlapBa"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 31,
+    "name": "Syn.Bass"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 32,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 33,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 34,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 35,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 36,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 37,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 38,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 39,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 40,
+    "name": "MutedTrp"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 41,
+    "name": "Harmnica"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 42,
+    "name": "ChoirAah"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 43,
+    "name": "JazzOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 44,
+    "name": "Syn.Wood"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 45,
+    "name": "Syn.Strs"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 46,
+    "name": "SynVoice"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 47,
+    "name": "GrandPno"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 48,
+    "name": "Mild Pno"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 49,
+    "name": "HnkyTonk"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 50,
+    "name": "ElPiano2"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 51,
+    "name": "BritePno"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 52,
+    "name": "BritePno"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 53,
+    "name": "Folk Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 54,
+    "name": "Rock Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 55,
+    "name": "Banjo"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 56,
+    "name": "Pizz.Str"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 57,
+    "name": "Harp"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 58,
+    "name": "SteelDrm"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 59,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 60,
+    "name": "BrassDcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 61,
+    "name": "FluteDcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 62,
+    "name": "Strs.Dcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 63,
+    "name": "ChoirDcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 64,
+    "name": "PpeOrDcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 65,
+    "name": "JazOrDcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 66,
+    "name": "SynBrDcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 67,
+    "name": "Sax. Dcy"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 68,
+    "name": "Clvinova"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 69,
+    "name": "RockGtr2"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 70,
+    "name": "MutedGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 71,
+    "name": "MiUprtBa"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 72,
+    "name": "JazzGtr2"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 73,
+    "name": "PopBrass"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 74,
+    "name": "Mild Str"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 75,
+    "name": "HrdVioln"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 76,
+    "name": "PipeOrg2"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 77,
+    "name": "Mild Sax"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 78,
+    "name": "EHeavyBa"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 79,
+    "name": "Flute 2"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 80,
+    "name": "Bassoon"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 81,
+    "name": "ChmbrStr"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 82,
+    "name": "JazzOrg2"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 83,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 84,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 85,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 86,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 87,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 88,
+    "name": "Dist.Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 89,
+    "name": "Cosmic 1"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 90,
+    "name": "Cosmic 2"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 91,
+    "name": "Cosmic 3"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 92,
+    "name": "Orch.Hit"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 93,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 94,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 95,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 96,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 97,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 98,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 99,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 100,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 101,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 102,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 103,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 104,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 105,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 106,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 107,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 108,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 109,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 110,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 111,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 112,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 113,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 114,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 115,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 116,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 117,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 118,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 119,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 120,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 121,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 122,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 123,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 124,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 125,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 126,
+    "name": "DOC Kit"
+  },
+  {
+    "msb": 57,
+    "sha": 112,
+    "prg": 127,
+    "name": "Silence"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 0,
+    "name": "Rock Pno"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 1,
+    "name": "ElPiano2"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 2,
+    "name": "ElPiano1"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 3,
+    "name": "Clavinet"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 4,
+    "name": "RockOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 5,
+    "name": "DrawOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 6,
+    "name": "HighStr."
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 7,
+    "name": "Low Str."
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 8,
+    "name": "BrasSect"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 9,
+    "name": "CleanGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 10,
+    "name": "Dist.Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 11,
+    "name": "MutedGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 12,
+    "name": "SteelGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 13,
+    "name": "JazzBass"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 14,
+    "name": "PickBass"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 15,
+    "name": "SlapBass"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 16,
+    "name": "SynthBas"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 17,
+    "name": "Moogy Ld"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 18,
+    "name": "Marimba"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 19,
+    "name": "Vibrafon"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 20,
+    "name": "Xylophon"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 21,
+    "name": "SynBrsPd"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 22,
+    "name": "SynStrPd"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 23,
+    "name": "SynCmpLd"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 24,
+    "name": "BowedBel"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 25,
+    "name": "PercComp"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 26,
+    "name": "Trumpet"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 27,
+    "name": "BrthyFlt"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 28,
+    "name": "SynLead1"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 29,
+    "name": "SynLead2"
+  },
+  {
+    "msb": 57,
+    "sha": 113,
+    "prg": 30,
+    "name": "QY10 Kit"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 0,
+    "name": "GrandPno"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 1,
+    "name": "BritePno"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 2,
+    "name": "EGrndPno"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 3,
+    "name": "HnkyTonk"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 4,
+    "name": "ElPiano3"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 5,
+    "name": "ElPiano1"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 6,
+    "name": "ElPiano4"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 7,
+    "name": "ElPiano2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 8,
+    "name": "Clavinet"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 9,
+    "name": "Glocken"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 10,
+    "name": "MusicBox"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 11,
+    "name": "Vibrafon"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 12,
+    "name": "Marimba"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 13,
+    "name": "ChrchOrg"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 14,
+    "name": "DrawOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 15,
+    "name": "PercOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 16,
+    "name": "RockOrgn"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 17,
+    "name": "Acordion"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 18,
+    "name": "Hrmonica"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 19,
+    "name": "NylonGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 20,
+    "name": "SteelGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 21,
+    "name": "12StrGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 22,
+    "name": "Jazz Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 23,
+    "name": "CleanGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 24,
+    "name": "CleanGt2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 25,
+    "name": "CleanGt3"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 26,
+    "name": "12StrEGt"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 27,
+    "name": "MutedGtr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 28,
+    "name": "MutedGt2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 29,
+    "name": "OvrDrvGt"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 30,
+    "name": "Dist.Gtr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 31,
+    "name": "Dist.Gt2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 32,
+    "name": "Dist.Gt3"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 33,
+    "name": "GtrHarmo"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 34,
+    "name": "Aco.Bass"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 35,
+    "name": "FngrBass"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 36,
+    "name": "FngrBas2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 37,
+    "name": "PickBass"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 38,
+    "name": "Fretless"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 39,
+    "name": "SlapBass"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 40,
+    "name": "SynBass3"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 41,
+    "name": "SynBass2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 42,
+    "name": "SynBass4"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 43,
+    "name": "SynBass1"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 44,
+    "name": "SynBass5"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 45,
+    "name": "BowedStr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 46,
+    "name": "Trem.Str"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 47,
+    "name": "Pizz.Str"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 48,
+    "name": "Strings3"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 49,
+    "name": "Strings1"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 50,
+    "name": "Strings2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 51,
+    "name": "SynthStr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 52,
+    "name": "ChoirAah"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 53,
+    "name": "VoiceOoh"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 54,
+    "name": "SynVoice"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 55,
+    "name": "Orch.Hit"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 56,
+    "name": "Trumpet"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 57,
+    "name": "Trombone"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 58,
+    "name": "MutedTrp"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 59,
+    "name": "BrasSect"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 60,
+    "name": "SynBras3"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 61,
+    "name": "SynBras4"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 62,
+    "name": "SynBras1"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 63,
+    "name": "SynBras2"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 64,
+    "name": "Alto Sax"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 65,
+    "name": "TenorSax"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 66,
+    "name": "Bari.Sax"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 67,
+    "name": "Clarinet"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 68,
+    "name": "Flute"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 69,
+    "name": "Shakhchi"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 70,
+    "name": "Ocarina"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 71,
+    "name": "SquareLd"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 72,
+    "name": "Saw Lead"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 73,
+    "name": "CaliopLd"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 74,
+    "name": "CharanLd"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 75,
+    "name": "Voice Ld"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 76,
+    "name": "Fifth Ld"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 77,
+    "name": "Bass&Ld"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 78,
+    "name": "Bell Pad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 79,
+    "name": "PianoPad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 80,
+    "name": "Seq. Pad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 81,
+    "name": "NewAgePd"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 82,
+    "name": "Warm Pad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 83,
+    "name": "PolySyPd"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 84,
+    "name": "ChoirPad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 85,
+    "name": "BowedPad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 86,
+    "name": "Halo Pad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 87,
+    "name": "SweepPad"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 88,
+    "name": "SoundTrk"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 89,
+    "name": "Crystal"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 90,
+    "name": "Atmosphr"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 91,
+    "name": "Bright"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 92,
+    "name": "Echoes"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 93,
+    "name": "Sci-Fi"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 94,
+    "name": "Banjo"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 95,
+    "name": "Kalimba"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 96,
+    "name": "Fiddle"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 97,
+    "name": "TnklBell"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 98,
+    "name": "SteelDrm"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 99,
+    "name": "RevCymbl"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 100,
+    "name": "GM Kit"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 101,
+    "name": "Pop Kit"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 102,
+    "name": "PowerKit"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 103,
+    "name": "Rock Kit"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 104,
+    "name": "ElectrKt"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 105,
+    "name": "AnalogKt"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 106,
+    "name": "Jazz Kit"
+  },
+  {
+    "msb": 57,
+    "sha": 114,
+    "prg": 107,
+    "name": "BrushKit"
+  }
+]

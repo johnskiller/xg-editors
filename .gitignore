@@ -1,0 +1,21 @@
+# Build outputs
+target/
+**/target/
+*.ppm
+*.rgba
+
+# Node modules
+node_modules/
+
+# CodeGraph (local dev, not needed)
+.codegraph/
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# IDE
+.idea/
+.vscode/
+*.swp
+*.swo

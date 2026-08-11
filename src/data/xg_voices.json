@@ -1,0 +1,12794 @@
+[
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 0,
+    "name": "GrandPno",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 126,
+    "name": "GrandP #",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 152,
+    "name": "GrandP**",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 1,
+    "name": "GrndPnoK",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 18,
+    "name": "MelloGrP",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 40,
+    "name": "PianoStr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 41,
+    "name": "DreamPno",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 64,
+    "name": "ConGrand",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 65,
+    "name": "ConGrndK",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 66,
+    "name": "DblConGr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 67,
+    "name": "MIDI Grd",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 68,
+    "name": "MIDI Gr2",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 69,
+    "name": "OldAcPno",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 128,
+    "name": "GrandP *",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 129,
+    "name": "StGrdPf*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 130,
+    "name": "WarmGrnd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 0,
+    "lsb": 131,
+    "name": "ConGrnd*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 0,
+    "name": "BritePno",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 126,
+    "name": "BriteP #",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 1,
+    "name": "BritPnoK",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 3,
+    "name": "StBrtPno",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 20,
+    "name": "RzBrtPno",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 32,
+    "name": "DetBrPno",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 40,
+    "name": "SynPdPno",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 64,
+    "name": "BrtConGr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 65,
+    "name": "BrConGrK",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 66,
+    "name": "MIDI Gr3",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 67,
+    "name": "MIDI Gr4",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 68,
+    "name": "OldPiano",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 1,
+    "lsb": 128,
+    "name": "BriteP *",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 0,
+    "name": "EGrndPno",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 126,
+    "name": "EGrndPno",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 1,
+    "name": "EGndPnoK",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 32,
+    "name": "Det.CP80",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 35,
+    "name": "Synth CP",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 40,
+    "name": "LayerCP1",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 41,
+    "name": "LayerCP2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 128,
+    "name": "MIDIGrd*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 2,
+    "lsb": 129,
+    "name": "CP80",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 3,
+    "lsb": 0,
+    "name": "HnkyTonk",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 3,
+    "lsb": 126,
+    "name": "HnkyTonk",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 3,
+    "lsb": 1,
+    "name": "HnkyTnkK",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 0,
+    "name": "ElPiano1",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 126,
+    "name": "EPiano1#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 1,
+    "name": "EPiano1K",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 18,
+    "name": "MellowEP",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 32,
+    "name": "ChorusEP",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 40,
+    "name": "HardEPno",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 45,
+    "name": "VX E.Pno",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 64,
+    "name": "60sElPno",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 65,
+    "name": "Old EP",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 66,
+    "name": "Tribecca",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 67,
+    "name": "Diploid1",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 68,
+    "name": "Flops EP",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 69,
+    "name": "Soho EP",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 70,
+    "name": "DetFlops",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 71,
+    "name": "Diploid2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 72,
+    "name": "Brooklyn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 73,
+    "name": "Diploid3",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 74,
+    "name": "PhunkyDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 75,
+    "name": "Nasal DX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 76,
+    "name": "DetNslDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 77,
+    "name": "Din",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 78,
+    "name": "4 Way EP",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 79,
+    "name": "Easy EP",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 80,
+    "name": "Sine EP",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 81,
+    "name": "Cheap EP",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 128,
+    "name": "Funky EP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 129,
+    "name": "TrmStcEP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 130,
+    "name": "GalaxyEP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 131,
+    "name": "PlarisEP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 132,
+    "name": "VntageEP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 133,
+    "name": "Stage EP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 134,
+    "name": "SuitcsEP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 135,
+    "name": "Trem.EP*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 136,
+    "name": "PhasedEP",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 4,
+    "lsb": 137,
+    "name": "ElPiano*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 0,
+    "name": "ElPiano2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 126,
+    "name": "EPiano2#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 1,
+    "name": "EPiano2K",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 12,
+    "name": "ChorEPDc",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 32,
+    "name": "Chor.EP2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 33,
+    "name": "DX Hard",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 34,
+    "name": "DXLegend",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 40,
+    "name": "DX Phase",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 41,
+    "name": "DXAnalog",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 42,
+    "name": "DX Kt EP",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 45,
+    "name": "VX EPno2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 48,
+    "name": "ChorsEPK",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 52,
+    "name": "DX Malet",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 64,
+    "name": "Shirakwa",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 65,
+    "name": "OldEPTyn",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 66,
+    "name": "Flips EP",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 67,
+    "name": "DetFlips",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 68,
+    "name": "FlicksEP",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 69,
+    "name": "DetFliks",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 70,
+    "name": "BrightDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 71,
+    "name": "DetBriDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 72,
+    "name": "Kitayama",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 73,
+    "name": "Turnpike",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 74,
+    "name": "Turnpik2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 75,
+    "name": "Cerritos",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 76,
+    "name": "Sunset",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 77,
+    "name": "SoftDXEP",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 78,
+    "name": "ResoDXEP",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 79,
+    "name": "PierceDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 80,
+    "name": "ShiverDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 81,
+    "name": "ShivrDX+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 82,
+    "name": "RattleDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 83,
+    "name": "RattlDX+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 84,
+    "name": "TinkerDX",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 85,
+    "name": "TinkrDX+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 128,
+    "name": "DXModern",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 129,
+    "name": "HyprTine",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 130,
+    "name": "BVenusEP",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 131,
+    "name": "ModernEP",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 132,
+    "name": "NwTineEP",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 133,
+    "name": "SuprDXEP",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 134,
+    "name": "JzChrsEP",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 135,
+    "name": "SmthTine",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 5,
+    "lsb": 136,
+    "name": "ChrBelEP",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 0,
+    "name": "Hrpschrd",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 126,
+    "name": "Hrpschrd",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 1,
+    "name": "HpschrdK",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 2,
+    "name": "Hpschrd4",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 3,
+    "name": "Hpschrd5",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 25,
+    "name": "Hpschrd2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 32,
+    "name": "HapsiDet",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 35,
+    "name": "Hpschrd3",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 40,
+    "name": "ElecHpsi",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 64,
+    "name": "SynHapsi",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 6,
+    "lsb": 128,
+    "name": "Hpschrd*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 0,
+    "name": "Clavinet",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 126,
+    "name": "Clavi. #",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 1,
+    "name": "ClvinetK",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 27,
+    "name": "ClaviWah",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 40,
+    "name": "CosClavi",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 64,
+    "name": "PulseClv",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 65,
+    "name": "PiercClv",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 66,
+    "name": "ClrClavi",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 67,
+    "name": "SweepClv",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 68,
+    "name": "SynthClv",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 69,
+    "name": "SupClavi",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 70,
+    "name": "GtrClavi",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 71,
+    "name": "HardyPlk",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 72,
+    "name": "HrdyPlk+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 73,
+    "name": "DblFMClv",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 74,
+    "name": "RobotClv",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 128,
+    "name": "BrtClav*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 129,
+    "name": "WahClav*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 130,
+    "name": "PhsClav*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 7,
+    "lsb": 131,
+    "name": "St.Clav*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 8,
+    "lsb": 0,
+    "name": "Celesta",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 8,
+    "lsb": 126,
+    "name": "Celesta",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 8,
+    "lsb": 64,
+    "name": "FM Celst",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 8,
+    "lsb": 128,
+    "name": "Celesta*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 9,
+    "lsb": 0,
+    "name": "Glocken",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 9,
+    "lsb": 126,
+    "name": "Glocken",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 10,
+    "lsb": 0,
+    "name": "MusicBox",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 10,
+    "lsb": 126,
+    "name": "MusicBox",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 10,
+    "lsb": 64,
+    "name": "Orgel",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 10,
+    "lsb": 65,
+    "name": "S. Orgel",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 10,
+    "lsb": 128,
+    "name": "MusicBx*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 11,
+    "lsb": 0,
+    "name": "Vibrafon",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 11,
+    "lsb": 126,
+    "name": "Vibrafon",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 11,
+    "lsb": 1,
+    "name": "VibrafnK",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 11,
+    "lsb": 45,
+    "name": "HardVibr",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 11,
+    "lsb": 128,
+    "name": "Vibrafn*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 11,
+    "lsb": 129,
+    "name": "JazzVibr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 0,
+    "name": "Marimba",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 126,
+    "name": "Marimba",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 1,
+    "name": "MarimbaK",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 64,
+    "name": "SMarimba",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 96,
+    "name": "Balafone",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 97,
+    "name": "Balimba",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 98,
+    "name": "Log Drum",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 12,
+    "lsb": 128,
+    "name": "Marimba*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 13,
+    "lsb": 0,
+    "name": "Xylophon",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 13,
+    "lsb": 126,
+    "name": "Xylophon",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 13,
+    "lsb": 128,
+    "name": "Xylophn*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 14,
+    "lsb": 0,
+    "name": "TubulBel",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 14,
+    "lsb": 126,
+    "name": "TubulBel",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 14,
+    "lsb": 96,
+    "name": "ChrchBel",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 14,
+    "lsb": 97,
+    "name": "Carillon",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 14,
+    "lsb": 128,
+    "name": "TubeBel*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 15,
+    "lsb": 0,
+    "name": "Dulcimer",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 15,
+    "lsb": 126,
+    "name": "Dulcimer",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 15,
+    "lsb": 152,
+    "name": "Dulcimr*",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 15,
+    "lsb": 35,
+    "name": "Dulcmer2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 15,
+    "lsb": 96,
+    "name": "Cimbalom",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 15,
+    "lsb": 97,
+    "name": "Santur",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 0,
+    "name": "DrawOrgn",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 126,
+    "name": "DrawOrg#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 152,
+    "name": "DrawOrg*",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 3,
+    "name": "StDrawOr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 32,
+    "name": "DetDrwOr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 33,
+    "name": "60sDrOrg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 34,
+    "name": "60sDrOr2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 35,
+    "name": "70sDrOrg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 36,
+    "name": "DrawOrg2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 37,
+    "name": "60sDrOr3",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 38,
+    "name": "EvenBar",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 40,
+    "name": "16+2”2/3",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 64,
+    "name": "Organ Ba",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 65,
+    "name": "70sDrOr2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 66,
+    "name": "CheezOrg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 67,
+    "name": "DrawOrg3",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 68,
+    "name": "StdiumOr",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 69,
+    "name": "StdiumO2",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 70,
+    "name": "GospelOr",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 71,
+    "name": "ClkGspOr",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 72,
+    "name": "ChapelOr",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 73,
+    "name": "DimChors",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 74,
+    "name": "Dawn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 75,
+    "name": "MelloOrg",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 76,
+    "name": "Fuzz Org",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 77,
+    "name": "FM Organ",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 78,
+    "name": "70sDrOr3",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 79,
+    "name": "Mood Org",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 128,
+    "name": "JazzOrg1",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 129,
+    "name": "JazzOrg2",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 130,
+    "name": "T16'&4'A",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 131,
+    "name": "DrwOrg2*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 132,
+    "name": "BrtDrwOr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 134,
+    "name": "EuroOrgn",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 135,
+    "name": "GospelOr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 16,
+    "lsb": 136,
+    "name": "JazzOrg3",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 0,
+    "name": "PercOrgn",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 126,
+    "name": "PercOrg#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 152,
+    "name": "PercOrg*",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 24,
+    "name": "70sPcOrg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 32,
+    "name": "DetPrcOr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 33,
+    "name": "LightOrg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 37,
+    "name": "PercOrg2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 64,
+    "name": "JazzOrgn",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 65,
+    "name": "WarmJazz",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 66,
+    "name": "ClickOrg",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 67,
+    "name": "Grace",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 68,
+    "name": "Cr.Grace",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 69,
+    "name": "DimClick",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 70,
+    "name": "Dusk",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 71,
+    "name": "FM Click",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 72,
+    "name": "Spoony",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 73,
+    "name": "SupRotar",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 74,
+    "name": "LoFiOrgn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 75,
+    "name": "BeepOrgn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 76,
+    "name": "Belief",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 77,
+    "name": "Snap Org",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 17,
+    "lsb": 128,
+    "name": "ClickOrg",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 0,
+    "name": "RockOrgn",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 126,
+    "name": "RockOrg#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 152,
+    "name": "RokOrg**",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 64,
+    "name": "RotaryOr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 65,
+    "name": "SlwRotar",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 66,
+    "name": "FstRotar",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 67,
+    "name": "GlaRotar",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 128,
+    "name": "RockOrg*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 130,
+    "name": "PurpleOr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 133,
+    "name": "CoolRtOr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 134,
+    "name": "CoolOrgn",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 136,
+    "name": "OcShftOr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 18,
+    "lsb": 143,
+    "name": "TheatrOr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 0,
+    "name": "ChrchOrg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 126,
+    "name": "ChrchOrg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 32,
+    "name": "ChurOrg3",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 35,
+    "name": "ChurOrg2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 40,
+    "name": "NotreDam",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 64,
+    "name": "OrgFlute",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 65,
+    "name": "TrmOrgFl",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 128,
+    "name": "PipeOrgn",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 129,
+    "name": "ChapelOr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 136,
+    "name": "16'+2'Or",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 19,
+    "lsb": 137,
+    "name": "16'+4'Or",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 20,
+    "lsb": 0,
+    "name": "ReedOrgn",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 20,
+    "lsb": 32,
+    "name": "DtReedOr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 20,
+    "lsb": 40,
+    "name": "PuffOrgn",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 20,
+    "lsb": 64,
+    "name": "SyReedDk",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 20,
+    "lsb": 128,
+    "name": "ReedOrg*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 21,
+    "lsb": 0,
+    "name": "Acordion",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 21,
+    "lsb": 32,
+    "name": "AccordIt",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 21,
+    "lsb": 128,
+    "name": "Musette",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 21,
+    "lsb": 129,
+    "name": "TrdAcord",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 21,
+    "lsb": 130,
+    "name": "SftAcord",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 21,
+    "lsb": 131,
+    "name": "SmallAcd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 21,
+    "lsb": 132,
+    "name": "Acrdion*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 22,
+    "lsb": 0,
+    "name": "Harmnica",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 22,
+    "lsb": 32,
+    "name": "Harmo. 2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 22,
+    "lsb": 128,
+    "name": "SwtHrmnc",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 22,
+    "lsb": 129,
+    "name": "ModernHm",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 22,
+    "lsb": 130,
+    "name": "BluesHrm",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 22,
+    "lsb": 131,
+    "name": "Hrmnica*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 0,
+    "name": "TangoAcd",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 126,
+    "name": "TngoAcd#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 152,
+    "name": "Bndneon*",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 64,
+    "name": "TngoAcd2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 65,
+    "name": "TightAcd",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 66,
+    "name": "DetT.Acd",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 128,
+    "name": "BallrmAc",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 23,
+    "lsb": 129,
+    "name": "Bndoneon",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 0,
+    "name": "NylonGtr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 126,
+    "name": "NylonGt#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 16,
+    "name": "NylonGt2",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 25,
+    "name": "NylonGt3",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 32,
+    "name": "NylnGtDt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 40,
+    "name": "WaysideG",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 43,
+    "name": "VelGtHrm",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 64,
+    "name": "Espa.Gtr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 65,
+    "name": "HrdEspGt",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 66,
+    "name": "MelEspGt",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 67,
+    "name": "DecayEsG",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 96,
+    "name": "Ukulele",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 128,
+    "name": "ClassGt*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 132,
+    "name": "DynNylnG",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 24,
+    "lsb": 138,
+    "name": "NylonGt*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 0,
+    "name": "SteelGtr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 126,
+    "name": "SteelGt#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 16,
+    "name": "SteelGt2",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 32,
+    "name": "StlGtrDt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 35,
+    "name": "12StrGtr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 40,
+    "name": "Nyln&Stl",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 41,
+    "name": "Stl&Body",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 64,
+    "name": "Nashv.Gt",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 65,
+    "name": "RezNashv",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 66,
+    "name": "Nashv.12",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 67,
+    "name": "OldSampl",
+    "elc": 1,
+    "lvl": 6
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 96,
+    "name": "Mandolin",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 97,
+    "name": "MndolnEn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 128,
+    "name": "Folk Gtr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 25,
+    "lsb": 129,
+    "name": "12StrGt*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 0,
+    "name": "Jazz Gtr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 126,
+    "name": "JazzGtr#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 18,
+    "name": "MelloGtr",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 32,
+    "name": "Jazz Amp",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 40,
+    "name": "OrganGtr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 41,
+    "name": "OctPlate",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 64,
+    "name": "MidSpJaz",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 65,
+    "name": "BriSpJaz",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 66,
+    "name": "DetSpJaz",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 67,
+    "name": "RezSpJaz",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 68,
+    "name": "DX JazGt",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 69,
+    "name": "DtDX JzG",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 70,
+    "name": "PulseJaz",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 71,
+    "name": "NekRough",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 72,
+    "name": "MidRough",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 128,
+    "name": "JazzGtr*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 129,
+    "name": "OctaveGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 131,
+    "name": "C!JazGtr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 132,
+    "name": "C!JzSolo",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 133,
+    "name": "DXJazzGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 134,
+    "name": "AlohaGtr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 135,
+    "name": "SmthLdGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 26,
+    "lsb": 96,
+    "name": "PdlSteel",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 0,
+    "name": "CleanGtr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 152,
+    "name": "ClnGtr**",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 32,
+    "name": "ChorusGt",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 33,
+    "name": "ChorGtLt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 64,
+    "name": "CleanGt2",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 65,
+    "name": "MidT.Gtr",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 66,
+    "name": "MidTGtSt",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 67,
+    "name": "NasalGtr",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 68,
+    "name": "StNaslGt",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 69,
+    "name": "HammrMid",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 70,
+    "name": "HammrBrg",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 71,
+    "name": "HammrDbl",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 72,
+    "name": "HammrSt.",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 73,
+    "name": "FMChoGtr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 74,
+    "name": "SoFMChGt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 75,
+    "name": "PeskyGtr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 76,
+    "name": "ClaviGtr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 128,
+    "name": "CleanGt*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 129,
+    "name": "Trem.Gtr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 130,
+    "name": "DpChrsGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 131,
+    "name": "PdlSteel",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 132,
+    "name": "BrtClnGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 133,
+    "name": "60sClnGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 134,
+    "name": "SolidGtr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 135,
+    "name": "12StrEGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 136,
+    "name": "VtgTremG",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 137,
+    "name": "SolidCdG",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 27,
+    "lsb": 143,
+    "name": "WahClnGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 0,
+    "name": "MutedGtr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 126,
+    "name": "MutedGt#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 40,
+    "name": "Funk Gtr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 41,
+    "name": "MuteStlG",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 43,
+    "name": "FunkGtr2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 45,
+    "name": "Jazz Man",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 64,
+    "name": "WrenchGt",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 65,
+    "name": "HvyWrGtr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 66,
+    "name": "DblWrnch",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 67,
+    "name": "Tin Gtr.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 68,
+    "name": "GrvyMtGt",
+    "elc": 1,
+    "lvl": 6
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 96,
+    "name": "Mu.DstGt",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 28,
+    "lsb": 128,
+    "name": "MutedGt*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 0,
+    "name": "OvrDrvGt",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 126,
+    "name": "Ovrdriv#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 32,
+    "name": "OvdrGtDt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 40,
+    "name": "Paral.Gt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 43,
+    "name": "Gt.Pinch",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 64,
+    "name": "MidMnhtn",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 65,
+    "name": "BrtMnhtn",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 66,
+    "name": "DetMnhtn",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 67,
+    "name": "PwrMnhtn",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 128,
+    "name": "Ovrdriv*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 29,
+    "lsb": 134,
+    "name": "DynOvrdr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 0,
+    "name": "Dist.Gtr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 126,
+    "name": "Dist.Gt#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 12,
+    "name": "DstRthmG",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 24,
+    "name": "DistGtr2",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 35,
+    "name": "DistGtr3",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 36,
+    "name": "PowerGt2",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 37,
+    "name": "PowerGtr",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 38,
+    "name": "Dst.5ths",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 40,
+    "name": "FeedbkGt",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 41,
+    "name": "FeedbkG2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 42,
+    "name": "TwinDist",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 43,
+    "name": "RckRthm2",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 45,
+    "name": "RockRthm",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 64,
+    "name": "BiteEGtr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 65,
+    "name": "ResoBite",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 66,
+    "name": "Det.Bite",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 67,
+    "name": "Bite +",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 68,
+    "name": "BurnoutG",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 69,
+    "name": "BombayGt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 70,
+    "name": "SusBmbay",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 71,
+    "name": "JaipurGt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 128,
+    "name": "Dist.Gt*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 30,
+    "lsb": 143,
+    "name": "WahDstGt",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 31,
+    "lsb": 0,
+    "name": "GtrHarmo",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 31,
+    "lsb": 126,
+    "name": "GtrHarmo",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 31,
+    "lsb": 64,
+    "name": "AcouHarm",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 31,
+    "lsb": 65,
+    "name": "GtFeedbk",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 31,
+    "lsb": 66,
+    "name": "GtrHrmo2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 31,
+    "lsb": 67,
+    "name": "ShimlaGH",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 0,
+    "name": "Aco.Bass",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 126,
+    "name": "Acou.Ba#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 40,
+    "name": "JazzRthm",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 41,
+    "name": "PkAcouBa",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 43,
+    "name": "Blink Ba",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 45,
+    "name": "VXUprght",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 64,
+    "name": "BostonBa",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 65,
+    "name": "BrBstnBa",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 66,
+    "name": "CoolthBa",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 67,
+    "name": "BrCoolth",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 96,
+    "name": "WalkSyBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 97,
+    "name": "Dim&Cool",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 128,
+    "name": "Acou.Ba*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 32,
+    "lsb": 130,
+    "name": "Bas&Cym.",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 0,
+    "name": "FngrBass",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 126,
+    "name": "FingrBa#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 18,
+    "name": "FingrDrk",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 27,
+    "name": "FlangrBa",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 32,
+    "name": "FngrBaDt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 40,
+    "name": "Ba&DstEG",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 43,
+    "name": "FngrSlap",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 45,
+    "name": "FngrBas2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 64,
+    "name": "Jazzy Ba",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 65,
+    "name": "Mod Bass",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 66,
+    "name": "ChaseBas",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 67,
+    "name": "RezChase",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 68,
+    "name": "BlueBass",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 69,
+    "name": "JazzyBa2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 112,
+    "name": "FW EBass",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 128,
+    "name": "MelFgrBa",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 129,
+    "name": "Alp.Bass",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 33,
+    "lsb": 132,
+    "name": "DynE.Bas",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 0,
+    "name": "PickBass",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 6,
+    "name": "PickBas2",
+    "elc": 0,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 28,
+    "name": "M.PkBass",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 40,
+    "name": "PkBa&MGt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 64,
+    "name": "HardPick",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 65,
+    "name": "RzHardPk",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 66,
+    "name": "PickBa +",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 67,
+    "name": "PickBas4",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 34,
+    "lsb": 128,
+    "name": "PickBas*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 0,
+    "name": "Fretless",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 126,
+    "name": "Fretles#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 32,
+    "name": "Fretles2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 33,
+    "name": "Fretles3",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 34,
+    "name": "Fretles4",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 64,
+    "name": "Pwr.Fret",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 65,
+    "name": "RzPwrFrt",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 66,
+    "name": "TalkinBa",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 67,
+    "name": "NoizFret",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 96,
+    "name": "SynFretl",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 97,
+    "name": "SmthFrtl",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 35,
+    "lsb": 128,
+    "name": "FrtlsBa*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 0,
+    "name": "SlapBass",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 126,
+    "name": "SlapBas#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 21,
+    "name": "CosmSlap",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 27,
+    "name": "ResoSlap",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 32,
+    "name": "PunchThm",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 64,
+    "name": "Slapper",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 65,
+    "name": "Thum&Slp",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 66,
+    "name": "GlitzSlp",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 67,
+    "name": "FM Slap",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 36,
+    "lsb": 68,
+    "name": "DetFMSlp",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 0,
+    "name": "SlapBas2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 126,
+    "name": "SlapBa2#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 16,
+    "name": "BrtSlpSp",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 22,
+    "name": "Wah Slap",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 43,
+    "name": "VeloSlap",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 68,
+    "name": "Polak Is",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 69,
+    "name": "VeryCute",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 128,
+    "name": "FunkBas*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 37,
+    "lsb": 129,
+    "name": "DXFunkBa",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 0,
+    "name": "SynBass1",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 18,
+    "name": "SynBs1Dk",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 20,
+    "name": "FastResB",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 21,
+    "name": "TL66",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 24,
+    "name": "AcidBass",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 27,
+    "name": "ResoBass",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 28,
+    "name": "MPulseBa",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 29,
+    "name": "SlwAttak",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 35,
+    "name": "Clv.Bass",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 40,
+    "name": "TechnoBa",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 41,
+    "name": "KickBass",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 42,
+    "name": "NEP",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 64,
+    "name": "OrbitrBa",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 65,
+    "name": "Sqr.Bass",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 66,
+    "name": "RubberBa",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 67,
+    "name": "FishBass",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 68,
+    "name": "HardReso",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 69,
+    "name": "WahSawBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 70,
+    "name": "PlutoBas",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 71,
+    "name": "PlutoBa+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 72,
+    "name": "StimuliB",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 73,
+    "name": "RunPulse",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 74,
+    "name": "TkinPuls",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 75,
+    "name": "NodeBass",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 76,
+    "name": "StainrBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 77,
+    "name": "StainAtk",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 78,
+    "name": "SweepSqr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 79,
+    "name": "SwpSqr +",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 80,
+    "name": "Stinks",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 81,
+    "name": "RezStink",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 82,
+    "name": "Reso Sqr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 83,
+    "name": "DaggerBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 84,
+    "name": "ZincBass",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 85,
+    "name": "SwePWMBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 86,
+    "name": "St.SwPWM",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 87,
+    "name": "Slow Wah",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 88,
+    "name": "CrookBas",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 89,
+    "name": "FstFrtBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 90,
+    "name": "Rubber30",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 91,
+    "name": "FstRezBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 92,
+    "name": "MnplisBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 93,
+    "name": "Miami Ba",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 94,
+    "name": "RzTalkBx",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 96,
+    "name": "HammerBa",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 112,
+    "name": "AnalogBa",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 128,
+    "name": "SynBass*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 129,
+    "name": "RezoBass",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 130,
+    "name": "RaveBass",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 131,
+    "name": "ClickBa.",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 38,
+    "lsb": 133,
+    "name": "PunchyBa",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 0,
+    "name": "SynBass2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 152,
+    "name": "SynBas2*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 6,
+    "name": "MelloSBa",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 12,
+    "name": "Seq.Bass",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 18,
+    "name": "ClkSynBa",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 19,
+    "name": "SynBs2Dk",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 22,
+    "name": "ZealotBa",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 32,
+    "name": "SmthSynB",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 40,
+    "name": "ModulrBa",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 41,
+    "name": "DX Bass",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 42,
+    "name": "DX BaBrt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 64,
+    "name": "X WireBa",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 65,
+    "name": "AtkPulse",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 66,
+    "name": "CS Light",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 67,
+    "name": "MetalBas",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 68,
+    "name": "F.OsciBa",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 69,
+    "name": "CubitBas",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 70,
+    "name": "CubitBa+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 71,
+    "name": "KeelBass",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 72,
+    "name": "Pwr Keel",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 73,
+    "name": "PlnPulse",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 74,
+    "name": "PwrPulse",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 75,
+    "name": "BrPwPuls",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 76,
+    "name": "PowerSaw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 77,
+    "name": "SmoothBa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 78,
+    "name": "SynthAtk",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 112,
+    "name": "SmoothBs",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 128,
+    "name": "AnalgBa*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 129,
+    "name": "Oct.Bass",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 130,
+    "name": "PowerBas",
+    "elc": 3,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 131,
+    "name": "80sSynBa",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 39,
+    "lsb": 132,
+    "name": "DrySynBa",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 0,
+    "name": "Violin",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 126,
+    "name": "Violin #",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 8,
+    "name": "SlwVioln",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 40,
+    "name": "UnisnStr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 64,
+    "name": "Cadenza",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 65,
+    "name": "CadenzDk",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 66,
+    "name": "ViolinSc",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 67,
+    "name": "HdVlnSec",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 68,
+    "name": "SlVlnSec",
+    "elc": 0,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 128,
+    "name": "SoloVln*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 40,
+    "lsb": 129,
+    "name": "SftVioln",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 41,
+    "lsb": 0,
+    "name": "Viola",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 41,
+    "lsb": 128,
+    "name": "Viola  *",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 41,
+    "lsb": 40,
+    "name": "DblViola",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 41,
+    "lsb": 64,
+    "name": "SonataS.",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 41,
+    "lsb": 65,
+    "name": "ViolaSec",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 41,
+    "lsb": 66,
+    "name": "HdVlaSec",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 41,
+    "lsb": 67,
+    "name": "SlVlaSec",
+    "elc": 0,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 42,
+    "lsb": 0,
+    "name": "Cello",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 42,
+    "lsb": 128,
+    "name": "Cello  *",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 42,
+    "lsb": 64,
+    "name": "CellSect",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 42,
+    "lsb": 65,
+    "name": "HdCelloS",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 42,
+    "lsb": 66,
+    "name": "SlCelloS",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 43,
+    "lsb": 0,
+    "name": "Contrbas",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 43,
+    "lsb": 64,
+    "name": "ContrSec",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 43,
+    "lsb": 65,
+    "name": "HdContrS",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 43,
+    "lsb": 66,
+    "name": "SlContrS",
+    "elc": 0,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 43,
+    "lsb": 128,
+    "name": "Contrbs*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 0,
+    "name": "Trem.Str",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 126,
+    "name": "TremStr#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 152,
+    "name": "TrmStr**",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 8,
+    "name": "SlwTrStr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 40,
+    "name": "Susp.Str",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 64,
+    "name": "Fear Str",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 65,
+    "name": "Det.Fear",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 66,
+    "name": "Apoclyps",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 67,
+    "name": "BrTrmStr",
+    "elc": 3,
+    "lvl": 6
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 128,
+    "name": "TremStr*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 44,
+    "lsb": 129,
+    "name": "LvTrmStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 45,
+    "lsb": 0,
+    "name": "Pizz.Str",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 45,
+    "lsb": 152,
+    "name": "PizStr**",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 45,
+    "lsb": 35,
+    "name": "PizzOct.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 45,
+    "lsb": 40,
+    "name": "SleepStr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 45,
+    "lsb": 64,
+    "name": "Collegno",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 45,
+    "lsb": 128,
+    "name": "PizzStr*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 0,
+    "name": "Harp",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 126,
+    "name": "Harp",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 128,
+    "name": "Harp   *",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 129,
+    "name": "Hakbrett",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 40,
+    "name": "YangChin",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 64,
+    "name": "ElecHarp",
+    "elc": 0,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 96,
+    "name": "VlinHarp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 46,
+    "lsb": 97,
+    "name": "DtVliHrp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 47,
+    "lsb": 0,
+    "name": "Timpani",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 47,
+    "lsb": 126,
+    "name": "Timpani",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 47,
+    "lsb": 43,
+    "name": "Roll&Hit",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 47,
+    "lsb": 128,
+    "name": "Timpani*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 0,
+    "name": "Strings1",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 126,
+    "name": "Strngs1#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 3,
+    "name": "StStrngs",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 8,
+    "name": "Slow Str",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 14,
+    "name": "SforzStr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 24,
+    "name": "Arco Str",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 35,
+    "name": "60sStrng",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 40,
+    "name": "Orch.Str",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 41,
+    "name": "OrchStr2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 42,
+    "name": "TremOrch",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 45,
+    "name": "Velo.Str",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 52,
+    "name": "LentoStr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 64,
+    "name": "SuperStr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 65,
+    "name": "StSupStr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 66,
+    "name": "TrsteStr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 67,
+    "name": "BassoStr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 68,
+    "name": "Stacc.Hi",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 69,
+    "name": "Stacc.Lo",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 70,
+    "name": "Hall Str",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 71,
+    "name": "Str&FrHr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 72,
+    "name": "SolidStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 73,
+    "name": "SwellStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 74,
+    "name": "Str+BrSc",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 75,
+    "name": "3 OctStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 76,
+    "name": "5PartStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 128,
+    "name": "StrngEns",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 129,
+    "name": "OrchStr*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 130,
+    "name": "SymphStr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 131,
+    "name": "CcrtoStr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 132,
+    "name": "BowedStr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 133,
+    "name": "StrEns.p",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 134,
+    "name": "StrEns.m",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 135,
+    "name": "StrEns.f",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 48,
+    "lsb": 136,
+    "name": "SpicStr*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 0,
+    "name": "Strings2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 126,
+    "name": "Strngs2#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 3,
+    "name": "StSlwStr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 8,
+    "name": "LegatoSt",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 40,
+    "name": "Warm Str",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 41,
+    "name": "Kingdom",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 64,
+    "name": "70s Str",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 65,
+    "name": "Strings3",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 128,
+    "name": "ChmbrStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 129,
+    "name": "SlowStr*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 130,
+    "name": "StrQuart",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 131,
+    "name": "Marcato*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 132,
+    "name": "OrchStr*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 133,
+    "name": "Strings*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 134,
+    "name": "Orch&Brs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 135,
+    "name": "Orch&Flt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 136,
+    "name": "OrchTtti",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 137,
+    "name": "OrchOboe",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 49,
+    "lsb": 138,
+    "name": "ArcoStr*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 0,
+    "name": "Syn.Str1",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 8,
+    "name": "MemoryS.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 18,
+    "name": "ZephyrS.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 27,
+    "name": "Reso Str",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 35,
+    "name": "Syn.Str3",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 39,
+    "name": "Monarchy",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 40,
+    "name": "GrandPad",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 41,
+    "name": "SweepStr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 42,
+    "name": "SwpStrOc",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 64,
+    "name": "Syn.Str4",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 65,
+    "name": "Syn.Str5",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 66,
+    "name": "Solitude",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 67,
+    "name": "Fate Str",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 68,
+    "name": "Thulium",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 69,
+    "name": "BrookStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 70,
+    "name": "St Brook",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 71,
+    "name": "OldSyStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 128,
+    "name": "SynStr1*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 50,
+    "lsb": 129,
+    "name": "SynStr2*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 0,
+    "name": "Syn.Str2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 21,
+    "name": "TradeWnd",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 39,
+    "name": "WormHole",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 64,
+    "name": "Hope Str",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 65,
+    "name": "VirgoStr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 66,
+    "name": "PltnmStr",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 67,
+    "name": "Octa.PWM",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 68,
+    "name": "TaurusS.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 69,
+    "name": "FrostStr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 70,
+    "name": "Leo Str.",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 71,
+    "name": "SolPlexs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 72,
+    "name": "Sun Rise",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 128,
+    "name": "AnlgStr*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 51,
+    "lsb": 129,
+    "name": "OberStr.",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 0,
+    "name": "ChoirAah",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 3,
+    "name": "St.Choir",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 16,
+    "name": "ChoirAh2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 32,
+    "name": "MelChoir",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 39,
+    "name": "Gasp",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 40,
+    "name": "ChoirStr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 41,
+    "name": "Dead Sea",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 64,
+    "name": "Str&C.Ah",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 65,
+    "name": "MaleC.Ah",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 66,
+    "name": "ScrollAh",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 67,
+    "name": "Scroll +",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 68,
+    "name": "StereoAh",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 69,
+    "name": "Aah Mix",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 70,
+    "name": "Orch.Aah",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 52,
+    "lsb": 129,
+    "name": "VocalEns",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 53,
+    "lsb": 0,
+    "name": "VoiceOoh",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 53,
+    "lsb": 64,
+    "name": "VoiceDoo",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 53,
+    "lsb": 65,
+    "name": "VoiceHmm",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 53,
+    "lsb": 66,
+    "name": "WhirlCho",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 53,
+    "lsb": 67,
+    "name": "StereoOh",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 53,
+    "lsb": 96,
+    "name": "VoiceHum",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 54,
+    "lsb": 0,
+    "name": "SynVoice",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 54,
+    "lsb": 40,
+    "name": "SynVoix2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 54,
+    "lsb": 41,
+    "name": "Choral",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 54,
+    "lsb": 64,
+    "name": "AnalgVox",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 54,
+    "lsb": 65,
+    "name": "Aspirate",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 54,
+    "lsb": 66,
+    "name": "DtAspirt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 54,
+    "lsb": 67,
+    "name": "Facula",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 0,
+    "name": "Orch.Hit",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 152,
+    "name": "OrchHt**",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 12,
+    "name": "LoFi Hit",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 35,
+    "name": "OrchHit2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 40,
+    "name": "ThroneHt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 64,
+    "name": "ImpactHt",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 65,
+    "name": "Brs Stab",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 66,
+    "name": "DoublHit",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 67,
+    "name": "BrsStb80",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 68,
+    "name": "Bass Hit",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 69,
+    "name": "BassHit+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 70,
+    "name": "6th Hit",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 71,
+    "name": "6th Hit+",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 72,
+    "name": "Euro Hit",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 73,
+    "name": "EuroHit+",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 74,
+    "name": "Blowout",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 75,
+    "name": "Tricertp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 128,
+    "name": "OrchHit*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 55,
+    "lsb": 129,
+    "name": "BrassHit",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 0,
+    "name": "Trumpet",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 126,
+    "name": "Trumpet#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 16,
+    "name": "Trumpet2",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 17,
+    "name": "BriteTrp",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 32,
+    "name": "Warm Trp",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 64,
+    "name": "Dark Trp",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 65,
+    "name": "SftDkTrp",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 66,
+    "name": "Soft Trp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 67,
+    "name": "BlownTrp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 68,
+    "name": "DblBlwTp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 69,
+    "name": "4th Trp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 70,
+    "name": "SynthTrp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 71,
+    "name": "SweetTrp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 72,
+    "name": "MlSwtTrp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 73,
+    "name": "NormlTrp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 74,
+    "name": "Bril Trp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 75,
+    "name": "Fanfare",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 96,
+    "name": "FlugelHr",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 97,
+    "name": "Cornet",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 128,
+    "name": "SoloTrp*",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 129,
+    "name": "FluglHr*",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 130,
+    "name": "SoftTrp*",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 131,
+    "name": "SwtTrmpt",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 132,
+    "name": "JazzTrp*",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 133,
+    "name": "Air Trp*",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 134,
+    "name": "SwtFlugl",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 135,
+    "name": "SwCornet",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 136,
+    "name": "MelTrmp*",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 137,
+    "name": "SilvrTrp",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 138,
+    "name": "Gold Trp",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 56,
+    "lsb": 139,
+    "name": "BrsBand*",
+    "elc": null,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 0,
+    "name": "Trombone",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 126,
+    "name": "Trombon#",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 18,
+    "name": "Trombon2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 64,
+    "name": "BrtTromb",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 65,
+    "name": "MelloTrb",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 66,
+    "name": "JJJ",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 67,
+    "name": "BrilTrmb",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 68,
+    "name": "HardTrmb",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 69,
+    "name": "BrtBsTrb",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 70,
+    "name": "HrdBsTrb",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 57,
+    "lsb": 129,
+    "name": "TromSect",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 58,
+    "lsb": 0,
+    "name": "Tuba",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 58,
+    "lsb": 16,
+    "name": "Tuba 2",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 58,
+    "lsb": 64,
+    "name": "HardTuba",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 58,
+    "lsb": 65,
+    "name": "SlowTuba",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 58,
+    "lsb": 66,
+    "name": "Eufonium",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 59,
+    "lsb": 0,
+    "name": "MutedTrp",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 59,
+    "lsb": 126,
+    "name": "MutedTp#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 59,
+    "lsb": 40,
+    "name": "BakydTrp",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 59,
+    "lsb": 64,
+    "name": "MuteTrp2",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 59,
+    "lsb": 65,
+    "name": "BakStair",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 59,
+    "lsb": 128,
+    "name": "MutedTp*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 59,
+    "lsb": 130,
+    "name": "SwtMtTrp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 0,
+    "name": "FrchHorn",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 6,
+    "name": "FrHrSolo",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 32,
+    "name": "FrHorn 2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 37,
+    "name": "HornOrch",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 64,
+    "name": "Syn.Horn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 65,
+    "name": "HrnOrch2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 66,
+    "name": "BrtFrHrn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 60,
+    "lsb": 67,
+    "name": "HardFrHr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 0,
+    "name": "BrasSect",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 126,
+    "name": "BrsSect#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 3,
+    "name": "StBrsSec",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 14,
+    "name": "SforzBrs",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 18,
+    "name": "MildBras",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 35,
+    "name": "Tp&TbSec",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 36,
+    "name": "TpTbSec2",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 39,
+    "name": "BrasFall",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 40,
+    "name": "BrsSect2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 41,
+    "name": "Hi Brass",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 42,
+    "name": "MelloBrs",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 52,
+    "name": "Bund Br.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 53,
+    "name": "FakeHrns",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 54,
+    "name": "FkHornOc",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 64,
+    "name": "SuperBrs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 65,
+    "name": "CutBrass",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 66,
+    "name": "BlownBrs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 67,
+    "name": "PwrSforz",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 68,
+    "name": "BrtPwSfz",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 69,
+    "name": "Alto&Trp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 70,
+    "name": "Tenor&Tp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 71,
+    "name": "BrasBros",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 72,
+    "name": "VagueBro",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 73,
+    "name": "BrsSect3",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 74,
+    "name": "SforzBr2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 75,
+    "name": "OctBrass",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 76,
+    "name": "Alps Brs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 77,
+    "name": "SymphBrs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 78,
+    "name": "PhoenxBr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 128,
+    "name": "BrsSect*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 129,
+    "name": "BigBndBr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 130,
+    "name": "FullHorn",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 131,
+    "name": "High Brs",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 132,
+    "name": "MellwBrs",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 133,
+    "name": "SmallBrs",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 134,
+    "name": "PopBrass",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 135,
+    "name": "MellwHrn",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 136,
+    "name": "BrightBr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 61,
+    "lsb": 137,
+    "name": "BigBrass",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 0,
+    "name": "SynBrass",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 12,
+    "name": "QuackBrs",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 20,
+    "name": "RezSynBr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 24,
+    "name": "PolyBras",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 27,
+    "name": "SynBras3",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 29,
+    "name": "AnlSforz",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 32,
+    "name": "JumpBras",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 40,
+    "name": "SyBrsSub",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 45,
+    "name": "AnVelBrs",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 64,
+    "name": "AnalgBrs",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 65,
+    "name": "Syn Then",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 66,
+    "name": "Sync Brs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 67,
+    "name": "StSyncBr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 68,
+    "name": "AnalgHrn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 69,
+    "name": "AnalgHr2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 70,
+    "name": "OctAnaHr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 71,
+    "name": "PwSawBrs",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 128,
+    "name": "SynBras*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 129,
+    "name": "80sBrass",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 130,
+    "name": "TechnoBr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 132,
+    "name": "OctaveBr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 133,
+    "name": "PopBras*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 134,
+    "name": "HyprBrs*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 62,
+    "lsb": 135,
+    "name": "HbrCmpBr",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 0,
+    "name": "SynBras2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 152,
+    "name": "SynBrs2*",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 18,
+    "name": "SoftBras",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 40,
+    "name": "SynBras4",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 41,
+    "name": "ChoirBrs",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 42,
+    "name": "Ana.Horn",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 45,
+    "name": "AnVelBr2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 64,
+    "name": "AnalBrs2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 65,
+    "name": "Soft Cut",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 63,
+    "lsb": 66,
+    "name": "SoAnaHrn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 64,
+    "lsb": 0,
+    "name": "SprnoSax",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 64,
+    "lsb": 8,
+    "name": "VgSoprSx",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 64,
+    "lsb": 64,
+    "name": "Medit.Sx",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 64,
+    "lsb": 65,
+    "name": "RezMedit",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 64,
+    "lsb": 128,
+    "name": "SprnoSx*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 64,
+    "lsb": 129,
+    "name": "SwtSprno",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 0,
+    "name": "Alto Sax",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 126,
+    "name": "AltoSax#",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 18,
+    "name": "LgtAltSx",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 40,
+    "name": "Sax Sect",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 43,
+    "name": "HyprAlto",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 64,
+    "name": "PwrAltSx",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 65,
+    "name": "FakeAlto",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 66,
+    "name": "FakeAlt+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 67,
+    "name": "DFakeAlt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 128,
+    "name": "AltoSax*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 65,
+    "lsb": 130,
+    "name": "SwtAltSx",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 0,
+    "name": "TenorSax",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 40,
+    "name": "BrthTenr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 41,
+    "name": "SoftTenr",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 64,
+    "name": "TenrSax2",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 65,
+    "name": "SuperTnr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 66,
+    "name": "SuprTnr+",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 67,
+    "name": "SupTnrSt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 68,
+    "name": "Tenr&Alt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 130,
+    "name": "BrthTnr2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 66,
+    "lsb": 133,
+    "name": "SwtTenor",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 67,
+    "lsb": 0,
+    "name": "Bari.Sax",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 67,
+    "lsb": 128,
+    "name": "BariSax*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 68,
+    "lsb": 0,
+    "name": "Oboe",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 68,
+    "lsb": 126,
+    "name": "Oboe   #",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 68,
+    "lsb": 152,
+    "name": "Oboe  **",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 68,
+    "lsb": 65,
+    "name": "HeinzUni",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 68,
+    "lsb": 66,
+    "name": "Exp.Oboe",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 69,
+    "lsb": 0,
+    "name": "Eng.Horn",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 70,
+    "lsb": 0,
+    "name": "Bassoon",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 71,
+    "lsb": 0,
+    "name": "Clarinet",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 71,
+    "lsb": 40,
+    "name": "Sy&Clari",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 71,
+    "lsb": 96,
+    "name": "BasClari",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 72,
+    "lsb": 0,
+    "name": "Piccolo",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 72,
+    "lsb": 96,
+    "name": "Bang Di",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 72,
+    "lsb": 128,
+    "name": "Piccolo*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 0,
+    "name": "Flute",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 126,
+    "name": "Flute  #",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 40,
+    "name": "NeatBrth",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 64,
+    "name": "Boehm",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 65,
+    "name": "BthBoehm",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 66,
+    "name": "Pastoral",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 67,
+    "name": "Shepherd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 96,
+    "name": "Qu Di",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 73,
+    "lsb": 130,
+    "name": "SwtFlute",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 74,
+    "lsb": 0,
+    "name": "Recorder",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 74,
+    "lsb": 64,
+    "name": "Piplith",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 74,
+    "lsb": 65,
+    "name": "Home",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 75,
+    "lsb": 0,
+    "name": "PanFlute",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 75,
+    "lsb": 126,
+    "name": "PanFlut#",
+    "elc": null,
+    "lvl": 4
+  },
+  {
+    "msb": 0,
+    "prg": 75,
+    "lsb": 64,
+    "name": "PanFlut2",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 75,
+    "lsb": 65,
+    "name": "Meadow",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 75,
+    "lsb": 96,
+    "name": "Kawala",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 75,
+    "lsb": 129,
+    "name": "SwtPanFl",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 76,
+    "lsb": 0,
+    "name": "BotlBlow",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 76,
+    "lsb": 64,
+    "name": "BotlLgto",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 77,
+    "lsb": 0,
+    "name": "Shakhchi",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 77,
+    "lsb": 152,
+    "name": "Shkhch**",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 78,
+    "lsb": 0,
+    "name": "Whistle",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 78,
+    "lsb": 64,
+    "name": "Reverie",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 79,
+    "lsb": 0,
+    "name": "Ocarina",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 79,
+    "lsb": 64,
+    "name": "Opalina",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 0,
+    "name": "SquareLd",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 6,
+    "name": "SqrLead2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 8,
+    "name": "LMSquare",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 18,
+    "name": "HollowSq",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 19,
+    "name": "ShmoogLd",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 35,
+    "name": "DblOsci.",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 64,
+    "name": "MellowSq",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 65,
+    "name": "SoloSine",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 66,
+    "name": "SineLead",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 67,
+    "name": "Pulse Ld",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 68,
+    "name": "SyncLead",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 69,
+    "name": "ForceOsc",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 70,
+    "name": "AccentLd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 71,
+    "name": "Brick Ld",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 72,
+    "name": "AlumLead",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 73,
+    "name": "Query Ld",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 74,
+    "name": "FMSlwSwp",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 75,
+    "name": "SyncLdDb",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 76,
+    "name": "Curse Ld",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 77,
+    "name": "OctvBeep",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 78,
+    "name": "SineLd 2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 79,
+    "name": "SqrLead3",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 80,
+    "name": "SqrLead4",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 128,
+    "name": "SqrLead*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 129,
+    "name": "Vintg.Ld",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 130,
+    "name": "MiniLead",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 131,
+    "name": "Vinyl Ld",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 132,
+    "name": "HiBiasLd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 133,
+    "name": "MetaWdLd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 134,
+    "name": "TinyLead",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 135,
+    "name": "SftR&BLd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 136,
+    "name": "Pop Lead",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 137,
+    "name": "TranceLd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 138,
+    "name": "Pan Lead",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 80,
+    "lsb": 139,
+    "name": "PercSqr.",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 0,
+    "name": "Saw Lead",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 6,
+    "name": "SawLead2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 8,
+    "name": "ThickSaw",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 18,
+    "name": "Dyna.Saw",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 19,
+    "name": "Digi.Saw",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 20,
+    "name": "Big Lead",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 24,
+    "name": "HeavySyn",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 25,
+    "name": "WaspySyn",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 26,
+    "name": "MondoSyn",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 27,
+    "name": "RezzySaw",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 32,
+    "name": "DoublSaw",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 35,
+    "name": "Toy Lead",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 36,
+    "name": "Dim Saw",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 40,
+    "name": "PulseSaw",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 41,
+    "name": "Dr. Lead",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 45,
+    "name": "VeloLead",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 64,
+    "name": "Digger",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 65,
+    "name": "Dunce Ld",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 66,
+    "name": "BrassSaw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 67,
+    "name": "SawRiver",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 68,
+    "name": "BrasPDbl",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 69,
+    "name": "SawTrmpt",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 70,
+    "name": "Hue",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 71,
+    "name": "Str8.Saw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 72,
+    "name": "Str8Puls",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 73,
+    "name": "PWMania",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 74,
+    "name": "ModulSaw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 75,
+    "name": "Toad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 76,
+    "name": "FatOctav",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 77,
+    "name": "Overdose",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 78,
+    "name": "PWMDecay",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 79,
+    "name": "SawDecay",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 80,
+    "name": "FatSawLd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 81,
+    "name": "DuckLead",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 82,
+    "name": "BoostSaw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 83,
+    "name": "Mr. Saw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 84,
+    "name": "Thin Saw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 85,
+    "name": "MouthSaw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 86,
+    "name": "Dr.Lead2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 87,
+    "name": "SawUnisn",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 88,
+    "name": "OctSawLd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 89,
+    "name": "Seq.Saw1",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 90,
+    "name": "Seq.Saw2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 91,
+    "name": "SimplSaw",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 96,
+    "name": "SeqAnalg",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 128,
+    "name": "SawLead*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 129,
+    "name": "BigLead*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 130,
+    "name": "BlastrLd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 131,
+    "name": "Analogon",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 132,
+    "name": "FireWire",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 133,
+    "name": "WarpLead",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 134,
+    "name": "Early Ld",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 135,
+    "name": "Fargo Ld",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 81,
+    "lsb": 137,
+    "name": "Funky Ld",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 82,
+    "lsb": 0,
+    "name": "CaliopLd",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 82,
+    "lsb": 40,
+    "name": "NoviceLd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 82,
+    "lsb": 64,
+    "name": "VentSyn.",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 82,
+    "lsb": 65,
+    "name": "PureLead",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 82,
+    "lsb": 66,
+    "name": "ElecPrim",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 83,
+    "lsb": 0,
+    "name": "Chiff Ld",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 83,
+    "lsb": 40,
+    "name": "SaltLead",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 83,
+    "lsb": 64,
+    "name": "Rubby",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 83,
+    "lsb": 65,
+    "name": "HardSync",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 84,
+    "lsb": 0,
+    "name": "CharanLd",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 84,
+    "lsb": 64,
+    "name": "DistLead",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 84,
+    "lsb": 65,
+    "name": "WireLead",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 84,
+    "lsb": 66,
+    "name": "SynPluck",
+    "elc": 0,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 84,
+    "lsb": 67,
+    "name": "DaSyncLd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 0,
+    "name": "Voice Ld",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 24,
+    "name": "SynthAah",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 64,
+    "name": "Vox Lead",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 65,
+    "name": "BrthLayr",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 66,
+    "name": "Cypher 1",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 67,
+    "name": "Cypher 2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 68,
+    "name": "Cypher 3",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 85,
+    "lsb": 69,
+    "name": "SupCyphr",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 86,
+    "lsb": 0,
+    "name": "Fifth Ld",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 86,
+    "lsb": 8,
+    "name": "5thLdSft",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 86,
+    "lsb": 35,
+    "name": "Big Five",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 0,
+    "name": "Bass&Ld",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 16,
+    "name": "Big&Low",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 64,
+    "name": "Fat&Prky",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 65,
+    "name": "SftWhirl",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 66,
+    "name": "Cant",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 67,
+    "name": "Mogul Ld",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 68,
+    "name": "Distance",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 69,
+    "name": "Sync B&L",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 87,
+    "lsb": 70,
+    "name": "BassLead",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 88,
+    "lsb": 0,
+    "name": "NewAgePd",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 88,
+    "lsb": 64,
+    "name": "Fantasy",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 88,
+    "lsb": 65,
+    "name": "LibraPad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 88,
+    "lsb": 66,
+    "name": "Bell Pad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 88,
+    "lsb": 128,
+    "name": "Fantasia",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 0,
+    "name": "Warm Pad",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 16,
+    "name": "ThickPad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 17,
+    "name": "Soft Pad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 18,
+    "name": "Sine Pad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 40,
+    "name": "Vishnu",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 64,
+    "name": "Horn Pad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 65,
+    "name": "RotarStr",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 66,
+    "name": "LightPad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 128,
+    "name": "Area51Pd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 89,
+    "lsb": 129,
+    "name": "DarkMoon",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 0,
+    "name": "PolySyPd",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 64,
+    "name": "PolyPd80",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 65,
+    "name": "ClickPad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 66,
+    "name": "AnalgPad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 67,
+    "name": "SquarePd",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 68,
+    "name": "Snow Pad",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 69,
+    "name": "PixiePad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 70,
+    "name": "PiscesPd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 71,
+    "name": "SpiralPd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 72,
+    "name": "PlySyPd2",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 90,
+    "lsb": 73,
+    "name": "PlySyPdK",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 0,
+    "name": "ChoirPad",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 64,
+    "name": "Heaven",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 65,
+    "name": "Light Pd",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 66,
+    "name": "Itopia",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 67,
+    "name": "CC Pad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 68,
+    "name": "CosmicPd",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 69,
+    "name": "Aah Pad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 70,
+    "name": "Ooh Pad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 91,
+    "lsb": 71,
+    "name": "Ooh Aah",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 92,
+    "lsb": 0,
+    "name": "BowedPad",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 92,
+    "lsb": 64,
+    "name": "Glacier",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 92,
+    "lsb": 65,
+    "name": "GlassPad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 92,
+    "lsb": 66,
+    "name": "SqrTwang",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 92,
+    "lsb": 67,
+    "name": "Sqr.Pad8",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 93,
+    "lsb": 0,
+    "name": "MetalPad",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 93,
+    "lsb": 64,
+    "name": "Tine Pad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 93,
+    "lsb": 65,
+    "name": "Pan Pad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 93,
+    "lsb": 66,
+    "name": "Queever",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 0,
+    "name": "Halo Pad",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 40,
+    "name": "Tiu",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 64,
+    "name": "Aries",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 65,
+    "name": "ChorusPd",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 128,
+    "name": "EqinoxPd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 129,
+    "name": "InsmnPad",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 130,
+    "name": "SolrisPd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 94,
+    "lsb": 131,
+    "name": "IonosPad",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 0,
+    "name": "SweepPad",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 20,
+    "name": "Shwimmer",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 27,
+    "name": "Converge",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 64,
+    "name": "PolarPad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 65,
+    "name": "Sweepy",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 66,
+    "name": "Celstial",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 128,
+    "name": "Wv2001Pd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 129,
+    "name": "TrnsfmPd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 130,
+    "name": "HipaStrs",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 131,
+    "name": "ObrSwpPd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 132,
+    "name": "MssngrPd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 133,
+    "name": "MellowPd",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 134,
+    "name": "Dark Pad",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 95,
+    "lsb": 135,
+    "name": "AnlgSwel",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 96,
+    "lsb": 0,
+    "name": "Ice Rain",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 96,
+    "lsb": 45,
+    "name": "ClaviPad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 96,
+    "lsb": 64,
+    "name": "HrmoRain",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 96,
+    "lsb": 65,
+    "name": "AfrcWind",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 96,
+    "lsb": 66,
+    "name": "Carib",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 97,
+    "lsb": 0,
+    "name": "SoundTrk",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 97,
+    "lsb": 27,
+    "name": "Prologue",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 97,
+    "lsb": 64,
+    "name": "Ancestrl",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 97,
+    "lsb": 65,
+    "name": "Rave",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 97,
+    "lsb": 66,
+    "name": "Fairy",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 97,
+    "lsb": 67,
+    "name": "Hermit",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 0,
+    "name": "Crystal",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 12,
+    "name": "SynDrCmp",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 14,
+    "name": "Popcorn",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 18,
+    "name": "TinyBell",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 35,
+    "name": "RndGlock",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 40,
+    "name": "GlokChim",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 41,
+    "name": "ClearBel",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 42,
+    "name": "ChorBell",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 64,
+    "name": "SynMalet",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 65,
+    "name": "SftCryst",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 66,
+    "name": "LoudGlok",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 67,
+    "name": "XmasBell",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 68,
+    "name": "VibraBel",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 69,
+    "name": "DigiBell",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 70,
+    "name": "AirBells",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 71,
+    "name": "BellHarp",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 72,
+    "name": "Gamelmba",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 73,
+    "name": "Bounce",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 98,
+    "lsb": 74,
+    "name": "AnalgBel",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 0,
+    "name": "Atmosphr",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 18,
+    "name": "WarmAtms",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 19,
+    "name": "HollwRls",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 40,
+    "name": "NylonEP.",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 64,
+    "name": "NylnHarp",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 65,
+    "name": "Harp Vox",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 66,
+    "name": "AtmosPad",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 67,
+    "name": "Planet",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 68,
+    "name": "Lyra",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 69,
+    "name": "Akasaka",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 70,
+    "name": "DigiBmda",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 71,
+    "name": "CloudPad",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 72,
+    "name": "PulseKey",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 99,
+    "lsb": 73,
+    "name": "NoisePno",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 100,
+    "lsb": 0,
+    "name": "Bright",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 100,
+    "lsb": 64,
+    "name": "FantaBel",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 100,
+    "lsb": 65,
+    "name": "ShinStar",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 100,
+    "lsb": 66,
+    "name": "Brt.Stab",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 100,
+    "lsb": 96,
+    "name": "Smokey",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 100,
+    "lsb": 129,
+    "name": "BellPad*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 0,
+    "name": "Goblins",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 64,
+    "name": "GobSynth",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 65,
+    "name": "Creeper",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 66,
+    "name": "Ring Pad",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 67,
+    "name": "Ritual",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 68,
+    "name": "ToHeaven",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 69,
+    "name": "MilkyWay",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 70,
+    "name": "Night",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 71,
+    "name": "Glisten",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 72,
+    "name": "Puffy",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 73,
+    "name": "Mimicry",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 74,
+    "name": "Parasite",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 75,
+    "name": "Cicada",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 76,
+    "name": "Beacon",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 77,
+    "name": "GblnTalk",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 78,
+    "name": "Temple",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 96,
+    "name": "BelChoir",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 101,
+    "lsb": 97,
+    "name": "Dharma",
+    "elc": 1,
+    "lvl": 3
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 0,
+    "name": "Echoes",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 8,
+    "name": "Echoes 2",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 14,
+    "name": "Echo Pan",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 64,
+    "name": "EchoBell",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 65,
+    "name": "Big Pan",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 66,
+    "name": "SynPiano",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 67,
+    "name": "Creation",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 68,
+    "name": "StarDust",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 69,
+    "name": "Reso&Pan",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 102,
+    "lsb": 70,
+    "name": "Ana.Echo",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 103,
+    "lsb": 0,
+    "name": "Sci-Fi",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 103,
+    "lsb": 64,
+    "name": "Starz",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 103,
+    "lsb": 65,
+    "name": "Odin",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 0,
+    "name": "Sitar",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 32,
+    "name": "DetSitar",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 35,
+    "name": "Sitar 2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 40,
+    "name": "Bhuj",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 64,
+    "name": "Syn.Raga",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 65,
+    "name": "Odin",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 96,
+    "name": "Tambra",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 97,
+    "name": "Tamboura",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 104,
+    "lsb": 128,
+    "name": "Sitar  *",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 0,
+    "name": "Banjo",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 28,
+    "name": "MuteBnjo",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 64,
+    "name": "ElecBnjo",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 96,
+    "name": "Rabab",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 97,
+    "name": "Gopichnt",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 98,
+    "name": "Oud",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 99,
+    "name": "Pi Pa",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 105,
+    "lsb": 128,
+    "name": "Banjo  *",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 106,
+    "lsb": 0,
+    "name": "Shamisen",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 106,
+    "lsb": 96,
+    "name": "Tsugaru",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 106,
+    "lsb": 128,
+    "name": "Shmisen*",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 107,
+    "lsb": 0,
+    "name": "Koto",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 107,
+    "lsb": 64,
+    "name": "FM Koto",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 107,
+    "lsb": 96,
+    "name": "TaishoKn",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 107,
+    "lsb": 97,
+    "name": "Kanoon",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 107,
+    "lsb": 98,
+    "name": "Zheng",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 107,
+    "lsb": 128,
+    "name": "Koto   *",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 108,
+    "lsb": 0,
+    "name": "Kalimba",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 108,
+    "lsb": 64,
+    "name": "BigKlmba",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 109,
+    "lsb": 0,
+    "name": "Bagpipe",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 109,
+    "lsb": 64,
+    "name": "Thistle",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 109,
+    "lsb": 96,
+    "name": "Sheng",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 110,
+    "lsb": 0,
+    "name": "Fiddle",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 110,
+    "lsb": 128,
+    "name": "Fiddle *",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 110,
+    "lsb": 96,
+    "name": "Er Hu",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 110,
+    "lsb": 97,
+    "name": "Ban Hu",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 110,
+    "lsb": 98,
+    "name": "Jing Hu",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 111,
+    "lsb": 0,
+    "name": "Shanai",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 111,
+    "lsb": 64,
+    "name": "Shanai 2",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 111,
+    "lsb": 96,
+    "name": "Pungi",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 111,
+    "lsb": 97,
+    "name": "Hichriki",
+    "elc": 0,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 111,
+    "lsb": 98,
+    "name": "Suo Na",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 0,
+    "name": "TnklBell",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 64,
+    "name": "TiklBell",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 96,
+    "name": "Bonang",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 97,
+    "name": "Altair",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 98,
+    "name": "Gamelan",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 99,
+    "name": "S.Gameln",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 100,
+    "name": "RamaCymb",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 112,
+    "lsb": 101,
+    "name": "AsianBel",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 0,
+    "prg": 113,
+    "lsb": 0,
+    "name": "Agogo",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 113,
+    "lsb": 152,
+    "name": "Agogo  *",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 113,
+    "lsb": 96,
+    "name": "Atargane",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 114,
+    "lsb": 0,
+    "name": "SteelDrm",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 114,
+    "lsb": 96,
+    "name": "Tablas",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 114,
+    "lsb": 97,
+    "name": "GlasPerc",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 114,
+    "lsb": 98,
+    "name": "ThaiBell",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 114,
+    "lsb": 128,
+    "name": "StlDrum*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 115,
+    "lsb": 0,
+    "name": "Woodblok",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 115,
+    "lsb": 96,
+    "name": "Castanet",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 116,
+    "lsb": 0,
+    "name": "Taiko",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 116,
+    "lsb": 96,
+    "name": "Gr.Cassa",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 117,
+    "lsb": 0,
+    "name": "MelodTom",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 117,
+    "lsb": 152,
+    "name": "MelodTm*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 117,
+    "lsb": 64,
+    "name": "Mel Tom2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 117,
+    "lsb": 65,
+    "name": "Real Tom",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 117,
+    "lsb": 66,
+    "name": "Rock Tom",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 117,
+    "lsb": 67,
+    "name": "Tim'sSet",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 118,
+    "lsb": 0,
+    "name": "Syn Drum",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 118,
+    "lsb": 64,
+    "name": "AnalgTom",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 118,
+    "lsb": 65,
+    "name": "ElecPerc",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 118,
+    "lsb": 66,
+    "name": "Syn.Perc",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 0,
+    "name": "RevCymbl",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 64,
+    "name": "RvCymbl2",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 65,
+    "name": "RvCymbl3",
+    "elc": null,
+    "lvl": null
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 96,
+    "name": "RevSnare",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 97,
+    "name": "RvSnare2",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 98,
+    "name": "Rev.Kick",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 99,
+    "name": "RConBaDr",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 100,
+    "name": "Rev. Tom",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 119,
+    "lsb": 101,
+    "name": "Rev.Tom2",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 0,
+    "prg": 120,
+    "lsb": 0,
+    "name": "FretNoiz",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 120,
+    "lsb": 152,
+    "name": "Fret.Nz*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 121,
+    "lsb": 0,
+    "name": "BrthNoiz",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 121,
+    "lsb": 152,
+    "name": "Brth.Nz*",
+    "elc": 0,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 122,
+    "lsb": 0,
+    "name": "Seashore",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 123,
+    "lsb": 0,
+    "name": "Tweet",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 124,
+    "lsb": 0,
+    "name": "Telphone",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 125,
+    "lsb": 0,
+    "name": "Helicptr",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 125,
+    "lsb": 152,
+    "name": "Helcptr*",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 126,
+    "lsb": 0,
+    "name": "Applause",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 0,
+    "prg": 126,
+    "lsb": 152,
+    "name": "Applauz*",
+    "elc": 1,
+    "lvl": 16
+  },
+  {
+    "msb": 0,
+    "prg": 127,
+    "lsb": 0,
+    "name": "Gunshot",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 0,
+    "name": "MtdClavi",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 8,
+    "name": "Beeline",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 16,
+    "name": "Rage",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 24,
+    "name": "Fuss",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 48,
+    "name": "Reflex 1",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 56,
+    "name": "Insanity",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 64,
+    "name": "DstnFire",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 72,
+    "name": "Lightnin",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 80,
+    "name": "Zipzap",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 88,
+    "name": "Escape",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 96,
+    "name": "TinKettl",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 104,
+    "name": "Satya",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 0,
+    "lsb": 120,
+    "name": "Voodoo",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 0,
+    "name": "Orimba",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 8,
+    "name": "BlineHrd",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 16,
+    "name": "TnglCaos",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 24,
+    "name": "VanAllen",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 48,
+    "name": "Reflex 2",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 56,
+    "name": "Habakkuk",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 64,
+    "name": "BlowNoiz",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 72,
+    "name": "Oof",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 88,
+    "name": "Zigzag",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 96,
+    "name": "K/S Ana.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 1,
+    "lsb": 104,
+    "name": "Monastry",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 8,
+    "name": "Dwarf",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 16,
+    "name": "Incontnc",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 24,
+    "name": "Divinity",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 48,
+    "name": "Prcesion",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 64,
+    "name": "Fall",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 72,
+    "name": "Lust",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 88,
+    "name": "Scud",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 96,
+    "name": "K/S Hum.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 2,
+    "lsb": 104,
+    "name": "Vinaya",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 8,
+    "name": "Byte",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 16,
+    "name": "IncntClk",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 24,
+    "name": "Paranoia",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 48,
+    "name": "RndmWalk",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 64,
+    "name": "Chaff",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 72,
+    "name": "Lust St.",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 88,
+    "name": "Hinayana",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 96,
+    "name": "K/S Slap",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 3,
+    "lsb": 104,
+    "name": "Prana",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 8,
+    "name": "Ping",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 16,
+    "name": "CheapOsc",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 24,
+    "name": "Vexation",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 48,
+    "name": "RandmRun",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 72,
+    "name": "SoftHit+",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 88,
+    "name": "Boot",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 96,
+    "name": "Rvr/Crsh",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 4,
+    "lsb": 104,
+    "name": "Delight",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 5,
+    "lsb": 8,
+    "name": "NastyCut",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 5,
+    "lsb": 16,
+    "name": "CheapOc+",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 5,
+    "lsb": 24,
+    "name": "CalcOrg1",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 5,
+    "lsb": 72,
+    "name": "Cough +",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 5,
+    "lsb": 88,
+    "name": "Anathema",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 5,
+    "lsb": 104,
+    "name": "Puja",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 6,
+    "lsb": 8,
+    "name": "NstyCtSt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 6,
+    "lsb": 16,
+    "name": "NstOrSpl",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 6,
+    "lsb": 24,
+    "name": "CalcOrg2",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 6,
+    "lsb": 72,
+    "name": "Ruin",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 6,
+    "lsb": 88,
+    "name": "Germ 1",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 6,
+    "lsb": 104,
+    "name": "Bent Tom",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 7,
+    "lsb": 8,
+    "name": "Xe",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 7,
+    "lsb": 16,
+    "name": "SprClick",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 7,
+    "lsb": 24,
+    "name": "CalcOrg3",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 7,
+    "lsb": 72,
+    "name": "Ruin St.",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 7,
+    "lsb": 88,
+    "name": "Germ 2",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 8,
+    "lsb": 8,
+    "name": "OrganHit",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 8,
+    "lsb": 16,
+    "name": "Boomout",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 8,
+    "lsb": 24,
+    "name": "ChoCalcO",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 8,
+    "lsb": 72,
+    "name": "Vein +",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 8,
+    "lsb": 88,
+    "name": "Malfnctn",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 9,
+    "lsb": 8,
+    "name": "OrgnHit+",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 9,
+    "lsb": 16,
+    "name": "ChoirSpl",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 9,
+    "lsb": 24,
+    "name": "Sodium",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 9,
+    "lsb": 72,
+    "name": "Universe",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 10,
+    "lsb": 8,
+    "name": "Soft Hit",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 10,
+    "lsb": 16,
+    "name": "Veld",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 10,
+    "lsb": 72,
+    "name": "UnvrsSwp",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 11,
+    "lsb": 8,
+    "name": "Vein",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 11,
+    "lsb": 16,
+    "name": "VaporVox",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 11,
+    "lsb": 72,
+    "name": "Xe +",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 12,
+    "lsb": 8,
+    "name": "Packet",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 12,
+    "lsb": 16,
+    "name": "VoxShoot",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 12,
+    "lsb": 72,
+    "name": "Daze",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 13,
+    "lsb": 8,
+    "name": "Jolly",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 13,
+    "lsb": 16,
+    "name": "SemiacOr",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 13,
+    "lsb": 72,
+    "name": "Refusal",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 14,
+    "lsb": 8,
+    "name": "Jolly +",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 14,
+    "lsb": 72,
+    "name": "Refusal+",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 15,
+    "lsb": 8,
+    "name": "Envy",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 15,
+    "lsb": 72,
+    "name": "Lie",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 16,
+    "lsb": 8,
+    "name": "EnvyShrt",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 16,
+    "lsb": 72,
+    "name": "Malice",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 17,
+    "lsb": 8,
+    "name": "Cough",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 17,
+    "lsb": 72,
+    "name": "Doubt",
+    "elc": 0,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 18,
+    "lsb": 8,
+    "name": "Remark",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 18,
+    "lsb": 72,
+    "name": "DoubtDbl",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 19,
+    "lsb": 8,
+    "name": "Potala",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 20,
+    "lsb": 8,
+    "name": "Fury",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 48,
+    "prg": 21,
+    "lsb": 8,
+    "name": "Glocken+",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 64,
+    "prg": 0,
+    "lsb": 0,
+    "name": "CutNoise",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 1,
+    "lsb": 0,
+    "name": "CutNoiz2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 2,
+    "lsb": 0,
+    "name": "DstCutNz",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 3,
+    "lsb": 0,
+    "name": "Str.Slap",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 4,
+    "lsb": 0,
+    "name": "B.Slide",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 5,
+    "lsb": 0,
+    "name": "P.Scrape",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 16,
+    "lsb": 0,
+    "name": "Fl.KClik",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 32,
+    "lsb": 0,
+    "name": "Shower",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 33,
+    "lsb": 0,
+    "name": "Thunder",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 34,
+    "lsb": 0,
+    "name": "Wind",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 35,
+    "lsb": 0,
+    "name": "Stream",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 36,
+    "lsb": 0,
+    "name": "Bubble",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 37,
+    "lsb": 0,
+    "name": "Feed",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 38,
+    "lsb": 0,
+    "name": "Cave",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 64,
+    "prg": 48,
+    "lsb": 0,
+    "name": "Dog Woof",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 49,
+    "lsb": 0,
+    "name": "HorseGlp",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 50,
+    "lsb": 0,
+    "name": "BirdTwit",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 51,
+    "lsb": 0,
+    "name": "Kitty",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 52,
+    "lsb": 0,
+    "name": "Growl",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 53,
+    "lsb": 0,
+    "name": "Haunted",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 54,
+    "lsb": 0,
+    "name": "Ghost",
+    "elc": 1,
+    "lvl": 1
+  },
+  {
+    "msb": 64,
+    "prg": 55,
+    "lsb": 0,
+    "name": "Maou",
+    "elc": 1,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 56,
+    "lsb": 0,
+    "name": "Insects",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 64,
+    "prg": 57,
+    "lsb": 0,
+    "name": "Bacteria",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 64,
+    "prg": 64,
+    "lsb": 0,
+    "name": "PhonCall",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 65,
+    "lsb": 0,
+    "name": "DoorSqek",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 66,
+    "lsb": 0,
+    "name": "DoorSlam",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 67,
+    "lsb": 0,
+    "name": "ScratchC",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 68,
+    "lsb": 0,
+    "name": "Scratch2",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 69,
+    "lsb": 0,
+    "name": "WindChim",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 70,
+    "lsb": 0,
+    "name": "TeleFon2",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 71,
+    "lsb": 0,
+    "name": "Scratch3",
+    "elc": 1,
+    "lvl": 5
+  },
+  {
+    "msb": 64,
+    "prg": 72,
+    "lsb": 0,
+    "name": "Turntabl",
+    "elc": 3,
+    "lvl": 5
+  },
+  {
+    "msb": 64,
+    "prg": 80,
+    "lsb": 0,
+    "name": "CarStart",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 81,
+    "lsb": 0,
+    "name": "CarTyreS",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 82,
+    "lsb": 0,
+    "name": "Car Pass",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 83,
+    "lsb": 0,
+    "name": "CarCrash",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 84,
+    "lsb": 0,
+    "name": "Siren",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 85,
+    "lsb": 0,
+    "name": "Train",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 86,
+    "lsb": 0,
+    "name": "JetPlane",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 87,
+    "lsb": 0,
+    "name": "Starship",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 88,
+    "lsb": 0,
+    "name": "Burst",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 89,
+    "lsb": 0,
+    "name": "Coaster",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 90,
+    "lsb": 0,
+    "name": "Submarin",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 91,
+    "lsb": 0,
+    "name": "Connect",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 64,
+    "prg": 92,
+    "lsb": 0,
+    "name": "Mystery",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 64,
+    "prg": 93,
+    "lsb": 0,
+    "name": "Charging",
+    "elc": 2,
+    "lvl": 5
+  },
+  {
+    "msb": 64,
+    "prg": 96,
+    "lsb": 0,
+    "name": "LaughVox",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 97,
+    "lsb": 0,
+    "name": "ScreamVx",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 98,
+    "lsb": 0,
+    "name": "Punch",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 99,
+    "lsb": 0,
+    "name": "Heart",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 100,
+    "lsb": 0,
+    "name": "Footstep",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 101,
+    "lsb": 0,
+    "name": "Handclap",
+    "elc": 0,
+    "lvl": 2
+  },
+  {
+    "msb": 64,
+    "prg": 112,
+    "lsb": 0,
+    "name": "MchinGun",
+    "elc": 0,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 113,
+    "lsb": 0,
+    "name": "LaserGun",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 114,
+    "lsb": 0,
+    "name": "Xplosion",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 115,
+    "lsb": 0,
+    "name": "Firework",
+    "elc": 1,
+    "lvl": 0
+  },
+  {
+    "msb": 64,
+    "prg": 116,
+    "lsb": 0,
+    "name": "Fireball",
+    "elc": 1,
+    "lvl": 4
+  },
+  {
+    "msb": 126,
+    "prg": 0,
+    "lsb": 0,
+    "name": "SFX Kit",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 126,
+    "prg": 1,
+    "lsb": 0,
+    "name": "SFX Kt 2",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 126,
+    "prg": 2,
+    "lsb": 152,
+    "name": "NewSFXKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 3,
+    "lsb": 152,
+    "name": "NuSFXKt2",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 8,
+    "lsb": 152,
+    "name": "NoisesKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 16,
+    "lsb": 0,
+    "name": "TechnoKt",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 126,
+    "prg": 17,
+    "lsb": 0,
+    "name": "TechnoHi",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 126,
+    "prg": 18,
+    "lsb": 0,
+    "name": "TechnoLo",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 126,
+    "prg": 20,
+    "lsb": 152,
+    "name": "BsDrumKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 21,
+    "lsb": 152,
+    "name": "RvBDrmKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 32,
+    "lsb": 0,
+    "name": "SakuraKt",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 126,
+    "prg": 33,
+    "lsb": 0,
+    "name": "S. Latin",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 126,
+    "prg": 34,
+    "lsb": 0,
+    "name": "ChinaKit",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 126,
+    "prg": 35,
+    "lsb": 152,
+    "name": "ArabicKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 36,
+    "lsb": 152,
+    "name": "ArabicKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 39,
+    "lsb": 152,
+    "name": "IndianKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 40,
+    "lsb": 0,
+    "name": "AfroCuba",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 126,
+    "prg": 40,
+    "lsb": 152,
+    "name": "CubanKit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 41,
+    "lsb": 0,
+    "name": "AfrCuba2",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 126,
+    "prg": 42,
+    "lsb": 0,
+    "name": "BrazilKt",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 126,
+    "prg": 43,
+    "lsb": 0,
+    "name": "PopLatin",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 126,
+    "prg": 44,
+    "lsb": 152,
+    "name": "PopLatn2",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 45,
+    "lsb": 152,
+    "name": "PopPerc.",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 49,
+    "lsb": 152,
+    "name": "Cymbl^Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 51,
+    "lsb": 152,
+    "name": "AfrBigKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 54,
+    "lsb": 152,
+    "name": "StdId1Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 55,
+    "lsb": 152,
+    "name": "StdId2Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 56,
+    "lsb": 152,
+    "name": "StdId3Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 64,
+    "lsb": 152,
+    "name": "ArabMxKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 65,
+    "lsb": 152,
+    "name": "KhlgMxKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 66,
+    "lsb": 152,
+    "name": "IranMxKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 67,
+    "lsb": 152,
+    "name": "TurkeyKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 112,
+    "lsb": 0,
+    "name": "Voices 1",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 126,
+    "prg": 112,
+    "lsb": 152,
+    "name": "SndEfKit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 113,
+    "lsb": 0,
+    "name": "Voices 2",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 126,
+    "prg": 114,
+    "lsb": 152,
+    "name": "India2Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 126,
+    "prg": 127,
+    "lsb": 152,
+    "name": "StdChnKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 0,
+    "lsb": 0,
+    "name": "Standard",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 0,
+    "lsb": 126,
+    "name": "StndKit#",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 0,
+    "lsb": 152,
+    "name": "Standard",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 1,
+    "lsb": 0,
+    "name": "Standrd2",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 2,
+    "lsb": 0,
+    "name": "Dry Kit",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 3,
+    "lsb": 0,
+    "name": "BrightKt",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 4,
+    "lsb": 0,
+    "name": "Skim Kit",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 5,
+    "lsb": 0,
+    "name": "Slim Kit",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 6,
+    "lsb": 0,
+    "name": "RogueKit",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 7,
+    "lsb": 0,
+    "name": "Hob Kit",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 8,
+    "lsb": 0,
+    "name": "Room Kit",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 9,
+    "lsb": 0,
+    "name": "DarkRoom",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 16,
+    "lsb": 0,
+    "name": "Rock Kit",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 17,
+    "lsb": 0,
+    "name": "RockKit2",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 24,
+    "lsb": 0,
+    "name": "ElectrKt",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 25,
+    "lsb": 0,
+    "name": "AnalogKt",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 26,
+    "lsb": 0,
+    "name": "AnalgKt2",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 27,
+    "lsb": 0,
+    "name": "DanceKit",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 28,
+    "lsb": 0,
+    "name": "HipHopKt",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 29,
+    "lsb": 0,
+    "name": "JungleKt",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 30,
+    "lsb": 0,
+    "name": "ApogeeKt",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 31,
+    "lsb": 0,
+    "name": "PerigeKt",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 32,
+    "lsb": 0,
+    "name": "Jazz Kit",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 33,
+    "lsb": 0,
+    "name": "JazzKit2",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 40,
+    "lsb": 0,
+    "name": "BrushKit",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 41,
+    "lsb": 0,
+    "name": "BrushKt2",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 48,
+    "lsb": 0,
+    "name": "SymphnKt",
+    "elc": 16,
+    "lvl": 0
+  },
+  {
+    "msb": 127,
+    "prg": 56,
+    "lsb": 0,
+    "name": "Ntrl Kit",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 57,
+    "lsb": 0,
+    "name": "NtrlFunk",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 58,
+    "lsb": 152,
+    "name": "AnlgT8Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 59,
+    "lsb": 152,
+    "name": "AnlgT9Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 60,
+    "lsb": 152,
+    "name": "Hous!Kit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 61,
+    "lsb": 152,
+    "name": "DrumMchn",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 64,
+    "lsb": 0,
+    "name": "TrampKit",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 64,
+    "lsb": 152,
+    "name": "HouseKit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 65,
+    "lsb": 0,
+    "name": "AmberKit",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 66,
+    "lsb": 0,
+    "name": "CoffinKt",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 68,
+    "lsb": 152,
+    "name": "DubstpKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 69,
+    "lsb": 152,
+    "name": "EDM Kit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 70,
+    "lsb": 152,
+    "name": "Elect^Kt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 71,
+    "lsb": 152,
+    "name": "Trap Kit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 72,
+    "lsb": 152,
+    "name": "SchlgrKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 73,
+    "lsb": 152,
+    "name": "PopDrmKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 75,
+    "lsb": 152,
+    "name": "JzBrCpKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 80,
+    "lsb": 0,
+    "name": "Lv StdKt",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 81,
+    "lsb": 0,
+    "name": "LvFunkKt",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 82,
+    "lsb": 0,
+    "name": "Lv Brush",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 83,
+    "lsb": 0,
+    "name": "Std&Perc",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 84,
+    "lsb": 0,
+    "name": "FunkPerc",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 85,
+    "lsb": 0,
+    "name": "Brush&P.",
+    "elc": 16,
+    "lvl": 5
+  },
+  {
+    "msb": 127,
+    "prg": 86,
+    "lsb": 152,
+    "name": "StudioKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 87,
+    "lsb": 152,
+    "name": "Pwr^Kit1",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 88,
+    "lsb": 152,
+    "name": "Pwr^Kit2",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 89,
+    "lsb": 152,
+    "name": "Acou.Kit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 90,
+    "lsb": 152,
+    "name": "Rock^Kit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 91,
+    "lsb": 152,
+    "name": "RealDrKt",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 112,
+    "lsb": 0,
+    "name": "R&B Kit",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 112,
+    "lsb": 152,
+    "name": "DanceKit",
+    "elc": 16,
+    "lvl": 16
+  },
+  {
+    "msb": 127,
+    "prg": 113,
+    "lsb": 0,
+    "name": "RockKit3",
+    "elc": 16,
+    "lvl": 3
+  },
+  {
+    "msb": 127,
+    "prg": 126,
+    "lsb": 0,
+    "name": "StndKit#",
+    "elc": 16,
+    "lvl": 4
+  },
+  {
+    "msb": 127,
+    "prg": 127,
+    "lsb": 0,
+    "name": "Standard",
+    "elc": 16,
+    "lvl": 4
+  }
+]
