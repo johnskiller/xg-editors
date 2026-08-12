@@ -12,6 +12,7 @@ pub mod lcd;
 pub mod midi_topology;
 pub mod part;
 pub mod persist;
+pub mod piano_roll;
 pub mod smf;
 pub mod sysex;
 pub mod playback;
@@ -453,6 +454,10 @@ pub struct XgApp {
     pub show_left: bool,
     pub show_right: bool,
     pub show_bottom: bool,
+    /// 底栏 Piano Roll 开关 (2026-08-12: Piano Roll 从中央视图移到底栏)
+    pub show_piano: bool,
+    /// 底栏 Piano Roll 高度
+    pub piano_height: f32,
     /// 中央视图模式: Piano Roll(静态时间轴) / Channel Notes(每行1通道) / PlayView(播放画面)
     pub central_view: CentralView,
     pub left_width: f32,
@@ -1520,6 +1525,8 @@ impl Default for XgApp {
             show_left: false, // 2026-08-09 UI 整理: 左侧 track 栏停用(音色+电平移入 center channel view 行头, 根治对齐)
             show_right: true,
             show_bottom: true,
+            show_piano: false,
+            piano_height: 220.0,
             central_view: CentralView::ChannelNotes, // 默认 Channel 音符指示(每行=channel, 行头含音色+绿电平); 可切 Piano Roll/PlayView
             left_width: 270.0, // 默认宽度容纳完整绿条+百分比(canvas内容); 拖窄则右缘裁剪, 不重排
             right_width: 240.0,
@@ -2237,110 +2244,156 @@ impl eframe::App for XgApp {
             });
         });
 
-        // 底栏 LCD(判据 5, 可收起 9) —— 收起留窄条 + 三角
+        // 底栏 Piano Roll (2026-08-12: 从中央视图移到底栏独立 panel)
+        // 沿用左右边栏 rail 折叠逻辑: 收起 = 22px 窄条 + 三角 ^, 点开展开 (无需中央顶部按钮)
+        // 声明顺序: bottom_status(最底) → bottom_piano(其上方) → CentralPanel 剩中间
         {
-            let open = self.show_bottom;
-            let mut panel = egui::TopBottomPanel::bottom("bottom_lcd")
+            let open = self.show_piano;
+            let mut panel = egui::TopBottomPanel::bottom("bottom_piano")
                 .resizable(open)
-                .default_height(self.bottom_height);
+                .default_height(self.piano_height);
             if open {
-                panel = panel.height_range(120.0..=620.0);
+                panel = panel.height_range(80.0..=500.0);
             } else {
-                panel = panel.exact_height(22.0); // 收起: 只留 22px 横条
+                panel = panel.exact_height(22.0); // 收起: 只留 22px 窄条
             }
             panel.show(ctx, |ui| {
-                    if open {
-                        ui.horizontal(|ui| {
-                            ui.label("LCD (MU90)");
-                            // 16ch / 32ch 显示模式切换
-                            let label32 = if self.lcd_32 { "32ch[on]" } else { "32ch[off]" };
-                            if ui.button(label32).clicked() {
-                                self.lcd_32 = !self.lcd_32;
-                                self.update_lcd_params();
+                if open {
+                    ui.horizontal(|ui| {
+                        ui.label("Piano Roll");
+                        ui.separator();
+                        // Zoom/Scroll (沿用时间轴共用状态 track_view_zoom / track_view_scroll_ticks)
+                        ui.label("Zoom");
+                        ui.add(
+                            egui::Slider::new(&mut self.track_view_zoom, 0.02..=200.0)
+                                .logarithmic(true)
+                                .show_value(true)
+                                .custom_formatter(|v, _| format!("{v:.2}x"))
+                                .custom_parser(|s| s.parse::<f64>().ok()),
+                        );
+                        ui.separator();
+                        let t_end = if self.smf.is_some() { self.smf_end_tick.max(1) } else { self.total_ticks.max(1) };
+                        let zoom_s = self.track_view_zoom.max(0.002);
+                        let win = (t_end.max(1) as f32 / zoom_s).round().max(1.0) as u64;
+                        let win = win.max(1);
+                        ui.label("Scroll");
+                        let max_scroll = t_end.saturating_sub(win) as f64;
+                        let mut scf = self.track_view_scroll_ticks as f64;
+                        ui.add(egui::Slider::new(&mut scf, 0.0..=max_scroll).step_by((win.max(1) / 20).max(1) as f64).custom_formatter(|v, _| format!("{}t", v as i64)));
+                        self.track_view_scroll_ticks = scf.max(0.0) as u64;
+                        ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                            // 收起三角 v (点击收起为 22px 窄条)
+                            if collapse_triangle_ui(ui, "piano_collapse", "v").clicked() {
+                                self.show_piano = false;
                             }
-                            // Part 选择器 1..32 (Part 号→Port/Channel 在 lcd.rs 映射: 1-16→A, 17-32→B)
-                            egui::ComboBox::from_id_salt("part_select")
-                                .selected_text(format!("Part {}", self.cur_part))
-                                .show_ui(ui, |ui| {
-                                    for p in 1..=32u32 {
-                                        let sec = lcd::part_sec(p);
-                                        let ch = lcd::part_channel(p);
-                                        ui.selectable_value(&mut self.cur_part, p, format!("{p:02}{sec}{ch:02} Part {p}"));
-                                    }
-                                });
-                            // cur_part 变化时重渲染 LCD
-                            self.update_lcd_params();
-                            // 缩放滑块: 手机窄屏上放大点阵到可读 (1x..5x)
-                            let mut zoom = self.lcd_zoom;
-                            ui.add(egui::Slider::new(&mut zoom, 0.5..=5.0).text("zoom"));
-                            // 点阵缩放 = 全局 UI 缩放因子 × 滑块 (底栏 avail 决定上限)
-                            self.lcd_zoom = zoom;
-                            // 右下角折叠三角 ^ (点击收起本栏)
-                            if collapse_triangle_ui(ui, "bottom_collapse", "^").clicked() {
-                                self.show_bottom = false;
-                            }
-                            ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
-                                ui.label("MU90 LCD (840x256)");
-                            });
                         });
-                        // LCD 纹理缓存: 首次 load, 像素变(dirty)才 set() — 避免每帧重建GPU纹理/重传 → 拖动闪烁
-                        if self.lcd_tex.is_none() {
-                            self.lcd_tex = Some(ctx.load_texture(
-                                "lcd",
-                                egui::ColorImage::from_rgba_unmultiplied(
-                                    [self.lcd_side, 256],
-                                    &self.lcd_pixels,
-                                ),
-                                egui::TextureOptions::NEAREST,
-                            ));
-                            self.lcd_dirty = false;
-                        } else if self.lcd_dirty {
-                            if let Some(tex) = self.lcd_tex.as_mut() {
-                                tex.set(
-                                    egui::ColorImage::from_rgba_unmultiplied(
-                                        [self.lcd_side, 256],
-                                        &self.lcd_pixels,
-                                    ),
-                                    egui::TextureOptions::NEAREST,
-                                );
-                            }
-                            self.lcd_dirty = false;
-                        }
-                        let tex = self.lcd_tex.as_ref().expect("lcd_tex cached");
-                        let avail = ui.available_size();
-                        // 宽度铺满可用区; 高度按比例。手机窄屏靠 zoom 放大 + ScrollArea 横向滚动
-                        let fit_scale = (avail.x / self.lcd_side as f32)
-                            .min(avail.y / 256.0)
-                            .min(3.0)
-                            .max(0.1);
-                        let scale = fit_scale * self.lcd_zoom;
-                        let size = egui::vec2(self.lcd_side as f32 * scale, 256.0 * scale);
-                        // 用 ScrollArea 包裹: 放大后可滚动查看 (手机)
-                        egui::ScrollArea::both()
-                            .auto_shrink([false, false])
-                            .show(ui, |ui| {
-                                let (rect, _) = ui.allocate_exact_size(size, egui::Sense::hover());
-                                ui.painter().image(
-                                    tex.id(),
-                                    rect,
-                                    egui::Rect::from_min_max(
-                                        egui::pos2(0.0, 0.0),
-                                        egui::pos2(1.0, 1.0)
-                                    ),
-                                    egui::Color32::WHITE,
-                                );
-                            });
-                    } else {
-                        // 收起横条: 垂直居中 " ^ " (表示向上展开), 点击整个横条展开
-                        let rect = ui.max_rect();
-                        if rail_triangle_ui(ui, rect, "bottom_rail", "^").clicked() {
-                            self.show_bottom = true;
-                        }
+                    });
+                    ui.separator();
+                    // piano roll 本体 (已抽到 src/piano_roll.rs)
+                    self.render_piano_roll(ui);
+                } else {
+                    // 收起窄条: 垂直居中 ^ (点击展开)
+                    let rect = ui.max_rect();
+                    if rail_triangle_ui(ui, rect, "piano_rail", "^").clicked() {
+                        self.show_piano = true;
                     }
-                });
+                }
+            });
         }
 
+        // LCD 浮动窗口 (用户 2026-08-12: LCD 改为 floating pane, 可拖动/缩放/开关)
+        // open = show_bottom (语义: LCD 窗口可见); 用局部变量避开 .open() 借 self 与闭包 &mut self 冲突
+        let mut lcd_open = self.show_bottom;
+        egui::Window::new("LCD (MU90)")
+            .id(egui::Id::new("lcd_float"))
+            .open(&mut lcd_open)
+            .default_width(900.0)
+            .default_height(360.0)
+            .default_pos(egui::pos2(560.0, 46.0)) // 默认中上 (顶部栏下方), 不挡中央编辑区/底栏 Piano Roll
+            .resizable(true)
+            .collapsible(true)
+            .show(ctx, |ui| {
+                ui.horizontal(|ui| {
+                    // 16ch / 32ch 显示模式切换
+                    let label32 = if self.lcd_32 { "32ch[on]" } else { "32ch[off]" };
+                    if ui.button(label32).clicked() {
+                        self.lcd_32 = !self.lcd_32;
+                        self.update_lcd_params();
+                    }
+                    // Part 选择器 1..32 (Part 号→Port/Channel 在 lcd.rs 映射: 1-16→A, 17-32→B)
+                    egui::ComboBox::from_id_salt("part_select")
+                        .selected_text(format!("Part {}", self.cur_part))
+                        .show_ui(ui, |ui| {
+                            for p in 1..=32u32 {
+                                let sec = lcd::part_sec(p);
+                                let ch = lcd::part_channel(p);
+                                ui.selectable_value(&mut self.cur_part, p, format!("{p:02}{sec}{ch:02} Part {p}"));
+                            }
+                        });
+                    // cur_part 变化时重渲染 LCD
+                    self.update_lcd_params();
+                    // 缩放滑块: 手机窄屏上放大点阵到可读 (1x..5x)
+                    let mut zoom = self.lcd_zoom;
+                    ui.add(egui::Slider::new(&mut zoom, 0.5..=5.0).text("zoom"));
+                    // 点阵缩放 = 全局 UI 缩放因子 × 滑块 (可用区决定上限)
+                    self.lcd_zoom = zoom;
+                    ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
+                        ui.label(format!("{}x{}", lcd::LCD_W, lcd::LCD_H));
+                    });
+                });
+                ui.separator();
+                // LCD 纹理缓存: 首次 load, 像素变(dirty)才 set() — 避免每帧重建GPU纹理/重传 → 拖动闪烁
+                if self.lcd_tex.is_none() {
+                    self.lcd_tex = Some(ctx.load_texture(
+                        "lcd",
+                        egui::ColorImage::from_rgba_unmultiplied(
+                            [self.lcd_side, 256],
+                            &self.lcd_pixels,
+                        ),
+                        egui::TextureOptions::NEAREST,
+                    ));
+                    self.lcd_dirty = false;
+                } else if self.lcd_dirty {
+                    if let Some(tex) = self.lcd_tex.as_mut() {
+                        tex.set(
+                            egui::ColorImage::from_rgba_unmultiplied(
+                                [self.lcd_side, 256],
+                                &self.lcd_pixels,
+                            ),
+                            egui::TextureOptions::NEAREST,
+                        );
+                    }
+                    self.lcd_dirty = false;
+                }
+                let tex = self.lcd_tex.as_ref().expect("lcd_tex cached");
+                let avail = ui.available_size();
+                // 宽度铺满可用区; 高度按比例。手机窄屏靠 zoom 放大 + ScrollArea 横向滚动
+                let fit_scale = (avail.x / self.lcd_side as f32)
+                    .min(avail.y / 256.0)
+                    .min(3.0)
+                    .max(0.1);
+                let scale = fit_scale * self.lcd_zoom;
+                let size = egui::vec2(self.lcd_side as f32 * scale, 256.0 * scale);
+                // 用 ScrollArea 包裹: 放大后可滚动查看 (手机)
+                egui::ScrollArea::both()
+                    .auto_shrink([false, false])
+                    .show(ui, |ui| {
+                        let (rect, _) = ui.allocate_exact_size(size, egui::Sense::hover());
+                        ui.painter().image(
+                            tex.id(),
+                            rect,
+                            egui::Rect::from_min_max(
+                                egui::pos2(0.0, 0.0),
+                                egui::pos2(1.0, 1.0)
+                            ),
+                            egui::Color32::WHITE,
+                        );
+                    });
+            });
+
         // 中央: 三视图切换(Piano Roll 静态时间轴 / Channel Notes 每行=一个channel / PlayView 播放画面)
+        // LCD 浮动窗口关闭状态回写 (open() 用的局部变量, 闭包结束后同步回 self)
+        self.show_bottom = lcd_open;
         egui::CentralPanel::default().show(ctx, |ui| {
                 self.central(ui);
         });
@@ -2426,7 +2479,8 @@ impl WebHandle {
                         match v.as_deref() {
                             Some("play") => app.central_view = CentralView::PlayView,
                             Some("channel") => app.central_view = CentralView::ChannelNotes,
-                            Some("piano") => app.central_view = CentralView::PianoRoll,
+                            // Piano Roll 已移到底栏 (2026-08-12): ?view=piano → 打开底栏 + 中央回 Channel
+                            Some("piano") => { app.show_piano = true; app.central_view = CentralView::ChannelNotes; }
                             _ => {}
                         }
                     }
