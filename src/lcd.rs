@@ -98,6 +98,14 @@ impl MuMatrix {
     }
 }
 
+// 34-bar 网格列公式 (全区域 A1/A2 + 01..32): bar i 占 2 列 (i*…, 每组 5 列内 2 bar, 间距 1)
+// i=0,1→A1/A2, i=2..33→ch1..32; bar i 列 = gi*5 + (k?3:0), gi=i/2, k=i%2
+fn bar_col(i: i32) -> i32 {
+    let gi = i / 2;
+    let k = i % 2;
+    gi * 5 + if k == 1 { 3 } else { 0 }
+}
+
 /// 在字体表中查找码位, 返回 8 字节偏移 (XG_FONT_BITS 内, 每字形 8 字节 = 5x8 逐行)
 fn font_offset(cp: u32) -> Option<usize> {
     // 线性查找 (2576 项, 仅在绘制时调用, 够快; 可优化为二分)
@@ -184,14 +192,14 @@ fn render_to_matrix_mode(voice: &str, bank: u32, program: u32, levels: &[f32], a
         //   若是简单"右侧 9 组 i=2..17" 会偏左一组 (对齐到 ch15, 用户实测发现)
         //   电平数据源暂缺 → 目前全 0, 只画基线
         for i in 18..34i32 {
-            let c = bar_col_grid(i) as i32;
+            let c = bar_col(i) as i32;
             mm.set(c, 15, 1);
             mm.set(c + 1, 15, 1);
         }
         for i in 18..34i32 {
             let lvl = 0.0f32; // 17-32 电平暂缺, 等 Port B 接入
             let n_l = (lvl * 16.0).round() as i32;
-            let c = bar_col_grid(i);
+            let c = bar_col(i);
             for p in 0..=n_l.min(15) {
                 let row = 15 - p;
                 mm.set(c, row as i32, 1);
