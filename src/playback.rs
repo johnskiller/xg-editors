@@ -173,11 +173,11 @@ impl XgApp {
                 (false, Some((msb, lsb))) => v.program
                     .and_then(|prg| self.voice_bank.as_ref().and_then(|b| b.find(msb, prg, lsb)))
                     .map(|vo| vo.name.clone())
-                    .unwrap_or_else(|| format!("Ch{:02}", i + 1)),
+                    .unwrap_or_else(|| "GrandPno".to_string()),
                 (false, None) => v.program
                     .and_then(|prg| self.voice_bank.as_ref().and_then(|b| b.xg_by_prg(prg)))
                     .map(|vo| vo.name.clone())
-                    .unwrap_or_else(|| format!("Ch{:02}", i + 1)),
+                    .unwrap_or_else(|| "GrandPno".to_string()),
             };
             self.live_voice_names[i] = name;
         }

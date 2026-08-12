@@ -1258,7 +1258,8 @@ impl XgApp {
                 return n.clone();
             }
         }
-        format!("Ch{:02}", i + 1)
+        // XG 初始化默认音色: GrandPno (bank 000 / pgm 001) — 不再显示 ChNN
+        "GrandPno".to_string()
     }
 
     /// 滑块变化后: 用当前 params 重新渲染 LCD 参数条 (按 param→LCD 条索引映射)
@@ -1280,6 +1281,17 @@ impl XgApp {
         // 播放时 LCD 实时反映: 电平条 = live_levels (16ch), 音色名 = 当前 part 通道的 live_voice_names
         // (SMF 加载后; 未播/无 SMF 时沿用 cur_voice 编辑音色, 电平 0)
         let lv: [f32; 16] = self.live_levels;
+        // bank/pgm 联动: SMF 加载后从 live_bank/live_program 实时取当前 part 通道的真实值
+        // (与音色名同一数据源, 保证 音色/bank/pgm 三者同步; 未加载时用滑块编辑值)
+        let (lcd_bank, lcd_prog): (u32, u32) = if self.smf.is_some() {
+            let ch = lcd::part_channel(self.cur_part).saturating_sub(1) as usize;
+            let (msb, lsb) = self.live_bank.get(ch).copied().unwrap_or((0u8, 0u8));
+            let prg = self.live_program.get(ch).copied().unwrap_or(0u8) as u32;
+            // LCD 显示 LSB 为 bank (MU90 真机显示 LSB; 如 Chor.EP2 = lsb32), program 1-based
+            (lsb as u32, prg + 1)
+        } else {
+            (self.cur_bank, self.cur_prog)
+        };
         let lcd_voice: String = if self.smf.is_some() {
             let ch = lcd::part_channel(self.cur_part).saturating_sub(1) as usize;
             self.live_voice_names.get(ch).cloned().unwrap_or_default()
@@ -1290,7 +1302,7 @@ impl XgApp {
         if self.lcd_32 {
             lcd::render_lcd_32(
                 &mut self.lcd_pixels,
-                &lcd_voice, self.cur_bank, self.cur_prog,
+                &lcd_voice, lcd_bank, lcd_prog,
                 &lv, &[0.0; 2],
                 self.cur_part, // part 1..32 (选择器切换; lcd.rs 内部映射 sec/channel)
                 &p,
@@ -1298,7 +1310,7 @@ impl XgApp {
         } else {
             lcd::render_lcd(
                 &mut self.lcd_pixels,
-                &lcd_voice, self.cur_bank, self.cur_prog,
+                &lcd_voice, lcd_bank, lcd_prog,
                 &lv, &[0.0; 2],
                 self.cur_part,
                 &p,
@@ -2663,11 +2675,25 @@ mod tests {
         // 用与渲染相同的计算: part_channel(1)-1=0 → live_voice_names[0]
         let ch = lcd::part_channel(1).saturating_sub(1) as usize;
         assert_eq!(app.live_voice_names[ch], app.live_voice_names[0]);
+        // 问题1修复: LCD bank/pgm 必须跟随当前 part 通道的 live 值 (与音色名同一数据源)
+        // live_program[0] 应有值 (SMF 里 PC=81 已注入)
+        app.update_lcd_params();
         // 渲染 LCD 不 panic + 像素有效
         let mut px = vec![0u8; lcd::LCD_W * lcd::LCD_H * 4];
         let lv = app.live_levels;
-        lcd::render_lcd(&mut px, &app.live_voice_names[ch], app.cur_bank, app.cur_prog, &lv, &[0.0; 2], 1, &[0.0; 8]);
+        // 与 update_lcd_params 相同的取值逻辑: SMF 已加载 → live_bank/live_program
+        let (msb, lsb) = app.live_bank[ch];
+        let prg = app.live_program[ch] as u32;
+        lcd::render_lcd(&mut px, &app.live_voice_names[ch], lsb as u32, prg + 1, &lv, &[0.0; 2], 1, &[0.0; 8]);
         assert!(px.chunks_exact(4).all(|c| c[3] == 255), "LCD 像素 alpha 全满");
+        // SMF 已加载时, 渲染用的 bank/prog 不应再用滑块编辑值 cur_bank/cur_prog (问题1核心)
+        // ch1 PC=81 → live_program[0]=81 → 显示 82 (1-based); 滑块值可能是初值 0
+        if app.live_program[0] as u32 + 1 != app.cur_prog {
+            assert_ne!(
+                lsb as u32, app.cur_bank,
+                "SMF 加载后 LCD bank 应取 live_bank 而非滑块 cur_bank"
+            );
+        }
     }
 
     #[test]
@@ -2993,8 +3019,8 @@ mod tests {
             "ch1 应有音色名, got '{}'",
             app.live_voice_names[0]
         );
-        // 空通道 fallback "ChNN" (ch02, program None)
-        assert_eq!(app.live_voice_names[1], "Ch02");
+        // 空通道 fallback "GrandPno" (ch02, program None; XG 初始化默认音色, 不再显示 ChNN)
+        assert_eq!(app.live_voice_names[1], "GrandPno");
         // ch10 (注音可能无 program) 是鼓通道 → StandKit (John: MU90 LCD 真机名)
         assert_eq!(app.live_voice_names[9], "StandKit");
         // 电平表初始归零
