@@ -105,18 +105,28 @@ impl XgApp {
 
         // ===== 内容区 (ScrollArea 纵向) : 左琴键 + 时间轴 =====
         let total_h = (MIDI_HIGH - MIDI_LOW) as f32 * ROW_H; // 128 行
-        // 初始垂直滚动: 定位到音符 pitch 中位数附近 (音符在底部 C 区, 视口初始在顶部会看不到)
-        let notes = self.pr_notes(ch);
-        let mut pitches: Vec<i32> = notes.iter().map(|(_, _, p)| *p as i32).collect();
-        pitches.sort_unstable();
-        let median_pitch = pitches.get(pitches.len() / 2).copied().unwrap_or(60);
-        // 目标行 (像素) = (127 - pitch)*ROW_H; 偏移到让该行居中
-        let target_y = (MIDI_HIGH - 1 - median_pitch) as f32 * ROW_H;
-        let init_off = (target_y - 60.0).max(0.0);
+        // 仅首帧设定 initial 垂直滚动到音符中位区, 之后完全交还用户 (egui vertical_scroll_offset
+        // 每帧都 apply → 若一直 Some 会把用户滚动弹回, 无法滚到 0-127 全部琴键; 用户 2026-08-12)
+        let need_init = !self.pr_scrolled_once;
+        let mut init_off = 0.0;
+        if need_init {
+            let notes = self.pr_notes(ch);
+            let mut pitches: Vec<i32> = notes.iter().map(|(_, _, p)| *p as i32).collect();
+            pitches.sort_unstable();
+            let median_pitch = pitches.get(pitches.len() / 2).copied().unwrap_or(60);
+            // 目标行 (像素) = (127 - pitch)*ROW_H; 偏移到让该行居中
+            let target_y = (MIDI_HIGH - 1 - median_pitch) as f32 * ROW_H;
+            init_off = (target_y - 60.0).max(0.0);
+            self.pr_scrolled_once = true;
+        }
         let mut scroll_area = egui::ScrollArea::vertical()
             .auto_shrink([false, false])
-            .vertical_scroll_offset(init_off);
-        // 若音符 pitch 分散, 用能覆盖中位数的偏移即可
+            .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysVisible)
+            .id_salt("piano_roll_scroll");
+        // 仅首帧传 initial offset; 后续帧不传 → 用户滚动不被弹回, 可滚遍 0-127 全部琴键
+        if need_init && init_off > 0.0 {
+            scroll_area = scroll_area.vertical_scroll_offset(init_off);
+        }
         scroll_area.show(ui, |ui| {
                 // 内部坐标系: 视口顶 = ui.min_rect().top()
                 let c0 = ui.min_rect().top();

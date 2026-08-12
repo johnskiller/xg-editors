@@ -693,6 +693,10 @@ pub struct XgApp {
     pub pr_zoom: f32,
     /// Piano Roll 独立横向滚动偏移 (tick 起始); 与 Channel 视图独立
     pub pr_scroll_ticks: u64,
+    /// Piano Roll 首帧是否已设定初始垂直滚动 (之后放弃控制, 交给用户滚动)
+    pub pr_scrolled_once: bool,
+    /// 是否已为 app 设置滚动条样式 (宽/常显)
+    pub ui_scroll_style_done: bool,
     /// 发送测试的异步结果 cell(wasm)
     #[cfg(target_arch = "wasm32")]
     pub midi_send_ui_cell: Option<std::rc::Rc<std::cell::RefCell<Option<Result<(), String>>>>>,
@@ -1718,6 +1722,8 @@ impl Default for XgApp {
             cur_pr_channel: 1,
             pr_zoom: 1.0,
             pr_scroll_ticks: 0,
+            pr_scrolled_once: false,
+            ui_scroll_style_done: false,
             #[cfg(target_arch = "wasm32")]
             midi_probe_cell: None,
             #[cfg(target_arch = "wasm32")]
@@ -1753,6 +1759,20 @@ impl Default for XgApp {
 
 impl eframe::App for XgApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
+        // ---- 滚动条样式 (一次; 用户 2026-08-12: piano roll 右侧滚动条太窄太淡拖不动) ----
+        if !self.ui_scroll_style_done {
+            self.ui_scroll_style_done = true;
+            let mut style = (*ctx.style()).clone();
+            // 非浮动(solid, 常显不透明) + 更宽 + 更明显
+            style.spacing.scroll.floating = false;
+            style.spacing.scroll.bar_width = 10.0;
+            style.spacing.scroll.handle_min_length = 24.0;
+            style.spacing.scroll.bar_inner_margin = 2.0;
+            style.spacing.scroll.bar_outer_margin = 1.0;
+            style.spacing.scroll.dormant_background_opacity = 0.6;
+            style.spacing.scroll.active_background_opacity = 0.9;
+            ctx.set_style(style);
+        }
         // ---- 双向通信: 每帧收 MIDI input (硬件 SysEx/消息 → 解析 part 音色) ----
         self.poll_midi_input();
         // 握手读超时: 建立/检查 deadline (~3s 无回包则放弃, 避免卡死)
