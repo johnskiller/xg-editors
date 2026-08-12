@@ -1615,7 +1615,7 @@ impl Default for XgApp {
             show_right: true,
             show_bottom: true,
             show_piano: true,        // 默认打开 (用户 2026-08-12: piano roll 默认显示)
-            piano_height: 660.0,    // 默认高度 = 原 220 * 3 (用户要求)
+            piano_height: 500.0,    // 默认高度 (用户改口: 660→500)
             central_view: CentralView::ChannelNotes, // 默认 Channel 音符指示(每行=channel, 行头含音色+绿电平); 可切 Piano Roll/PlayView
             left_width: 270.0, // 默认宽度容纳完整绿条+百分比(canvas内容); 拖窄则右缘裁剪, 不重排
             right_width: 240.0,
@@ -2372,18 +2372,36 @@ impl eframe::App for XgApp {
         // 声明顺序: bottom_status(最底) → bottom_piano(其上方) → CentralPanel 剩中间
         {
             let open = self.show_piano;
-            let mut panel = egui::TopBottomPanel::bottom("bottom_piano")
+            let panel_id = egui::Id::new("bottom_piano");
+            // 删掉 egui 持久化的面板高度: 面板高度由 self.piano_height 统一管理
+            // (展开态实时记录拖动值; 收起=22不残留; 展开用 default=self.piano_height)
+            // (用户 2026-08-12: 收起再展开回用户拖过的高度/默认 500, 而非 220; egui 的
+            //  PanelState 每帧 store, exact_height(22) 会覆盖用户高度, 故每次 show 前清除)
+            ctx.data_mut(|d| d.remove::<egui::containers::panel::PanelState>(panel_id));
+            let mut panel = egui::TopBottomPanel::bottom(panel_id)
                 .resizable(open)
-                .default_height(self.piano_height);
+                .default_height(self.piano_height)
+                // 标题行要浅色/白: frame 要显式填 panel 浅色(透明会露深层 → 标题变深)。
+                // 内容区(render_piano_roll)自己铺深色; 深色只作用内容, 标题/左侧 padding 白。
+                // (用户 2026-08-12: 标题底色不要深色, 保持白色)
+                .frame(egui::Frame::default()
+                    .fill(egui::Color32::from_gray(248))
+                    .inner_margin(egui::Margin {
+                        left: 0.0,
+                        right: 0.0,
+                        top: 3.0,
+                        bottom: 3.0,
+                    })); // 标题行上方留 3px, 不再紧贴横线 (用户: 上贴下空 → 上下均衡)
             if open {
                 panel = panel.height_range(80.0..=900.0);
             } else {
                 panel = panel.exact_height(22.0); // 收起: 只留 22px 窄条
             }
-            panel.show(ctx, |ui| {
+            let pr_inner = panel.show(ctx, |ui| {
                 if open {
                     ui.horizontal(|ui| {
-                        ui.label("Piano Roll");
+                        // 与中央 Channel 视图标题(heading)同字号 (用户 2026-08-12)
+                        ui.heading("Piano Roll");
                         ui.separator();
                         // Channel 选择 (用户 2026-08-12: piano roll 只显示一个 channel 的音符)
                         ui.label("Ch");
@@ -2433,6 +2451,11 @@ impl eframe::App for XgApp {
                     }
                 }
             });
+            // 展开态实时记录面板高度 (用户拖动 → self.piano_height), 收起/展开后恢复
+            if open {
+                let h = pr_inner.response.rect.height();
+                if h > 10.0 { self.piano_height = h; }
+            }
         }
 
         // LCD 浮动窗口 (用户 2026-08-12: LCD 改为 floating pane, 可拖动/缩放/开关)
@@ -2441,8 +2464,8 @@ impl eframe::App for XgApp {
         egui::Window::new("LCD (MU90)")
             .id(egui::Id::new("lcd_float"))
             .open(&mut lcd_open)
-            .default_width(900.0)
-            .default_height(360.0)
+            .default_width(450.0)    // 缩小为原来一半 (用户 2026-08-12: 默认尺寸改一半)
+            .default_height(165.0)  // 按 LCD 比例: 16ch 等比内接高 ~131 + 顶栏 ~30 (用户: 略高改合适)
             .default_pos(egui::pos2(560.0, 46.0)) // 默认中上 (顶部栏下方), 不挡中央编辑区/底栏 Piano Roll
             .resizable(true)
             .collapsible(true)

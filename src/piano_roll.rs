@@ -65,10 +65,12 @@ impl XgApp {
     /// 钢琴卷帘: 左琴键(0-127) + 顶 bar/beat + 单 channel 音符 + playhead
     pub(crate) fn render_piano_roll(&mut self, ui: &mut egui::Ui) {
         let ch = self.cur_pr_channel; // 1..16
-        let outer = ui.available_rect_before_wrap();
+        // 内容区铺 ruler 同色深底: available_rect 在标题行之下(标题行保持浅色/白),
+        // 但 min.x 展到窗口左缘 → 左侧 padding 也覆盖成深色 (用户 2026-08-12: 标题要白,
+        // padding 不要白)
+        let mut outer = ui.available_rect_before_wrap();
+        outer.min.x = 0.0;
         // 注意: 不要用 ui.allocate_rect(outer) 抢占空间 — 会让后续 ScrollArea 视口塌缩为 0 (内容全不可见)
-        // 整个内容区铺 ruler 同色深底 (用户 2026-08-12: 底栏 padding 颜色与 ruler 底色一致 →
-        // 标尺/琴键/网格视觉连续, 左侧衔接不齐消隐)
         let panel_p = ui.painter();
         panel_p.rect_filled(outer, 0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e));
 
@@ -92,14 +94,18 @@ impl XgApp {
         let (ruler_rect, _) =
             ui.allocate_exact_size(egui::vec2(outer.width(), RULER_H), egui::Sense::hover());
         let ruler_p = ui.painter();
+        // time_left 必须与内容区 time_rect.left() 完全同一基准: outer.left()+KEY_W
+        // (not ruler_rect.left()+KEY_W — allocate 的 left 可能受 spacing 影响 ≠ outer.left(),
+        //  会导致标尺 bar/beat 线 vs 内容区 bar/beat 线横向错位; 用户 2026-08-12 强调 bar/beat 对齐优先)
+        let time_left = outer.left() + KEY_W;
         let ruler_time_rect = egui::Rect::from_min_max(
-            egui::pos2(ruler_rect.left() + KEY_W, ruler_rect.top()),
+            egui::pos2(time_left, ruler_rect.top()),
             ruler_rect.max,
         );
         crate::draw_time_ruler(
             ruler_p,
             ruler_rect,
-            ruler_time_rect.left(),
+            time_left,
             ruler_time_rect.width(),
             win_ticks,
             scroll,
