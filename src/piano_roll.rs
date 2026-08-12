@@ -189,7 +189,7 @@ impl XgApp {
                         p.rect_filled(row, 1.0, egui::Color32::from_rgb(0x1a, 0x1a, 0x20));
                     }
                     p.rect_stroke(row, 1.0, egui::Stroke::new(1.0, egui::Color32::from_gray(90)));
-                    // C 标注
+                    // C 标注 (画在琴键接近右端, 用户 2026-08-12: 左缘会被窗口/内边距截断, 改右端确保可见)
                     if p_.rem_euclid(12) == 0 {
                         let col = if is_white {
                             egui::Color32::from_gray(70)
@@ -197,8 +197,8 @@ impl XgApp {
                             egui::Color32::from_gray(170)
                         };
                         p.text(
-                            egui::pos2(row.left() + 3.0, row.center().y),
-                            egui::Align2::LEFT_CENTER,
+                            egui::pos2(row.right() - 4.0, row.center().y),
+                            egui::Align2::RIGHT_CENTER,
                             midi_name(p_),
                             egui::FontId::proportional(9.0),
                             col,
