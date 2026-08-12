@@ -67,6 +67,10 @@ impl XgApp {
         let ch = self.cur_pr_channel; // 1..16
         let outer = ui.available_rect_before_wrap();
         // 注意: 不要用 ui.allocate_rect(outer) 抢占空间 — 会让后续 ScrollArea 视口塌缩为 0 (内容全不可见)
+        // 整个内容区铺 ruler 同色深底 (用户 2026-08-12: 底栏 padding 颜色与 ruler 底色一致 →
+        // 标尺/琴键/网格视觉连续, 左侧衔接不齐消隐)
+        let panel_p = ui.painter();
+        panel_p.rect_filled(outer, 0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e));
 
         let t_end = if self.smf.is_some() {
             self.smf_end_tick.max(1)

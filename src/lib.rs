@@ -1614,8 +1614,8 @@ impl Default for XgApp {
             show_left: false, // 2026-08-09 UI 整理: 左侧 track 栏停用(音色+电平移入 center channel view 行头, 根治对齐)
             show_right: true,
             show_bottom: true,
-            show_piano: false,
-            piano_height: 220.0,
+            show_piano: true,        // 默认打开 (用户 2026-08-12: piano roll 默认显示)
+            piano_height: 660.0,    // 默认高度 = 原 220 * 3 (用户要求)
             central_view: CentralView::ChannelNotes, // 默认 Channel 音符指示(每行=channel, 行头含音色+绿电平); 可切 Piano Roll/PlayView
             left_width: 270.0, // 默认宽度容纳完整绿条+百分比(canvas内容); 拖窄则右缘裁剪, 不重排
             right_width: 240.0,
@@ -1759,18 +1759,23 @@ impl Default for XgApp {
 
 impl eframe::App for XgApp {
     fn update(&mut self, ctx: &egui::Context, _frame: &mut eframe::Frame) {
-        // ---- 滚动条样式 (一次; 用户 2026-08-12: piano roll 右侧滚动条太窄太淡拖不动) ----
+        // ---- 滚动条样式 (一次; 用户 2026-08-12: 需可见可拖, 且不占布局使标尺与网格错位) ----
         if !self.ui_scroll_style_done {
             self.ui_scroll_style_done = true;
             let mut style = (*ctx.style()).clone();
-            // 非浮动(solid, 常显不透明) + 更宽 + 更明显
-            style.spacing.scroll.floating = false;
+            // floating 滚动条不占布局 → 标尺/琴键/网格同宽, bar 竖线上下对齐。
+            // 用 floating.allocated_width + 高对比 + 半透明常显, 兼顾"可见可拖"。
+            style.spacing.scroll.floating = true;
             style.spacing.scroll.bar_width = 10.0;
+            style.spacing.scroll.floating_width = 4.0;      // 未激活更细、更不易见
+            style.spacing.scroll.floating_allocated_width = 0.0; // 布局占位 0 → 标尺/内容同宽, bar 上下对齐
             style.spacing.scroll.handle_min_length = 24.0;
             style.spacing.scroll.bar_inner_margin = 2.0;
             style.spacing.scroll.bar_outer_margin = 1.0;
-            style.spacing.scroll.dormant_background_opacity = 0.6;
-            style.spacing.scroll.active_background_opacity = 0.9;
+            // 未激活(不在滚动/未 hover)几乎不可见; 激活时对比降低, 灰色更淡
+            style.spacing.scroll.dormant_background_opacity = 0.12;
+            style.spacing.scroll.active_background_opacity = 0.55;
+            style.spacing.scroll.foreground_color = true;   // 高对比 thumb
             ctx.set_style(style);
         }
         // ---- 双向通信: 每帧收 MIDI input (硬件 SysEx/消息 → 解析 part 音色) ----
@@ -2371,7 +2376,7 @@ impl eframe::App for XgApp {
                 .resizable(open)
                 .default_height(self.piano_height);
             if open {
-                panel = panel.height_range(80.0..=500.0);
+                panel = panel.height_range(80.0..=900.0);
             } else {
                 panel = panel.exact_height(22.0); // 收起: 只留 22px 窄条
             }
