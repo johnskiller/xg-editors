@@ -10,6 +10,7 @@ pub mod data;
 pub mod device;
 pub mod lcd;
 pub mod midi_topology;
+pub mod part;
 pub mod persist;
 pub mod smf;
 pub mod sysex;
@@ -487,6 +488,10 @@ pub struct XgApp {
     pub cur_pc_idx: usize,
     /// 当前在 (cur_msb, prog0) 变体列表中的索引 (LSB 有效范围走索引, 不直接存 lsb 值)
     pub cur_lsb_idx: usize,
+    /// Part 状态唯一数据源 (32 part, 含音色 + 混音参数; 单源重构)
+    pub parts: [crate::part::PartState; 32],
+    /// 全局系统效果类型 (Rev/Cho/Var), 与 per-part 的 send 量分离
+    pub sys_fx: crate::part::SystemFx,
     pub bg_pixels: Vec<u8>,  // 背景纹理像素(测试背景贴图是否扰乱布局)
     pub bg_side: usize,
     /// PlayView 瀑布区背景纹理 (Horsehead 星云) — 缓存避免每帧 load_texture
@@ -1233,72 +1238,52 @@ impl XgApp {
         }
     }
 
-    /// PlayView 左矩阵: 通道 i 当前播放音色名 — 由实时 (live_bank msb/lsb + live_program) 映射.
-    /// 鼓 (msb==127) → drum_display_name; 旋律 → voice_bank.find(msb,prg,lsb);
-    /// 查找失败回退 live_voice_names (SMF 加载时预填) 或 "ChNN".
+    /// 音色名查找: 从单源 parts[i] 取 msb/lsb/prog, 查 voice_bank (鼓用 drum_display_name)
     pub(crate) fn voice_name_for_channel(&self, i: usize) -> String {
         if i >= 16 { return String::new(); }
-        let (msb, lsb) = self.live_bank[i];
-        let prg = self.live_program[i];
-        if msb == 127 {
-            // 鼓: MSB=127 → drum kit 名 (复用 LCD 8字符短名表, 规格书 §4.2)
-            return crate::data::drum_display_name(prg).to_string();
-        }
-        if let Some(vb) = &self.voice_bank {
-            if let Some(v) = vb.find(msb, prg, lsb) {
-                return v.name.clone();
+        if let Some(part) = self.parts.get(i) {
+            let (msb, lsb) = (part.msb, part.lsb);
+            let prg = part.prog;
+            if msb == 127 {
+                // 鼓: MSB=127 → drum kit 名
+                return crate::data::drum_display_name(prg).to_string();
             }
-            if let Some(v) = vb.xg_by_prg(prg) {
-                return v.name.clone();
+            if let Some(vb) = &self.voice_bank {
+                if let Some(v) = vb.find(msb, prg, lsb) {
+                    return v.name.clone();
+                }
+                if let Some(v) = vb.xg_by_prg(prg) {
+                    return v.name.clone();
+                }
+            }
+            // 回退: part.voice (SMF 预填或 quickpick 选择)
+            if !part.voice.is_empty() {
+                return part.voice.clone();
             }
         }
-        // 回退: SMF 预填音色名
-        if let Some(n) = self.live_voice_names.get(i) {
-            if !n.is_empty() {
-                return n.clone();
-            }
-        }
-        // XG 初始化默认音色: GrandPno (bank 000 / pgm 001) — 不再显示 ChNN
+        // XG 初始化默认音色: GrandPno (bank 000 / pgm 001)
         "GrandPno".to_string()
     }
 
-    /// 滑块变化后: 用当前 params 重新渲染 LCD 参数条 (按 param→LCD 条索引映射)
-    /// 值归一化 0..1 (依据各自 min/max)
+    /// 滑块变化后: 用当前 part 的 params 重新渲染 LCD 参数条
+    /// 从唯一数据源 parts[cur_part-1] 取音色/bank/pgm/8 条参数
     fn update_lcd_params(&mut self) {
-        // 先清空 8 条, 再按映射填入
+        // 先清空 8 条, 再按映射填入 (现在用 part params, 不再用全局 self.params)
         let mut p = [0.0f32; 8];
-        for (i, item) in self.params.iter().enumerate() {
-            let Some(lcd_i) = self.param_lcd_idx.get(i).copied().flatten() else {
-                continue; // 该参数没有 LCD 条 (Cutoff/Reso)
-            };
-            let (_, min, max, val) = item;
-            p[lcd_i] = if max - min > 0.0 {
-                ((val - min) / (max - min)).clamp(0.0, 1.0)
-            } else {
-                0.0
-            };
+        let part = self.parts.get((self.cur_part.saturating_sub(1)) as usize);
+        if let Some(part) = part {
+            for i in 0..part.params.len() {
+                p[i] = part.params[i] / 127.0; // 归一化 0..1
+            }
         }
-        // 播放时 LCD 实时反映: 电平条 = live_levels (16ch), 音色名 = 当前 part 通道的 live_voice_names
-        // (SMF 加载后; 未播/无 SMF 时沿用 cur_voice 编辑音色, 电平 0)
+        // 播放时 LCD 实时反映: 电平条 = live_levels (16ch), 音色名 = 当前 part
         let lv: [f32; 16] = self.live_levels;
-        // bank/pgm 联动: SMF 加载后从 live_bank/live_program 实时取当前 part 通道的真实值
-        // (与音色名同一数据源, 保证 音色/bank/pgm 三者同步; 未加载时用滑块编辑值)
-        let (lcd_bank, lcd_prog): (u32, u32) = if self.smf.is_some() {
-            let ch = lcd::part_channel(self.cur_part).saturating_sub(1) as usize;
-            let (msb, lsb) = self.live_bank.get(ch).copied().unwrap_or((0u8, 0u8));
-            let prg = self.live_program.get(ch).copied().unwrap_or(0u8) as u32;
-            // LCD 显示 LSB 为 bank (MU90 真机显示 LSB; 如 Chor.EP2 = lsb32), program 1-based
-            (lsb as u32, prg + 1)
+        // 单源化: LCD 音色/bank/pgm 都来自 parts[cur_part-1]
+        let (lcd_voice, lcd_bank, lcd_prog) = if let Some(part) = part {
+            (part.voice.clone(), part.lsb as u32, part.prog as u32 + 1)
         } else {
-            (self.cur_bank, self.cur_prog)
+            (self.cur_voice.clone(), self.cur_bank, self.cur_prog)
         };
-        let lcd_voice: String = if self.smf.is_some() {
-            let ch = lcd::part_channel(self.cur_part).saturating_sub(1) as usize;
-            self.live_voice_names.get(ch).cloned().unwrap_or_default()
-        } else {
-            self.cur_voice.clone()
-        };
-        let lcd_voice = if lcd_voice.is_empty() { self.cur_voice.clone() } else { lcd_voice };
         if self.lcd_32 {
             lcd::render_lcd_32(
                 &mut self.lcd_pixels,
@@ -1559,6 +1544,8 @@ impl Default for XgApp {
             cur_msb_idx: 0,
             cur_pc_idx: 0,
             cur_lsb_idx: 0,
+            parts: (0..32).map(|_| crate::part::PartState::default_voice(0, 0, 0, "GrandPno")).collect::<Vec<_>>().try_into().unwrap(),
+            sys_fx: crate::part::SystemFx::default(),
             bg_pixels,
             bg_side,
             starfield_tex: None,
@@ -1966,6 +1953,16 @@ impl eframe::App for XgApp {
                                 self.show_right = false;
                             }
                         });
+                        // 当前 part 显示行 (用户 2026-08-12 要求: 右栏 params 顶端显示当前 part)
+                        let cur_part_idx = (self.cur_part.saturating_sub(1)) as usize;
+                        let part = self.parts.get(cur_part_idx);
+                        let (part_voice, part_bank, part_prog) = part
+                            .map(|p| (p.voice.clone(), p.lsb as u32, p.prog as u32 + 1))
+                            .unwrap_or_else(|| (self.cur_voice.clone(), self.cur_bank, self.cur_prog));
+                        ui.horizontal(|ui| {
+                            ui.strong(format!("Part {}", self.cur_part));
+                            ui.label(format!("·  {}  ▶{:03}▶{:03}", part_voice, part_bank, part_prog));
+                        });
                         ui.separator();
                         // Bank / PC 音色选择 (独立滑块, 驱动 LCD 音色名 + bank prog 数字显示)
                         // 注意: 每行 label 占第1列, "数值+滑块" 用 horizontal 包成整体占第2列
@@ -2115,14 +2112,27 @@ impl eframe::App for XgApp {
                             .num_columns(2)
                             .spacing([8.0, 6.0])
                             .show(ui, |ui| {
-                                // 注意:索引循环避免 iter() immutable borrow + self.params 可变写冲突
+                                // 前8条 VOL..KEY 是 per-part 混音参数 (单源到 parts[cur_part]);
+                                // 后2条 Cutoff/Reso 是音色编辑参数, 不进 part (保留全局 self.params)
+                                let cur_part_idx = (self.cur_part.saturating_sub(1)) as usize;
+                                let n_mix = crate::part::N_PARAMS; // 8
                                 for i in 0..self.params.len() {
-                                    let (label, min, max, val) = self.params[i].clone();
+                                    let (label, min, max, _val) = self.params[i].clone();
                                     ui.label(label);
-                                    let mut v = val;
+                                    // 值: 前8条读 part, 后2条读全局
+                                    let mut v = if i < n_mix {
+                                        self.parts[cur_part_idx].params[i]
+                                    } else {
+                                        self.params[i].3
+                                    };
                                     if ui.add(egui::Slider::new(&mut v, min..=max)).changed() {
-                                        self.params[i].3 = v;
-                                        // 生成真实 XG SysEx (Part 0, 该参数 offset)
+                                        // 写回: 前8条到 part, 后2条到全局
+                                        if i < n_mix {
+                                            self.parts[cur_part_idx].params[i] = v;
+                                        } else {
+                                            self.params[i].3 = v;
+                                        }
+                                        // 生成真实 XG SysEx (当前 part)
                                         let offset = self.param_offsets[i];
                                         let value = v as i32;
                                         // 双向参数 (min<0, 如 Pan/Bright): 偏移使 0 居中 → 0..127
@@ -2503,6 +2513,7 @@ impl WebHandle {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::part::P;
 
     /// 用户操作全链路: msb_idx=1(→48), pc_idx=21(→prg21, 显示22), lsb 唯一变体 8
     /// 验证 LCD 音色名 + 发送字节全部正确 (真机对 48/8/22 报 Silencc → 排查发字节)
@@ -2670,27 +2681,18 @@ mod tests {
         let mut app = XgApp::default();
         let err = app.load_smf_bytes("lcdpart.mid", &data);
         assert!(err.is_ok(), "SMF 解析失败: {err:?}");
-        // part1 → A01 → ch1 → live_voice_names[0] = Saw Ld (非 cur_voice GrandPno)
-        assert!(app.live_voice_names[0].len() > 2, "ch1 音色应被填充");
-        // 用与渲染相同的计算: part_channel(1)-1=0 → live_voice_names[0]
+        assert!(!app.parts[0].voice.is_empty(), "ch1 voice filled");
         let ch = lcd::part_channel(1).saturating_sub(1) as usize;
-        assert_eq!(app.live_voice_names[ch], app.live_voice_names[0]);
-        // 问题1修复: LCD bank/pgm 必须跟随当前 part 通道的 live 值 (与音色名同一数据源)
-        // live_program[0] 应有值 (SMF 里 PC=81 已注入)
+        assert_eq!(ch, 0);
+        assert_eq!(app.parts[ch].voice, app.parts[0].voice);
         app.update_lcd_params();
-        // 渲染 LCD 不 panic + 像素有效
         let mut px = vec![0u8; lcd::LCD_W * lcd::LCD_H * 4];
         let lv = app.live_levels;
-        // 与 update_lcd_params 相同的取值逻辑: SMF 已加载 → live_bank/live_program
-        let (msb, lsb) = app.live_bank[ch];
-        let prg = app.live_program[ch] as u32;
-        lcd::render_lcd(&mut px, &app.live_voice_names[ch], lsb as u32, prg + 1, &lv, &[0.0; 2], 1, &[0.0; 8]);
+        let prg = app.parts[0].prog as u32;
+        lcd::render_lcd(&mut px, &app.parts[0].voice, app.parts[0].lsb as u32, prg + 1, &lv, &[0.0; 2], 1, &[0.0; 8]);
         assert!(px.chunks_exact(4).all(|c| c[3] == 255), "LCD 像素 alpha 全满");
-        // 问题1根因修复: SMF 加载后 live_program 必须从 SMF 解析结果同步 (此前漏同步 → 恒 0)
-        // ch1 PC=81 → live_program[0] 应为 81 → LCD 显示 82 (1-based)
-        assert_eq!(app.live_program[0], 81, "SMF ch1 PC=81 应同步进 live_program[0] (根因修复)");
-        // 渲染值: program+1 = 82, 与音色名同源 (不再恒 001)
-        assert_eq!(prg as u32 + 1, 82, "LCD 应显示 PGM 082");
+        assert_eq!(prg, 81, "SMF ch1 PC=81 → parts[0].prog=81");
+        assert_eq!(prg + 1, 82, "LCD PGM=82");
         // 切 part 联动: 加载后曲目带 ch5 PC=58(Tuba), 切到 part5 → LCD 应显示 pgm 059
         // (构造: 在同一 MTrk 里追加 ch5 program change + note)
         let mut data2: Vec<u8> = Vec::new();
@@ -2705,12 +2707,13 @@ mod tests {
         data2.extend_from_slice(&trk2);
         let mut app2 = XgApp::default();
         assert!(app2.load_smf_bytes("part5.mid", &data2).is_ok());
-        assert_eq!(app2.live_program[4], 58, "SMF ch5 PC58 应同步进 live_program[4] (切 part 联动的基础)");
-        // 切到 part5 → LCD 用 [part_channel(5)-1]=[4] → pgm 059
+        // 单源化: SMF 加载后 live_program 从 SMF 解析同步进 parts[4]
+        assert_eq!(app2.parts[4].prog, 58, "SMF ch5 PC58 应同步进 parts[4].prog");
+        // 切到 part5 → parts[4] → prog 58 → LCD PGM 059
         app2.cur_part = 5;
         let ch5 = lcd::part_channel(5).saturating_sub(1) as usize;
         assert_eq!(ch5, 4);
-        assert_eq!(app2.live_program[ch5] as u32 + 1, 59, "part5 LCD 应显示 PGM 059");
+        assert_eq!(app2.parts[ch5].prog as u32 + 1, 59, "part5 LCD 应显示 PGM 059");
     }
 
     #[test]
@@ -2818,24 +2821,25 @@ mod tests {
     #[test]
     fn params_lcd_alignment() {
         let mut app = XgApp::default();
-        // 把 Volume/Exp(默认127) 和 Pan(默认0→0.5) 归零/归最小, 排除干扰
-        app.params[0].3 = 0.0;   // Volume → 0 (VOL 条灭)
-        app.params[1].3 = 0.0;   // Exp → 0 (EXP 条灭)
-        app.params[3].3 = -64.0; // Pan → 最左 (PAN 条灭)
+        // 从 parts[0] 取 params (单源化), 设置后调用 update_lcd_params
+        // 先设 VOL=0 EXP=0 PAN=0 → 条全灭
+        app.parts[0].params[P::Volume as usize] = 0.0;
+        app.parts[0].params[P::Exp as usize] = 0.0;
+        app.parts[0].params[P::Pan as usize] = 0.0;
         app.update_lcd_params();
         assert!(!bar_pixel_lit(&app.lcd_pixels, 0), "先决: VOL 条初始不应亮 (Vol=0)");
         assert!(!bar_pixel_lit(&app.lcd_pixels, 1), "先决: EXP 条初始不应亮 (Exp=0)");
-        assert!(!bar_pixel_lit(&app.lcd_pixels, 3), "先决: PAN 条初始不应亮 (Pan=-64)");
+        assert!(!bar_pixel_lit(&app.lcd_pixels, 3), "先决: PAN 条初始不应亮 (Pan=0)");
         // Volume(0) → VOL 条(0): 设满 → VOL 亮, EXP/PAN 不亮
-        app.params[0].3 = 127.0;
+        app.parts[0].params[P::Volume as usize] = 127.0;
         app.update_lcd_params();
         assert!(bar_pixel_lit(&app.lcd_pixels, 0), "Volume should light VOL bar");
         assert!(!bar_pixel_lit(&app.lcd_pixels, 1), "EXP bar should not light from Volume (错位 bug)");
         assert!(!bar_pixel_lit(&app.lcd_pixels, 3), "PAN bar should not light from Volume");
 
-        // Pan(3) → PAN 条(3): 设最右 (+63), Volume 归零
-        app.params[0].3 = 0.0;  // Volume 归零
-        app.params[3].3 = 63.0; // Pan 最大 (-64..63)
+        // Pan(3) → PAN 条(3): 设最右 (127), Volume 归零
+        app.parts[0].params[P::Volume as usize] = 0.0;  // Volume 归零
+        app.parts[0].params[P::Pan as usize] = 127.0;   // Pan 最大 (0..127)
         app.update_lcd_params();
         assert!(bar_pixel_lit(&app.lcd_pixels, 3), "Pan should light PAN bar");
         assert!(!bar_pixel_lit(&app.lcd_pixels, 0), "Volume 已归零, VOL 条不应亮");
@@ -3254,14 +3258,16 @@ mod tests {
 
     #[test]
     fn playview_bank_program_and_poly_tracking() {
-        // Task5: CC0/CC32 → live_bank; PC → live_program; NoteOn → poly 计数
+        // Task5: CC0/CC32 → parts[ch].msb/lsb; PC → parts[ch].prog; NoteOn → poly 计数
         let mut app = XgApp::default();
         // bank select MSB=0, LSB=1 (Bank1)
         app.apply_fired_event_to_meter(&PlayEvent::cc_tick(4, 0, 0, 0));
         app.apply_fired_event_to_meter(&PlayEvent::cc_tick(4, 32, 1, 0));
         app.apply_fired_event_to_meter(&PlayEvent::prog(4, 41));
-        assert_eq!(app.live_bank[4], (0, 1));
-        assert_eq!(app.live_program[4], 41);
+        // 单源化: 现在读 parts[4]
+        assert_eq!(app.parts[4].msb, 0);
+        assert_eq!(app.parts[4].lsb, 1);
+        assert_eq!(app.parts[4].prog, 41);
         // NoteOn 两个 → poly 计数 2
         app.apply_fired_event_to_meter(&PlayEvent::note(4, 60, 100, 0, true));
         app.apply_fired_event_to_meter(&PlayEvent::note(4, 64, 90, 0, true));
@@ -3276,18 +3282,20 @@ mod tests {
     #[test]
     fn playview_voice_name_maps_bank_and_drum() {
         // Task4: 鼓通道 (msb=127) → drum_display_name; 旋律 → voice_bank.find
+        // 单源化: 现在直接写 parts[ch]
         let mut app = XgApp::default();
         app.voice_bank = crate::data::VoiceBank::embedded_mu90().ok();
         // 鼓: msb=127, prg=0 → Standard Kit
-        app.live_bank[9] = (127, 0);
-        app.live_program[9] = 0;
+        app.parts[9].msb = 127;
+        app.parts[9].prog = 0;
         assert_eq!(app.voice_name_for_channel(9), "StandKit");
         // 鼓: prg=16 → Rock Kit
-        app.live_program[9] = 16;
+        app.parts[9].prog = 16;
         assert_eq!(app.voice_name_for_channel(9), "Rock Kit");
         // 旋律: 默认 (msb0 lsb0) + pc0 → Grand Piano
-        app.live_bank[0] = (0, 0);
-        app.live_program[0] = 0;
+        app.parts[0].msb = 0;
+        app.parts[0].lsb = 0;
+        app.parts[0].prog = 0;
         let name = app.voice_name_for_channel(0);
         assert!(name.to_lowercase().contains("piano") || !name.is_empty(), "pc0 msb0 应映射到钢琴系, got {name}");
     }

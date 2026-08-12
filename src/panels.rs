@@ -675,7 +675,7 @@ impl XgApp {
                     let (row_name, row_voice, row_level): (String, String, f32) = if self.smf.is_some() {
                         (
                             format!("Ch{:02}", i + 1),
-                            self.live_voice_names.get(i).cloned().unwrap_or_default(),
+                            self.voice_name_for_channel(i),  // 单源化: 从 parts 派生
                             self.live_levels.get(i).copied().unwrap_or(0.0),
                         )
                     } else {

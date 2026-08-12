@@ -166,12 +166,18 @@ impl XgApp {
         self.live_program = [0u8; 16];
         for (i, v) in self.smf_views.iter().enumerate() {
             // 同步 live_bank/live_program ← SMF 解析出的真实 bank/program
-            // (这是 LCD bank/pgm 显示的同源数据; 此前漏了, 导致 LCD 音色变但 bank/pgm 恒 0)
             if let Some((msb, lsb)) = v.bank {
                 self.live_bank[i] = (msb, lsb);
             }
             if let Some(p) = v.program {
                 self.live_program[i] = p;
+            }
+            // 单源化: 同时同步到 parts[i] (唯一数据源)
+            if let Some(part) = self.parts.get_mut(i) {
+                part.msb = v.bank.map(|(msb, _)| msb).unwrap_or(0);
+                part.lsb = v.bank.map(|(_, lsb)| lsb).unwrap_or(0);
+                part.prog = v.program.unwrap_or(0);
+                // 音色名已在下面计算，赋值给 part.voice
             }
             let name = match (i + 1 == 10, v.bank) {
                 // 鼓通道: bank.msb == 127 → 鼓组 (LCD 8字符短名); 否则 (含 None) 默认 Standard Kit
@@ -189,7 +195,11 @@ impl XgApp {
                     .map(|vo| vo.name.clone())
                     .unwrap_or_else(|| "GrandPno".to_string()),
             };
-            self.live_voice_names[i] = name;
+            self.live_voice_names[i] = name.clone();
+            // 单源化: 同步音色名到 parts[i]
+            if let Some(part) = self.parts.get_mut(i) {
+                part.voice = name;
+            }
         }
         self.live_levels = [0.0; 16];
         self.live_volumes = [1.0; 16]; // 重新加载: 音量重置 (CC7 播放时覆盖)
@@ -471,15 +481,19 @@ impl XgApp {
                     match num {
                         7 => self.live_volumes[ch] = (val as f32) / 127.0,      // volume
                         11 => self.live_expressions[ch] = (val as f32) / 127.0,  // expression
-                        0 => self.live_bank[ch].0 = val,                          // Bank Select MSB
-                        32 => self.live_bank[ch].1 = val,                         // Bank Select LSB
+                        0 => { // Bank MSB
+                            self.parts[ch].msb = val;
+                        }
+                        32 => { // Bank LSB
+                            self.parts[ch].lsb = val;
+                        }
                         _ => {}
                     }
                 }
             }
             0xC0 => {
                 if let Some(&prog) = ev.bytes.get(1) {
-                    self.live_program[ch] = prog;
+                    self.parts[ch].prog = prog;
                 }
             }
             0x90 => {
