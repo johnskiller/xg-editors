@@ -2686,14 +2686,31 @@ mod tests {
         let prg = app.live_program[ch] as u32;
         lcd::render_lcd(&mut px, &app.live_voice_names[ch], lsb as u32, prg + 1, &lv, &[0.0; 2], 1, &[0.0; 8]);
         assert!(px.chunks_exact(4).all(|c| c[3] == 255), "LCD 像素 alpha 全满");
-        // SMF 已加载时, 渲染用的 bank/prog 不应再用滑块编辑值 cur_bank/cur_prog (问题1核心)
-        // ch1 PC=81 → live_program[0]=81 → 显示 82 (1-based); 滑块值可能是初值 0
-        if app.live_program[0] as u32 + 1 != app.cur_prog {
-            assert_ne!(
-                lsb as u32, app.cur_bank,
-                "SMF 加载后 LCD bank 应取 live_bank 而非滑块 cur_bank"
-            );
-        }
+        // 问题1根因修复: SMF 加载后 live_program 必须从 SMF 解析结果同步 (此前漏同步 → 恒 0)
+        // ch1 PC=81 → live_program[0] 应为 81 → LCD 显示 82 (1-based)
+        assert_eq!(app.live_program[0], 81, "SMF ch1 PC=81 应同步进 live_program[0] (根因修复)");
+        // 渲染值: program+1 = 82, 与音色名同源 (不再恒 001)
+        assert_eq!(prg as u32 + 1, 82, "LCD 应显示 PGM 082");
+        // 切 part 联动: 加载后曲目带 ch5 PC=58(Tuba), 切到 part5 → LCD 应显示 pgm 059
+        // (构造: 在同一 MTrk 里追加 ch5 program change + note)
+        let mut data2: Vec<u8> = Vec::new();
+        data2.extend_from_slice(b"MThd");
+        data2.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x60]);
+        data2.extend_from_slice(b"MTrk");
+        let mut trk2: Vec<u8> = Vec::new();
+        trk2.extend_from_slice(&[0x00, 0xC0, 81]); // ch1 PC81
+        trk2.extend_from_slice(&[0x00, 0xC4, 58]); // ch5 (idx4) PC58 Tuba — 注意 ch 是 0-based 在 status nibble
+        trk2.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data2.extend_from_slice(&(trk2.len() as u32).to_be_bytes());
+        data2.extend_from_slice(&trk2);
+        let mut app2 = XgApp::default();
+        assert!(app2.load_smf_bytes("part5.mid", &data2).is_ok());
+        assert_eq!(app2.live_program[4], 58, "SMF ch5 PC58 应同步进 live_program[4] (切 part 联动的基础)");
+        // 切到 part5 → LCD 用 [part_channel(5)-1]=[4] → pgm 059
+        app2.cur_part = 5;
+        let ch5 = lcd::part_channel(5).saturating_sub(1) as usize;
+        assert_eq!(ch5, 4);
+        assert_eq!(app2.live_program[ch5] as u32 + 1, 59, "part5 LCD 应显示 PGM 059");
     }
 
     #[test]

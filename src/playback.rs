@@ -162,7 +162,17 @@ impl XgApp {
         // 预填 16 通道音色名 (program + bank → XG/MU90 权威音色名)
         // ch10 (index 9) 是 XG 强制鼓通道: 默认 Standard Kit, 但有 bank(msb=127)/PC 时响应实际鼓组;
         // 其它通道: 有 bank 按 find(msb,prg,lsb), 无 bank 按 xg_by_prg (msb=0 旋律区)
+        self.live_bank = [(0u8, 0u8); 16];
+        self.live_program = [0u8; 16];
         for (i, v) in self.smf_views.iter().enumerate() {
+            // 同步 live_bank/live_program ← SMF 解析出的真实 bank/program
+            // (这是 LCD bank/pgm 显示的同源数据; 此前漏了, 导致 LCD 音色变但 bank/pgm 恒 0)
+            if let Some((msb, lsb)) = v.bank {
+                self.live_bank[i] = (msb, lsb);
+            }
+            if let Some(p) = v.program {
+                self.live_program[i] = p;
+            }
             let name = match (i + 1 == 10, v.bank) {
                 // 鼓通道: bank.msb == 127 → 鼓组 (LCD 8字符短名); 否则 (含 None) 默认 Standard Kit
                 (true, Some((msb, lsb))) if msb == 127 => v.program
@@ -186,8 +196,6 @@ impl XgApp {
         self.live_expressions = [1.0; 16];
         self.raw_vel_peaks = [0.0; 16];
         self.cc_live = [[0u8; 128]; 16];
-        self.live_bank = [(0u8, 0u8); 16];
-        self.live_program = [0u8; 16];
         self.play_evt_count = 0;
         self.max_poly = 0;
         self.live_vel_peaks = [0.0; 16];
