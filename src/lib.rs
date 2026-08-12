@@ -2361,18 +2361,21 @@ impl eframe::App for XgApp {
                     self.lcd_dirty = false;
                 }
                 let tex = self.lcd_tex.as_ref().expect("lcd_tex cached");
-                let avail_rect = ui.available_rect_before_wrap();
-                // LCD 等比内接 + 居中; 窗口比例与 LCD 不完全匹配时, 剩余区以深色面板底色填充 (无白边观感)
-                // (egui 0.29 Window 无公开锁宽高比 API; 用居中+同色背景轻量解决, 用户 2026-08-12 定案)
-                let scale = (avail_rect.width() / self.lcd_side as f32)
-                    .min(avail_rect.height() / 256.0)
+                // 先记下整个内容区 (标题/控制栏之下), 供黑底铺满 — 必须在 allocate 之前取,
+                // 否则 available_rect_before_wrap() 已被推进为剩余区, 黑底画错位置
+                let content_rect = ui.available_rect_before_wrap();
+                let avail = ui.available_size();
+                // LCD 等比内接: 窗口缩小时 LCD 缩小, 放大时放大; 左上角贴齐内容区 (无居中偏移, 坐标确定)
+                let scale = (avail.x / self.lcd_side as f32)
+                    .min(avail.y / 256.0)
                     .max(0.1); // 窗口太小时 LCD 不消失
                 let size = egui::vec2(self.lcd_side as f32 * scale, 256.0 * scale);
-                let rect = egui::Rect::from_center_size(avail_rect.center(), size);
+                // allocate 内容尺寸 (egui 据此得知窗口需多大, 不塌缩)
+                let (rect, _) = ui.allocate_exact_size(size, egui::Sense::hover());
                 let p = ui.painter();
-                // 面板底色 (先画, LCD 纹理盖在上面)
-                p.rect_filled(avail_rect, 0.0, egui::Color32::from_gray(12));
-                // LCD 纹理 (居中)
+                // 深色底铺满整个内容区 (先画, 在 LCD 之下) — 消除窗口比例不匹配时的浅色留白
+                p.rect_filled(content_rect, 0.0, egui::Color32::from_gray(12));
+                // LCD 纹理 (左上贴齐, 画在深底之上)
                 p.image(
                     tex.id(),
                     rect,
