@@ -91,28 +91,35 @@ impl XgApp {
         let bar_ticks = beats_per_bar * ppq; // 每小节 tick (4/4)
 
         // ===== 顶部 bar/beat 标尺 (共用函数 draw_time_ruler, 与 Channel 视图一致) =====
-        let (ruler_rect, _) =
-            ui.allocate_exact_size(egui::vec2(outer.width(), RULER_H), egui::Sense::hover());
+        // 不用 allocate 的返回位置 (受 spacing 影响, 实测 left=22), 标尺底条显式对齐
+        // outer: [outer.left(), outer.left()+outer.width()], 与时间轴同一坐标系
+        // (用户 2026-08-12: 标尺数字/竖线 vs 内容区竖线必须在同一基准, 否则累积错位)
+        let ruler_y0 = ui.cursor().top();
+        let ruler_rect = egui::Rect::from_min_max(
+            egui::pos2(outer.left(), ruler_y0),
+            egui::pos2(outer.left() + outer.width(), ruler_y0 + RULER_H),
+        );
+        ui.allocate_rect(ruler_rect, egui::Sense::hover());
         let ruler_p = ui.painter();
-        // time_left 必须与内容区 time_rect.left() 完全同一基准: outer.left()+KEY_W
-        // (not ruler_rect.left()+KEY_W — allocate 的 left 可能受 spacing 影响 ≠ outer.left(),
-        //  会导致标尺 bar/beat 线 vs 内容区 bar/beat 线横向错位; 用户 2026-08-12 强调 bar/beat 对齐优先)
+        // ★ 时间轴基准单一来源: 标尺与内容区共用同一 time_left/time_width,
+        // 不各自推算 (否则两侧宽度微差会随 bar 递增累积漂移; 用户 2026-08-12 实证 bar1 对齐后面越偏)。
+        // 不用 ruler_rect/allocate 返回的坐标(受 spacing 影响), 全部从 outer 派生:
         let time_left = outer.left() + KEY_W;
+        let time_width = (outer.width() - KEY_W).max(1.0);
         let ruler_time_rect = egui::Rect::from_min_max(
             egui::pos2(time_left, ruler_rect.top()),
-            ruler_rect.max,
+            egui::pos2(time_left + time_width, ruler_rect.bottom()),
         );
         crate::draw_time_ruler(
             ruler_p,
             ruler_rect,
             time_left,
-            ruler_time_rect.width(),
+            time_width,
             win_ticks,
             scroll,
             ppq,
             bar_ticks,
         );
-
         // ===== 内容区 (ScrollArea 纵向) : 左琴键 + 时间轴 =====
         let total_h = (MIDI_HIGH - MIDI_LOW) as f32 * ROW_H; // 128 行
         // 仅首帧设定 initial 垂直滚动到音符中位区, 之后完全交还用户 (egui vertical_scroll_offset
@@ -199,10 +206,10 @@ impl XgApp {
                     }
                 }
 
-                // ===== 时间轴区 (琴键右侧) =====
+                // ===== 时间轴区 (琴键右侧) — ★ 与标尺共用同一 time_left/time_width, 杜绝累积漂移 =====
                 let time_rect = egui::Rect::from_min_max(
-                    egui::pos2(key_rect.right(), c0),
-                    egui::pos2(c_right, c0 + total_h),
+                    egui::pos2(time_left, c0),
+                    egui::pos2(time_left + time_width, c0 + total_h),
                 );
                 // 行分隔细线
                 for i in 0..=(MIDI_HIGH - MIDI_LOW) {
