@@ -2332,11 +2332,6 @@ impl eframe::App for XgApp {
                         });
                     // cur_part 变化时重渲染 LCD
                     self.update_lcd_params();
-                    // 缩放滑块: 手机窄屏上放大点阵到可读 (1x..5x)
-                    let mut zoom = self.lcd_zoom;
-                    ui.add(egui::Slider::new(&mut zoom, 0.5..=5.0).text("zoom"));
-                    // 点阵缩放 = 全局 UI 缩放因子 × 滑块 (可用区决定上限)
-                    self.lcd_zoom = zoom;
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         ui.label(format!("{}x{}", lcd::LCD_W, lcd::LCD_H));
                     });
@@ -2367,12 +2362,11 @@ impl eframe::App for XgApp {
                 }
                 let tex = self.lcd_tex.as_ref().expect("lcd_tex cached");
                 let avail = ui.available_size();
-                // 宽度铺满可用区; 高度按比例。手机窄屏靠 zoom 放大 + ScrollArea 横向滚动
-                let fit_scale = (avail.x / self.lcd_side as f32)
+                // LCD 随窗口缩放: 按可用区等比例铺满 (用户 2026-08-12: 去掉 zoom slider, 随窗口缩放)
+                // 只保底 0.1x (窗口太小时不消失), 不设上限 (窗口拉大 LCD 随之放大)
+                let scale = (avail.x / self.lcd_side as f32)
                     .min(avail.y / 256.0)
-                    .min(3.0)
                     .max(0.1);
-                let scale = fit_scale * self.lcd_zoom;
                 let size = egui::vec2(self.lcd_side as f32 * scale, 256.0 * scale);
                 // 用 ScrollArea 包裹: 放大后可滚动查看 (手机)
                 egui::ScrollArea::both()
