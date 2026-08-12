@@ -8,16 +8,29 @@
 
 ## 当前进行中
 
-(空 — 小问题清单第一轮已完成并发布,等下一批)
+(空 — 单源化重构已完成验收,当前在 feat/part-single-source 分支未合并/发布)
 
 ## 待办池 (Backlog)
 
+- [ ] **PolySyPd (bank000/pgm091) 缺 icon** —— 未定事项,等 John 回家真机 MU90 确认回显再定:
+      `src/xg_icons.rs` ICONS 自动生成表 59 个不含 PolySyPd; resolve_icon 精确/前缀/fallback 三路都不中 → LCD 空白。
+      方案待定: (a) FALLBACK 归到合成 pad 图标, (b) 专门画 16x16 图标。2026-08-12 John 拍板先记录、暂不动。
+- [ ] 右栏 params「Rev: Hall | Cho: Chorus1 | Var: off」效果器行 —— 系统级效果(Rev/Cho 全局, Var 偏系统), 待并入 SystemFx 数据源(单源化后续)
+- [ ] Cutoff/Reso(音色编辑参数)—— 已决定不进 part(留全局), 未来可考虑独立「音色编辑器」分区
 - [ ] 「小问题」清单第二轮(用户/自己再收集)
 - [ ] `docs/cloudflare-pages-deploy.md` —— 历史调研文档,确认要不要留(可删)
 - [ ] `STATUS_CHECK.md` —— 一次性状态核对文档,已过时,可删
+- [ ] (未定) 用户反馈窗口式 params 的参数还需再理清 —— 见设计 reference/part-single-source-design-2026-08-12.md
 
 ## 已完成 (历史)
 
+- [x] **Part 状态单源化重构 (2026-08-12, feat/part-single-source, 待验收合并)**:
+  - 新增 `src/part.rs`: PartState(32 part × voice/bank/prog/8混音参数) + SystemFx(Rev/Cho/Var 类型)
+  - XgApp 增 `parts[32]`; LCD/PlayView/ChannelView/params 面板统一从 parts 读
+  - SMF 加载/CC0/CC32/PC 事件同步写入 parts[i]; params 前 8 条(VOL..KEY)per-part,Cutoff/Reso 留全局
+  - 右栏 params 顶端新增「Part N · 音色 ▶bank▶pgm」显示行(John 要求)
+  - 修复单源化引入的越界 panic(10 条 params vs 8 条 part params)
+  - 测试 84/84 绿(+3 part.rs 单测,更新 4 个旧测试);本地 wasm 验证通过
 - [x] **第一轮小问题修复 (2026-08-12, feat/lcd-live-sync)**:
   - ① LCD bank/pgm 与 part 联动: `update_lcd_params` SMF 加载后从 live_bank/live_program 取当前 part 通道真实值(音色/bank/pgm 三者同步),不再用滑块编辑值
   - ② Part10 鼓 icon: `resolve_icon` 增加鼓组短名(StandKit/Room/Jazz/Brush 等)→ Standard 鼓位图 fallback
