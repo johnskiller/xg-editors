@@ -72,6 +72,22 @@ pub fn console_log(_mark: &str, _msg: impl std::fmt::Display) {}
 /// 顶部 bar/beat 时间标尺绘制 (Channel Notes 与 Piano Roll 共用, 用户 2026-08-12 定案).
 /// 两侧真正差异只是 time_left/width 与各自的 win_ticks/scroll; bar/beat 遍历/颜色/字号完全一致.
 /// 参数: 标尺整块(含深色底), 时间轴起始 x + 宽, 当前窗口 tick 语义 (win_ticks=end/zoom, scroll).
+/// Ruler 自适应密度参数 (纯逻辑, 便于测试): 返回 (bar 号标注步长, 是否画 beat tick)
+/// label_step: 每 N 个小节才标一次 bar 号 (太密跳号); show_beat: 像素充足才画 beat 子刻线
+pub(crate) fn ruler_density(win_ticks: u64, bar_ticks: u64, time_width: f32, ppq: u64) -> (u64, bool) {
+    if bar_ticks == 0 || time_width <= 0.0 {
+        return (1, false);
+    }
+    let n_bars_visible = (win_ticks.max(1) as f32 / bar_ticks.max(1) as f32).ceil();
+    let px_per_bar = (time_width / n_bars_visible.max(1.0)).max(0.0);
+    // bar 号标注步长: 每小节可显示的最小宽度约 44px (数字+间隔)
+    let label_step = ((44.0 / px_per_bar.max(1.0)).ceil() as u64).max(1);
+    // beat tick 最小像素间距: <9px 则省略 (太密)
+    let px_per_beat = px_per_bar / (bar_ticks.max(1) as f32 / ppq.max(1) as f32);
+    let show_beat = px_per_beat >= 9.0 && px_per_bar >= 14.0;
+    (label_step, show_beat)
+}
+
 pub(crate) fn draw_time_ruler(
     p: &egui::Painter,
     ruler_rect: egui::Rect,
@@ -89,6 +105,10 @@ pub(crate) fn draw_time_ruler(
     }
     let last_tick_win = scroll + win_ticks.max(1);
     let win = win_ticks.max(1) as f32;
+
+    // ---- 自适应密度 (用户 2026-08-12: rule 太密时 bar 号跳格 / 更密省略 beat tick) ----
+    let (label_step, show_beat) = ruler_density(win_ticks, bar_ticks, time_width, ppq);
+
     let first_bar = scroll / bar_ticks;
     let last_bar = last_tick_win / bar_ticks + 1;
     let mut bar_no = first_bar;
@@ -96,26 +116,30 @@ pub(crate) fn draw_time_ruler(
         let bt = bar_no * bar_ticks;
         if bt <= last_tick_win {
             let bx = time_left + (bt.saturating_sub(scroll)) as f32 / win * time_width;
-            // bar 起始竖线 (标尺内亮)
+            // bar 起始竖线 (标尺内亮) — 始终保留
             p.vline(bx, ruler_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_rgb(0x66, 0x88, 0x99)));
-            // bar 号 (1-based)
-            p.text(
-                egui::pos2(bx + 3.0, ruler_rect.top() + 1.0),
-                egui::Align2::LEFT_TOP,
-                (bar_no + 1).to_string(),
-                egui::FontId::monospace(10.0),
-                egui::Color32::from_gray(210),
-            );
-            // beat 子刻线: bar 内 1..次 (bar 起点已画)
-            let beat_t = ppq.max(1);
-            let mut b = 1;
-            while b < bar_ticks / beat_t {
-                let btk = bt + b * beat_t;
-                if btk <= last_tick_win {
-                    let bbx = time_left + (btk - scroll) as f32 / win * time_width;
-                    p.vline(bbx, ruler_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_rgb(0x3a, 0x4a, 0x58)));
+            // bar 号 (1-based): 太密则跳格 (每 label_step 个小节标一次)
+            if (bar_no % label_step) == 0 || bar_no == first_bar || bar_no == last_bar {
+                p.text(
+                    egui::pos2(bx + 3.0, ruler_rect.top() + 1.0),
+                    egui::Align2::LEFT_TOP,
+                    (bar_no + 1).to_string(),
+                    egui::FontId::monospace(10.0),
+                    egui::Color32::from_gray(210),
+                );
+            }
+            // beat 子刻线: 空间足够才画 (太密省略)
+            if show_beat {
+                let beat_t = ppq.max(1);
+                let mut b = 1;
+                while b < bar_ticks / beat_t {
+                    let btk = bt + b * beat_t;
+                    if btk <= last_tick_win {
+                        let bbx = time_left + (btk - scroll) as f32 / win * time_width;
+                        p.vline(bbx, ruler_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_rgb(0x3a, 0x4a, 0x58)));
+                    }
+                    b += 1;
                 }
-                b += 1;
             }
         }
         bar_no += 1;
@@ -3437,5 +3461,29 @@ mod tests {
         app.parts[0].prog = 0;
         let name = app.voice_name_for_channel(0);
         assert!(name.to_lowercase().contains("piano") || !name.is_empty(), "pc0 msb0 应映射到钢琴系, got {name}");
+    }
+
+    #[test]
+    fn ruler_density_self_adaptive() {
+        // 用户 2026-08-12: rule 太密时 bar 号跳格 / 更密省略 beat tick
+        // 参数: bar_ticks=384 (默认 4/4 ppq96), time_width=1000px
+        let (bar_ticks, ppq, w) = (384u64, 96u64, 1000.0f32);
+        // 1) 少量 bar; zoom=1 → win_ticks=768 (2 bars) → 每 bar 500px 充足
+        let (step, beat) = ruler_density(768, bar_ticks, w, ppq);
+        assert_eq!(step, 1, "2 bars 稀疏: 每 bar 都标号");
+        assert!(beat, "2 bars 稀疏: 应画 beat tick");
+        // 2) zoom=4 → win_ticks=192 (半 bar 宽 1000px) → 更稀疏, 仍每 bar 标 + beat
+        let (step2, beat2) = ruler_density(192, bar_ticks, w, ppq);
+        assert_eq!(step2, 1);
+        assert!(beat2);
+        // 3) zoom-out: win_ticks=76800 (200 bars 挤 1000px) → 每 bar 5px 极密 → 跳号 + 无 beat
+        let (step3, beat3) = ruler_density(76800, bar_ticks, w, ppq);
+        assert!(step3 > 1, "200 bars 挤 1000px: 必须跳号 (step>1), got {step3}");
+        assert!(!beat3, "200 bars 5px: 省略 beat tick");
+        // 4) 中密: win_ticks=7680 (20 bars 50px/bar) → 跳号或至少 beat 保留逻辑自洽
+        let (step4, beat4) = ruler_density(7680, bar_ticks, w, ppq);
+        // 50px/bar > 44 → 每 bar 标; beat px = 50/4 = 12.5 >= 9 → 保留
+        assert_eq!(step4, 1, "50px/bar 应每 bar 标号");
+        assert!(beat4, "12.5px/beat 应画 beat");
     }
 }
