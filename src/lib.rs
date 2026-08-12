@@ -1960,14 +1960,24 @@ impl eframe::App for XgApp {
                                 self.show_right = false;
                             }
                         });
-                        // 当前 part 显示行 (用户 2026-08-12 要求: 右栏 params 顶端显示当前 part)
+                        // 当前 part 选择下拉 (用户 2026-08-12: part 选择移到 Params 顶部, LCD 里去掉了)
                         let cur_part_idx = (self.cur_part.saturating_sub(1)) as usize;
                         let part = self.parts.get(cur_part_idx);
                         let (part_voice, part_bank, part_prog) = part
                             .map(|p| (p.voice.clone(), p.lsb as u32, p.prog as u32 + 1))
                             .unwrap_or_else(|| (self.cur_voice.clone(), self.cur_bank, self.cur_prog));
                         ui.horizontal(|ui| {
-                            ui.strong(format!("Part {}", self.cur_part));
+                            egui::ComboBox::from_id_salt("part_select_right")
+                                .selected_text(format!("Part {}\t", self.cur_part))
+                                .show_ui(ui, |ui| {
+                                    for p in 1..=32u32 {
+                                        let sec = lcd::part_sec(p);
+                                        let ch = lcd::part_channel(p);
+                                        ui.selectable_value(&mut self.cur_part, p, format!("{p:02}{sec}{ch:02} Part {p}"));
+                                    }
+                                });
+                            // 与原 LCD 下拉一致: show_ui 后无条件重绘 LCD (lcd_dirty guard 控制纹理上传)
+                            self.update_lcd_params();
                             ui.label(format!("·  {}  ▶{:03}▶{:03}", part_voice, part_bank, part_prog));
                         });
                         ui.separator();
@@ -2320,18 +2330,7 @@ impl eframe::App for XgApp {
                         self.lcd_32 = !self.lcd_32;
                         self.update_lcd_params();
                     }
-                    // Part 选择器 1..32 (Part 号→Port/Channel 在 lcd.rs 映射: 1-16→A, 17-32→B)
-                    egui::ComboBox::from_id_salt("part_select")
-                        .selected_text(format!("Part {}", self.cur_part))
-                        .show_ui(ui, |ui| {
-                            for p in 1..=32u32 {
-                                let sec = lcd::part_sec(p);
-                                let ch = lcd::part_channel(p);
-                                ui.selectable_value(&mut self.cur_part, p, format!("{p:02}{sec}{ch:02} Part {p}"));
-                            }
-                        });
-                    // cur_part 变化时重渲染 LCD
-                    self.update_lcd_params();
+                    // Part 选择已移到右栏 Params 顶部 (2026-08-12 用户要求), LCD 只留 32ch toggle + 分辨率
                     ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                         ui.label(format!("{}x{}", lcd::LCD_W, lcd::LCD_H));
                     });
