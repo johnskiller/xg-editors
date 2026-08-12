@@ -2361,28 +2361,27 @@ impl eframe::App for XgApp {
                     self.lcd_dirty = false;
                 }
                 let tex = self.lcd_tex.as_ref().expect("lcd_tex cached");
-                let avail = ui.available_size();
-                // LCD 随窗口缩放: 按可用区等比例铺满 (用户 2026-08-12: 去掉 zoom slider, 随窗口缩放)
-                // 只保底 0.1x (窗口太小时不消失), 不设上限 (窗口拉大 LCD 随之放大)
-                let scale = (avail.x / self.lcd_side as f32)
-                    .min(avail.y / 256.0)
-                    .max(0.1);
+                let avail_rect = ui.available_rect_before_wrap();
+                // LCD 等比内接 + 居中; 窗口比例与 LCD 不完全匹配时, 剩余区以深色面板底色填充 (无白边观感)
+                // (egui 0.29 Window 无公开锁宽高比 API; 用居中+同色背景轻量解决, 用户 2026-08-12 定案)
+                let scale = (avail_rect.width() / self.lcd_side as f32)
+                    .min(avail_rect.height() / 256.0)
+                    .max(0.1); // 窗口太小时 LCD 不消失
                 let size = egui::vec2(self.lcd_side as f32 * scale, 256.0 * scale);
-                // 用 ScrollArea 包裹: 放大后可滚动查看 (手机)
-                egui::ScrollArea::both()
-                    .auto_shrink([false, false])
-                    .show(ui, |ui| {
-                        let (rect, _) = ui.allocate_exact_size(size, egui::Sense::hover());
-                        ui.painter().image(
-                            tex.id(),
-                            rect,
-                            egui::Rect::from_min_max(
-                                egui::pos2(0.0, 0.0),
-                                egui::pos2(1.0, 1.0)
-                            ),
-                            egui::Color32::WHITE,
-                        );
-                    });
+                let rect = egui::Rect::from_center_size(avail_rect.center(), size);
+                let p = ui.painter();
+                // 面板底色 (先画, LCD 纹理盖在上面)
+                p.rect_filled(avail_rect, 0.0, egui::Color32::from_gray(12));
+                // LCD 纹理 (居中)
+                p.image(
+                    tex.id(),
+                    rect,
+                    egui::Rect::from_min_max(
+                        egui::pos2(0.0, 0.0),
+                        egui::pos2(1.0, 1.0)
+                    ),
+                    egui::Color32::WHITE,
+                );
             });
 
         // 中央: 三视图切换(Piano Roll 静态时间轴 / Channel Notes 每行=一个channel / PlayView 播放画面)
