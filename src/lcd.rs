@@ -313,6 +313,13 @@ pub fn resolve_icon(voice: &str) -> Option<&'static Icon> {
         ("Piano", "GrandPno"), ("Bass", "Aco.Bass"), ("Drum", "Taiko"),
         ("Organ", "DrawOrgn"), ("Str", "Strings1"), ("Vln", "Violin"),
         ("Gtr", "NylonGtr"), ("Flute", "Flute"), ("Horn", "FrchHorn"),
+        // 鼓组 (MU90 drum_display_name 的 LCD 短名 → 已有鼓图标):
+        // StandKit/Standrd2/Dry/BrightKt/Room/DarkRoom/Rock/ElectrKt/Analog/Dance/HipHop/Jungle/Jazz/Brush/Symphn
+        ("Stand", "Standard"), ("Dry Kit", "Standard"), ("Bright", "Standard"),
+        ("Room", "Standard"), ("Rock", "Standard"), ("Electr", "Standard"),
+        ("Analog", "Standard"), ("Dance", "Standard"), ("HipHop", "Standard"),
+        ("Jungle", "Standard"), ("Jazz", "Standard"), ("Brush", "Standard"),
+        ("Symph", "Standard"), ("Kit", "Standard"),
     ];
     for (k, v) in FALLBACK {
         if voice.contains(k) {
@@ -444,6 +451,24 @@ mod tests {
         let mut lit2 = 0;
         for y in 8..16 { for x in 45..85 { lit2 += mm.get(x, y) as u32; } }
         assert!(lit2 > 0, "bank/program row should draw (lit={lit2})");
+    }
+
+    #[test]
+    fn drum_voice_gets_icon() {
+        // 问题2: part10 切到鼓时 LCD icon 必须显示鼓图标 (真机有鼓 icon)。
+        // 鼓组 LCD 短名 (StandKit 等) 在 ICONS 无直接条目, 应 fallback 到鼓位图 ("Standard" 或 "Taiko")。
+        for drum_name in [
+            "StandKit", "Standrd2", "Dry Kit", "BrightKt", "Room Kit", "DarkRoom",
+            "Rock Kit", "RockKit2", "ElectrKt", "AnalogKt", "DanceKit", "HipHopKt",
+            "JungleKt", "Jazz Kit", "JazzKit2", "BrushKit", "SymphnKt",
+        ] {
+            let ic = resolve_icon(drum_name).unwrap_or_else(|| panic!("鼓 {drum_name} 应能解析出 icon"));
+            // 鼓位图至少要有一些点亮位 (非空)
+            let lit = ic.bits.iter().map(|b| b.count_ones()).sum::<u32>();
+            assert!(lit > 0, "鼓 {drum_name} icon 应有位图 (lit={lit})");
+        }
+        // 未知鼓名 fallback 到 "Drum" → Taiko 也应能解析
+        assert!(resolve_icon("Drum").is_some(), "\"Drum\" 应 fallback 到鼓 icon");
     }
 
     #[test]
