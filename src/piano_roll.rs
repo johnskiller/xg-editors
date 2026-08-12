@@ -1,117 +1,225 @@
 //! 钢琴卷帘视图 (Piano Roll)
 //!
-//! 2026-08-12: 从 panels.rs 抽出为独立文件, 为后续完善 PianoRoll 做准备。
-//! 当前是"空壳"实现: 半音横带背景 + 通道色音符条 + playhead 竖线。
-//! 后续迭代计划 (见 reference / TASKS.md):
-//!   - 真实钢琴键左侧栏 (C2..C7 键盘)
-//!   - 缩放/滚动联动轨道
-//!   - 音符选中/拖拽编辑
-//!   - MIDI 音符增删改 + 回写 SMF
+//! 2026-08-12: 从 panels.rs 抽出为独立文件, 并完善为真实 piano roll:
+//!   - 左侧黑白钢琴键: MIDI 0-127 全范围 (用户定案: 不用计算范围), 固定行高, 随内容区垂直滚动
+//!   - 顶部 bar/beat 标尺 (ppq 换算, bar 刻度 + beat 细分) — 固定不随垂直滚动
+//!   - 只显示一个 channel 的音符 (顶部工具栏 Channel 选择器; 高音在上、低音在下)
+//!   - 音符体现时长: 宽度 = dur_ticks / 总长 (note on→off 间隔, 数据源已带 dur_ticks)
 //!
-//! 依赖: XgApp 字段 bg_pixels/bg_side(背景) + tracks(音符) + playhead_tick/total_ticks(定位)。
-//! 数据源单向: 只读播放状态, 不改播放状态 (与 AGENTS.md 数据流单向约定一致)。
+//! 数据源 (用户 2026-08-12 定案: 只显示单个 channel):
+//!   - SMF 已加载: self.smf_views[ch-1].notes (真实音符)
+//!   - 未加载: self.tracks[ch-1].notes (默认演示 pattern)
+//! 只读播放状态, 不改播放状态 (与 AGENTS.md 数据流单向约定一致)。
+//!
+//! 布局: 标尺 (allocate 顶部) → ScrollArea(纵向): 左琴键 + 时间轴。
+//! 注意 ScrollArea 闭包内坐标是内部坐标系 (视口顶 = ui.min_rect().top()),
+//! 不能直接用外部 content_rect 的坐标 (否则画到错误位置)。
 
 use crate::XgApp;
 use eframe::egui;
 
+/// 左侧琴键宽度 (px)
+const KEY_W: f32 = 52.0;
+/// 顶部 bar/beat 标尺高度 (px)
+const RULER_H: f32 = 22.0;
+/// 每半音行高 (px)
+const ROW_H: f32 = 12.0;
+/// MIDI 音高范围 (用户定案: 固定 0-127)
+const MIDI_LOW: i32 = 0;
+const MIDI_HIGH: i32 = 128;
+/// 白键半音集合 (标准钢琴: C D E F G A B 为白键)
+const WHITE_PC: [i32; 7] = [0, 2, 4, 5, 7, 9, 11];
+
+/// MIDI 音符名 (C-1..G9); 0-127 全范围
+fn midi_name(p: i32) -> String {
+    let names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
+    let oct = p / 12 - 1;
+    format!("{}{oct}", names[(p.rem_euclid(12)) as usize])
+}
+
 impl XgApp {
-    /// 钢琴卷帘视图: 半音横带 + 彩色音符条 + playhead 竖线。
-    /// 从 panels.rs central() 拆出后独立成文件, 便于后续完善。
+    /// 当前 channel 的音符列表 (SMF 优先, 无则演示 tracks): (start_tick, dur_ticks, pitch)
+    fn pr_notes(&self, ch: u8) -> Vec<(u64, u64, u8)> {
+        let idx = (ch.saturating_sub(1)) as usize;
+        if let Some(view) = self.smf_views.get(idx) {
+            view.notes
+                .iter()
+                .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
+                .collect()
+        } else if let Some(t) = self.tracks.get(idx) {
+            t.notes
+                .iter()
+                .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
+                .collect()
+        } else {
+            Vec::new()
+        }
+    }
+
+    /// 钢琴卷帘: 左琴键(0-127) + 顶 bar/beat + 单 channel 音符 + playhead
     pub(crate) fn render_piano_roll(&mut self, ui: &mut egui::Ui) {
-        let ctx = ui.ctx().clone();
-        let rect = ui.available_rect_before_wrap();
-        ui.allocate_rect(rect, egui::Sense::hover());
-        ui.label("note placeholders (green)");
-        let p = ui.painter();
-        // ===== 背景贴图测试(John 旧项目卡死点)=====
-        // 正确姿势: 用 painter.image() 直画, 不参与布局流(不占空间、不推乱控件)
-        // 先画 = 在底层(egui 按 add 顺序 z 叠放, 后画在上层)
-        // 这里故意在网格/音符之前画, 网格音符会盖在背景上, 布局不受影响
-        let bg_tex = ctx.load_texture(
-            "bg_texture",
-            egui::ColorImage::from_rgba_unmultiplied(
-                [self.bg_side, 128],
-                &self.bg_pixels,
-            ),
-            egui::TextureOptions::NEAREST,
+        let ch = self.cur_pr_channel; // 1..16
+        let outer = ui.available_rect_before_wrap();
+        ui.allocate_rect(outer, egui::Sense::hover());
+
+        let t_end = if self.smf.is_some() {
+            self.smf_end_tick.max(1)
+        } else {
+            self.total_ticks.max(1)
+        };
+        let ppq = self.ppq.max(1);
+        let beats_per_bar = 4u64; // 默认 4/4 (复杂拍号后续)
+        let zoom = self.pr_zoom.max(0.05);
+
+        // ===== 顶部 bar/beat 标尺 (allocate 占位, 固定) =====
+        let (ruler_rect, _) =
+            ui.allocate_exact_size(egui::vec2(outer.width(), RULER_H), egui::Sense::hover());
+        let ruler_p = ui.painter();
+        ruler_p.rect_filled(ruler_rect, 0.0, egui::Color32::from_rgb(0x22, 0x22, 0x28));
+        let ruler_time_rect = egui::Rect::from_min_max(
+            egui::pos2(ruler_rect.left() + KEY_W, ruler_rect.top()),
+            ruler_rect.max,
         );
-        let uv_full = egui::Rect::from_min_max(egui::pos2(0.0, 0.0), egui::pos2(1.0, 1.0));
-        let bg_rect = rect; // 背景铺满内容区
-        p.image(bg_tex.id(), bg_rect, uv_full, egui::Color32::WHITE);
-        // ===== 钢琴卷帘: 每一行(半音横带)不同背景 =====
-        // 行高统一 = note_row_h(与网格横线、绿条行距一致), 每个绿条正好落在自己的色带行中
-        let note_row_h = 70.0;
-        let n_rows = ((rect.height() / note_row_h) as usize).max(1);
-        for r in 0..n_rows {
-            let y0 = rect.top() + r as f32 * note_row_h;
-            let row_rect = egui::Rect::from_min_max(
-                egui::pos2(rect.left(), y0),
-                egui::pos2(rect.right(), (y0 + note_row_h).min(rect.bottom())),
+        let total_bars = (t_end / (ppq * beats_per_bar)).max(1);
+        for bar in 0..=total_bars {
+            let tick = bar * ppq * beats_per_bar;
+            let x = ruler_time_rect.left()
+                + (tick as f32 / t_end.max(1) as f32) * ruler_time_rect.width();
+            ruler_p.vline(x, ruler_time_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_gray(110)));
+            ruler_p.text(
+                egui::pos2(x + 3.0, ruler_time_rect.top() + 3.0),
+                egui::Align2::LEFT_TOP,
+                (bar + 1).to_string(),
+                egui::FontId::proportional(10.0),
+                egui::Color32::from_gray(215),
             );
-            let base: (u8, u8, u8) = if r % 2 == 0 { (0x14, 0x22, 0x30) } else { (0x1c, 0x30, 0x44) };
-            let lift = ((r / 2) % 5) as u8; // 每两设定亮度小台阶, 突显"每行不同"
-            let c = egui::Color32::from_rgb(
-                (base.0 as u16 + lift as u16 * 3).min(255) as u8,
-                (base.1 as u16 + lift as u16 * 3).min(255) as u8,
-                (base.2 as u16 + lift as u16 * 3).min(255) as u8,
-            );
-            p.rect_filled(row_rect, 0.0, c);
-        }
-        let step = 24.0;
-        let mut y = rect.top();
-        while y < rect.bottom() {
-            p.line_segment(
-                [egui::pos2(rect.left(), y), egui::pos2(rect.right(), y)],
-                egui::Stroke::new(1.0, egui::Color32::from_gray(30)),
-            );
-            y += note_row_h;
-        }
-        let mut x = rect.left() + 60.0;
-        while x < rect.right() {
-            p.vline(x, rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_gray(25)));
-            x += step * 4.0;
-        }
-        // 实时音符渲染: 遍历所有轨的真实音符数据 (pitch 高 → 靠上)
-        // 行高 70px, 每行半音 → 音高跨 ~12 行
-        let n_notes_rows = ((rect.height() - 20.0) / note_row_h) as usize;
-        for t in &self.tracks {
-            for n in &t.notes {
-                // 音高→行: pitch 0..127; 显示窗 pitch 范围 [pan_low, pan_low+rows)
-                let rows = n_notes_rows.max(1) as i32;
-                let low = 24; // C1
-                let high = low + rows;
-                if n.pitch < low as u8 || n.pitch >= high as u8 {
-                    continue;
+            if zoom > 0.5 {
+                for b in 1..beats_per_bar {
+                    let bt = tick + b * ppq;
+                    let bx = ruler_time_rect.left()
+                        + (bt as f32 / t_end.max(1) as f32) * ruler_time_rect.width();
+                    ruler_p.vline(bx, ruler_time_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_gray(55)));
                 }
-                let row = (high - 1 - n.pitch as i32) as f32; // 高音→小行号(靠上)
-                let cy = rect.top() + row * note_row_h + note_row_h * 0.5;
-                // 时间→x: total 768 tick → 内容宽
-                let x0 = rect.left() + 60.0;
-                let w = (rect.width() - 60.0).max(1.0);
-                let nx = x0 + (n.start_tick as f32 / self.total_ticks.max(1) as f32) * w;
-                let nw = (n.dur_ticks as f32 / self.total_ticks.max(1) as f32) * w;
-                let ch = n.channel as usize;
-                let note_col = egui::Color32::from_rgb(
-                    0x2e,
-                    0xcc - (ch % 3) as u8 * 20,
-                    0x40 + (ch % 2) as u8 * 30,
-                );
-                p.rect_filled(
-                    egui::Rect::from_min_size(
-                        egui::pos2(nx, cy - 6.0),
-                        egui::vec2(nw.max(3.0), 12.0),
-                    ),
-                    2.0,
-                    note_col,
-                );
             }
         }
-        // playhead 竖线 (播放时跟随)
-        if self.playing || self.playhead_tick > 0 {
-            let x0 = rect.left() + 60.0;
-            let w = (rect.width() - 60.0).max(1.0);
-            let px = x0 + (self.playhead_tick as f32 / self.total_ticks.max(1) as f32) * w;
-            p.vline(px, rect.y_range(), egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xd7, 0x00)));
-        }
+        ruler_p.hline(
+            ruler_time_rect.y_range(),
+            ruler_time_rect.bottom(),
+            egui::Stroke::new(1.0, egui::Color32::from_gray(80)),
+        );
+
+        // ===== 内容区 (ScrollArea 纵向) : 左琴键 + 时间轴 =====
+        let total_h = (MIDI_HIGH - MIDI_LOW) as f32 * ROW_H; // 128 行
+        egui::ScrollArea::vertical()
+            .auto_shrink([false, false])
+            .show(ui, |ui| {
+                // 内部坐标系: 视口顶 = ui.min_rect().top()
+                let c0 = ui.min_rect().top();
+                // 预留内容高度 (可滚动)
+                ui.allocate_space(egui::vec2(outer.width(), total_h));
+                let p = ui.painter();
+
+                // 内容左右范围 (ScrollArea 内部, 相对 c0)
+                let c_left = outer.left();
+                let c_right = outer.right();
+
+                // 背景半音行 (白键行亮, 黑键行暗)
+                for p_ in MIDI_LOW..MIDI_HIGH {
+                    let y0 = c0 + (MIDI_HIGH - 1 - p_) as f32 * ROW_H;
+                    let row = egui::Rect::from_min_max(
+                        egui::pos2(c_left, y0),
+                        egui::pos2(c_right, y0 + ROW_H),
+                    );
+                    let is_white = WHITE_PC.contains(&(p_.rem_euclid(12)));
+                    let base = if is_white {
+                        (0x16, 0x22, 0x34)
+                    } else {
+                        (0x0f, 0x17, 0x22)
+                    };
+                    p.rect_filled(row, 0.0, egui::Color32::from_rgb(base.0, base.1, base.2));
+                }
+
+                // ===== 左侧黑白琴键 (0-127, 固定宽) =====
+                let key_rect = egui::Rect::from_min_max(
+                    egui::pos2(c_left, c0),
+                    egui::pos2(c_left + KEY_W, c0 + total_h),
+                );
+                for p_ in MIDI_LOW..MIDI_HIGH {
+                    let y0 = c0 + (MIDI_HIGH - 1 - p_) as f32 * ROW_H;
+                    let row = egui::Rect::from_min_max(
+                        egui::pos2(key_rect.left(), y0),
+                        egui::pos2(key_rect.right(), y0 + ROW_H),
+                    );
+                    let is_white = WHITE_PC.contains(&(p_.rem_euclid(12)));
+                    if is_white {
+                        p.rect_filled(row, 1.0, egui::Color32::from_rgb(0xe6, 0xe6, 0xe6));
+                    } else {
+                        p.rect_filled(row, 1.0, egui::Color32::from_rgb(0x1a, 0x1a, 0x20));
+                    }
+                    p.rect_stroke(row, 1.0, egui::Stroke::new(1.0, egui::Color32::from_gray(90)));
+                    // C 标注
+                    if p_.rem_euclid(12) == 0 {
+                        let col = if is_white {
+                            egui::Color32::from_gray(70)
+                        } else {
+                            egui::Color32::from_gray(170)
+                        };
+                        p.text(
+                            egui::pos2(row.left() + 3.0, row.center().y),
+                            egui::Align2::LEFT_CENTER,
+                            midi_name(p_),
+                            egui::FontId::proportional(9.0),
+                            col,
+                        );
+                    }
+                }
+
+                // ===== 时间轴区 (琴键右侧) =====
+                let time_rect = egui::Rect::from_min_max(
+                    egui::pos2(key_rect.right(), c0),
+                    egui::pos2(c_right, c0 + total_h),
+                );
+                // 行分隔细线
+                for i in 0..=(MIDI_HIGH - MIDI_LOW) {
+                    let y = c0 + i as f32 * ROW_H;
+                    p.hline(time_rect.x_range(), y, egui::Stroke::new(1.0, egui::Color32::from_gray(28)));
+                }
+                // bar 竖线
+                for bar in 0..=total_bars {
+                    let tick = bar * ppq * beats_per_bar;
+                    let x = time_rect.left()
+                        + (tick as f32 / t_end.max(1) as f32) * time_rect.width();
+                    p.vline(x, time_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_rgb(0x3a, 0x44, 0x52)));
+                }
+
+                // ===== 单 channel 音符 (宽度 = 时长 dur/t_end) =====
+                let notes = self.pr_notes(ch);
+                let scroll_tick = self.pr_scroll_ticks as f32;
+                let span = (t_end as f32 - scroll_tick).max(1.0);
+                for (start, dur, pitch) in &notes {
+                    let p_ = *pitch as i32;
+                    if p_ < MIDI_LOW || p_ >= MIDI_HIGH {
+                        continue;
+                    }
+                    let row_idx = (MIDI_HIGH - 1 - p_) as usize;
+                    let vy = c0 + row_idx as f32 * ROW_H;
+                    let sx = time_rect.left() + ((*start as f32 - scroll_tick) / span) * time_rect.width();
+                    let sw = ((*dur as f32) / span) * time_rect.width();
+                    let note_rect = egui::Rect::from_min_max(
+                        egui::pos2(sx, vy),
+                        egui::pos2(sx + sw.max(2.0), vy + ROW_H),
+                    );
+                    let ci = (ch - 1) as usize;
+                    let (r, g, b) = self.channel_note_color(ci, 100);
+                    p.rect_filled(note_rect, 2.0, egui::Color32::from_rgb(r, g, b));
+                }
+
+                // ===== playhead =====
+                if self.playing || self.playhead_tick > 0 {
+                    let px = time_rect.left()
+                        + ((self.playhead_tick as f32 - scroll_tick) / span) * time_rect.width();
+                    p.vline(px, time_rect.y_range(), egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xd7, 0x00)));
+                }
+            });
     }
 }

@@ -608,6 +608,12 @@ pub struct XgApp {
     pub track_view_zoom: f32,
     /// track view 横向滚动偏移 (tick 起始)
     pub track_view_scroll_ticks: u64,
+    /// Piano Roll 显示的 channel (1..16; 用户 2026-08-12: 只显示一个 channel 的音符)
+    pub cur_pr_channel: u8,
+    /// Piano Roll 独立时间缩放 (倍数); 与 Channel 视图 track_view_zoom 独立 (用户 2026-08-12)
+    pub pr_zoom: f32,
+    /// Piano Roll 独立横向滚动偏移 (tick 起始); 与 Channel 视图独立
+    pub pr_scroll_ticks: u64,
     /// 发送测试的异步结果 cell(wasm)
     #[cfg(target_arch = "wasm32")]
     pub midi_send_ui_cell: Option<std::rc::Rc<std::cell::RefCell<Option<Result<(), String>>>>>,
@@ -1630,6 +1636,9 @@ impl Default for XgApp {
             url_override_view: false,
             track_view_zoom: 1.0,
             track_view_scroll_ticks: 0,
+            cur_pr_channel: 1,
+            pr_zoom: 1.0,
+            pr_scroll_ticks: 0,
             #[cfg(target_arch = "wasm32")]
             midi_probe_cell: None,
             #[cfg(target_arch = "wasm32")]
@@ -2272,10 +2281,21 @@ impl eframe::App for XgApp {
                     ui.horizontal(|ui| {
                         ui.label("Piano Roll");
                         ui.separator();
-                        // Zoom/Scroll (沿用时间轴共用状态 track_view_zoom / track_view_scroll_ticks)
+                        // Channel 选择 (用户 2026-08-12: piano roll 只显示一个 channel 的音符)
+                        ui.label("Ch");
+                        egui::ComboBox::from_id_salt("pr_channel")
+                            .selected_text(format!("{}", self.cur_pr_channel))
+                            .width(44.0)
+                            .show_ui(ui, |ui| {
+                                for c in 1..=16u8 {
+                                    ui.selectable_value(&mut self.cur_pr_channel, c, format!("{c:02}"));
+                                }
+                            });
+                        ui.separator();
+                        // Zoom/Scroll (Piano Roll 独立状态 pr_zoom/pr_scroll_ticks, 与 Channel 视图独立)
                         ui.label("Zoom");
                         ui.add(
-                            egui::Slider::new(&mut self.track_view_zoom, 0.02..=200.0)
+                            egui::Slider::new(&mut self.pr_zoom, 0.02..=200.0)
                                 .logarithmic(true)
                                 .show_value(true)
                                 .custom_formatter(|v, _| format!("{v:.2}x"))
@@ -2283,14 +2303,14 @@ impl eframe::App for XgApp {
                         );
                         ui.separator();
                         let t_end = if self.smf.is_some() { self.smf_end_tick.max(1) } else { self.total_ticks.max(1) };
-                        let zoom_s = self.track_view_zoom.max(0.002);
+                        let zoom_s = self.pr_zoom.max(0.002);
                         let win = (t_end.max(1) as f32 / zoom_s).round().max(1.0) as u64;
                         let win = win.max(1);
                         ui.label("Scroll");
                         let max_scroll = t_end.saturating_sub(win) as f64;
-                        let mut scf = self.track_view_scroll_ticks as f64;
+                        let mut scf = self.pr_scroll_ticks as f64;
                         ui.add(egui::Slider::new(&mut scf, 0.0..=max_scroll).step_by((win.max(1) / 20).max(1) as f64).custom_formatter(|v, _| format!("{}t", v as i64)));
-                        self.track_view_scroll_ticks = scf.max(0.0) as u64;
+                        self.pr_scroll_ticks = scf.max(0.0) as u64;
                         ui.with_layout(egui::Layout::right_to_left(egui::Align::Center), |ui| {
                             // 收起三角 v (点击收起为 22px 窄条)
                             if collapse_triangle_ui(ui, "piano_collapse", "v").clicked() {
