@@ -54,7 +54,16 @@ jobs:
         
       - name: Generate JS bindings
         run: wasm-bindgen --target web --out-dir www/pkg target/wasm32-unknown-unknown/release/xg-editor.wasm
-        
+
+      # 注入 commit hash 到 APP_VERSION (仅 www/index.html 的 APP_VERSION 行), 用于 Pages 追溯。
+      # 例: "0.1.1" → "0.1.1-abc1234"。仅替换 APP_VERSION = "..." 行, 不影响 ?v= 参数。
+      - name: Stamp commit hash into APP_VERSION
+        run: |
+          SHA=$(git rev-parse --short HEAD)
+          echo "Stamping version with commit ${SHA}"
+          sed -i -E 's/(const APP_VERSION = ")([^"]*)(";)/\1\2-'"${SHA}"'\3/' www/index.html
+          grep -n 'APP_VERSION' www/index.html
+
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4
         with:
