@@ -2944,8 +2944,8 @@ mod tests {
     fn lcd_levels_reflect_live_levels() {
         // LCD 电平条应反映 live_levels 高度 (John: play 时 LCD 电平实时跳)
         // render_to_matrix 电平条在 row 基线 15 向上; lvl=1.0 → 16 层满
-        let mm1 = lcd::render_to_matrix("GrandPno", 0, 1, &[1.0; 16], &[0.0; 2]);
-        let mm0 = lcd::render_to_matrix("GrandPno", 0, 1, &[0.0; 16], &[0.0; 2]);
+        let mm1 = lcd::render_to_matrix("GrandPno", 0, 1, &[1.0; 16], &[0.0; 2], 1);
+        let mm0 = lcd::render_to_matrix("GrandPno", 0, 1, &[0.0; 16], &[0.0; 2], 1);
         // 电平条布局: i=0/1 = A1/A2 (audio), i=2..17 = ch1..16.
         // bar_col(i=2)=5 → ch1 条占 col 5/6. 检查基线上方 row 0..7
         let lit = |mm: &crate::lcd::MuMatrix| -> u32 {

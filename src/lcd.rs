@@ -111,21 +111,24 @@ fn font_offset(cp: u32) -> Option<usize> {
 
 /// 渲染 state → 85x16 主矩阵
 /// state: voice(8字符), bank(0..), program(1-based), levels(16 个 0..1), audio(2 个 0..1)
-pub fn render_to_matrix(voice: &str, bank: u32, program: u32, levels: &[f32], audio: &[f32]) -> MuMatrix {
-    render_to_matrix_mode(voice, bank, program, levels, audio, false)
+/// part (1..32): 16ch 模式下 Port B (part 17-32) 音色/bank/pgm 左移 (真机一致, John 2026-08-12)
+pub fn render_to_matrix(voice: &str, bank: u32, program: u32, levels: &[f32], audio: &[f32], part: u32) -> MuMatrix {
+    render_to_matrix_mode(voice, bank, program, levels, audio, false, part)
 }
 
 /// 32-channel 模式: 音色名+bank/prg 合并第 1 行, A1/A2+01..32 全部电平条 (高度减半)
 /// 用户权威 (2026-08-08): "mu90有AB两个MIDI in,可同时演奏32 part; lcd的32channel显示模式
 /// 是 5x16 点阵上半部显示音色名和bank prog只占一行, 下半部正好用来显示a1,a2,01-32的所有电平,
 /// 但此时full 电平显示为原来的一半高"
-pub fn render_to_matrix_32(voice: &str, bank: u32, program: u32, levels: &[f32], audio: &[f32]) -> MuMatrix {
-    render_to_matrix_mode(voice, bank, program, levels, audio, true)
+pub fn render_to_matrix_32(voice: &str, bank: u32, program: u32, levels: &[f32], audio: &[f32], part: u32) -> MuMatrix {
+    render_to_matrix_mode(voice, bank, program, levels, audio, true, part)
 }
 
-fn render_to_matrix_mode(voice: &str, bank: u32, program: u32, levels: &[f32], audio: &[f32], is_32: bool) -> MuMatrix {
+fn render_to_matrix_mode(voice: &str, bank: u32, program: u32, levels: &[f32], audio: &[f32], is_32: bool, part: u32) -> MuMatrix {
     let mut mm = MuMatrix::new(85, 16);
-    // 音色名 (右上, 第 1 行): col 45..79
+    // 音色名 8 字符: 位置 = port A 右侧(col 45) / port B 左侧(col 0) [John 2026-08-12: 两者对称]
+    let port_b = part > 16; // part 17-32 = Port B (MIDI IN B)
+    let voice_col: i32 = if is_32 { 0 } else if port_b { 0 } else { 45 };
     let v: String = voice.chars().take(8).collect();
     let v_pad = format!("{:<8}", v);
     if is_32 {
@@ -133,14 +136,19 @@ fn render_to_matrix_mode(voice: &str, bank: u32, program: u32, levels: &[f32], a
         // 8(名) + 1(空格) + 1(▶) + 3(bank) + 1(▶) + 3(prog) = 17
         let bp = format!("{} \u{0080}{:03}\u{0081}{:03}", v.trim_end(), bank, program);
         mm.text5(&bp, 0, 0);
-    } else {
-        // 16ch 模式: 音色 col 45 第 1 行, bank/program 第 2 行
-        mm.text5(&v_pad, 45, 0);
-        let bnk = format!("{:03}", bank);
-        let prg = format!("{:03}", program);
+    } else if port_b {
+        // Port B (part 17-32): 音色/bank/prog 显示在左侧 8 组点阵 (col 0..39), 真机一致
+        mm.text5(&v_pad, 0, 0);
         let bh = "\u{0080}".to_string();
         let sh = "\u{0081}".to_string();
-        let bp = format!("{}{}{}{}", bh, bnk, sh, prg);
+        let bp = format!("{}{:03}{}{:03}", bh, bank, sh, program);
+        mm.text5(&bp, 0, 8);
+    } else {
+        // Port A (part 1-16): 音色 col 45 第 1 行, bank/program 第 2 行 (现状)
+        mm.text5(&v_pad, 45, 0);
+        let bh = "\u{0080}".to_string();
+        let sh = "\u{0081}".to_string();
+        let bp = format!("{}{:03}{}{:03}", bh, bank, sh, program);
         mm.text5(&bp, 45, 8);
     }
     // 电平条区
@@ -169,8 +177,29 @@ fn render_to_matrix_mode(voice: &str, bank: u32, program: u32, levels: &[f32], a
                 mm.set(c + 1, row as i32, 1);
             }
         }
+    } else if port_b {
+        // 16ch + Port B (part 17-32): 音色已占左 8 组 (col0..39), 电平条在右侧显示 17-32。
+        // ★ 全区域是 34 ch (A1,A2+1..32), bar 网格 bar_col(i), i=0,1→A1/A2, i=2..33→ch1..32。
+        //   17-32 = i=18..33 → col 45..83 (右 9 组)。A1/A2/01..16 (i=0..17) 不显示(音色占左区)。
+        //   若是简单"右侧 9 组 i=2..17" 会偏左一组 (对齐到 ch15, 用户实测发现)
+        //   电平数据源暂缺 → 目前全 0, 只画基线
+        for i in 18..34i32 {
+            let c = bar_col_grid(i) as i32;
+            mm.set(c, 15, 1);
+            mm.set(c + 1, 15, 1);
+        }
+        for i in 18..34i32 {
+            let lvl = 0.0f32; // 17-32 电平暂缺, 等 Port B 接入
+            let n_l = (lvl * 16.0).round() as i32;
+            let c = bar_col_grid(i);
+            for p in 0..=n_l.min(15) {
+                let row = 15 - p;
+                mm.set(c, row as i32, 1);
+                mm.set(c + 1, row as i32, 1);
+            }
+        }
     } else {
-        // 16ch: 18 bar (A1/A2+16), 高 16 层, 从 row15 基线
+        // 16ch + Port A (part 1-16): 现有布局, 音色右、电平左 (现状)
         let bar_col = |i: i32| -> i32 { let gi = i / 2; let k = i % 2; gi * 5 + if k == 1 { 3 } else { 0 } };
         for i in 0..18i32 {
             let c = bar_col(i) as i32;
@@ -410,7 +439,7 @@ fn fill_rect(pixels: &mut [u8], x: i32, y: i32, w: i32, h: i32, on: bool) {
 /// params: 8 个底部参数 (0..1) → VOL/EXP/BRT/PAN/REV/CHO/VAR/KEY 上方画条
 pub fn render_lcd(pixels: &mut [u8], voice: &str, bank: u32, program: u32,
                   levels: &[f32], audio: &[f32], part: u32, params: &[f32; 8]) {
-    let mm = render_to_matrix(voice, bank, program, levels, audio);
+    let mm = render_to_matrix(voice, bank, program, levels, audio, part);
     let pm = render_part_matrix(part);
     blit(pixels, &mm, &pm, params);
     // 底部 icon 区 (右下, 180,260): 当前音色的 voice icon
@@ -420,7 +449,7 @@ pub fn render_lcd(pixels: &mut [u8], voice: &str, bank: u32, program: u32,
 /// 32-channel 渲染入口 (音色合并第1行 + 34 电平条)
 pub fn render_lcd_32(pixels: &mut [u8], voice: &str, bank: u32, program: u32,
                      levels: &[f32], audio: &[f32], part: u32, params: &[f32; 8]) {
-    let mm = render_to_matrix_32(voice, bank, program, levels, audio);
+    let mm = render_to_matrix_32(voice, bank, program, levels, audio, part);
     let pm = render_part_matrix(part);
     blit(pixels, &mm, &pm, params);
     paint_voice_icon(pixels, voice);
@@ -442,7 +471,7 @@ mod tests {
 
     #[test]
     fn matrix_voice_col45() {
-        let mm = render_to_matrix("GrandPno", 0, 1, &[], &[]);
+        let mm = render_to_matrix("GrandPno", 0, 1, &[], &[], 1);
         // 音色名首字符 'G' 应点亮 col45..49 内的一些点
         let mut lit = 0;
         for y in 0..8 { for x in 45..50 { lit += mm.get(x, y) as u32; } }
@@ -532,9 +561,56 @@ mod tests {
     }
 
     #[test]
+    fn port_b_voice_moves_to_left() {
+        // John 2026-08-12: 32ch off 时, part 17-32 (PortB) 音色/bank/pgm 显示在左边 8 组点阵 (col 0..39)
+        // part 1-16 (PortA) 保持右侧 col 45..84。用程序解码断言, 不靠人眼。
+        // Port A: 音色在 col 45 (右)
+        let mm_a = render_to_matrix("DreamPno", 0, 7, &[], &[], 1);
+        let got_a = decode_run(&mm_a, 45, 0, 8);
+        assert_eq!(got_a, "DreamPno", "PortA voice should stay at col45 (right), got '{got_a}'");
+        // Port A: col0 应该是电平条 (有字→空白区) 而非音色
+        let left_a = decode_run(&mm_a, 0, 0, 8);
+        assert_ne!(left_a, "DreamPno", "PortA col0 must NOT hold the voice name (got '{left_a}')");
+
+        // Port B (part 17): 音色应在 col 0 (左)
+        let mm_b = render_to_matrix("DreamPno", 0, 7, &[], &[], 17);
+        let got_b = decode_run(&mm_b, 0, 0, 8);
+        assert_eq!(got_b, "DreamPno", "PortB voice should move to col0 (left), got '{got_b}'");
+        // Port B: bank/program 第 2 行也在左 (col0..39)
+        let bp_b = decode_run(&mm_b, 0, 8, 8); // ▶000▶007
+        let exp_b: String = [
+            '\u{0080}', '0', '0', '0', '\u{0081}', '0', '0', '7',
+        ].iter().map(|c| match c {
+            '\u{0080}' => '▶', '\u{0081}' => '▶', c => *c,
+        }).collect();
+        assert_eq!(bp_b, exp_b, "PortB bank/prog should draw at col0 row8, got '{bp_b}'");
+        // Port B: 右侧 col45 不再有音色 (留给电平)
+        let right_b = decode_run(&mm_b, 45, 0, 8);
+        assert_ne!(right_b, "DreamPno", "PortB col45 must NOT hold the voice name (got '{right_b}')");
+
+        // 电平条位置 John 2026-08-12: PortB 时 1-16 电平不再显示(否则覆盖左侧字母),
+        // 电平条移到右侧 (col40..84), 18 bar 位置与 PortA 对称, ch15/16 空缺, 17-32 有基线。
+        // PortB: col0..39 (音色区) 的 row15 不应有点亮 (无电平基线)
+        for x in 0..40 { assert_eq!(mm_b.get(x, 15), 0, "PortB col{x} row15 must be empty (no meter over voice)"); }
+        // PortB: 右侧 18 bar 列 (i=0..17 → col40..83), 其中 i=0,1 (col40,43 = ch15,16) 留空
+        // i=2..17 (col45..83 = ch17..32) 有基线
+        let bar_col_b = |i: i32| -> i32 { let gi = i / 2; let k = i % 2; 40 + gi * 5 + if k == 1 { 3 } else { 0 } };
+        let c15 = bar_col_b(0); let c16 = bar_col_b(1);
+        assert_eq!(mm_b.get(c15, 15), 0, "ch15 slot col{c15} should be empty");
+        assert_eq!(mm_b.get(c16, 15), 0, "ch16 slot col{c16} should be empty");
+        let mut right_base = 0;
+        for i in 2..18 { right_base += mm_b.get(bar_col_b(i), 15) as u32 + mm_b.get(bar_col_b(i)+1, 15) as u32; }
+        assert!(right_base >= 16, "PortB 17-32 应有电平基线 (lit={right_base})");
+        // PortA: 左侧有电平基线 (col0..44)
+        let mut left_base_a = 0;
+        for x in 0..44 { left_base_a += mm_a.get(x, 15) as u32; }
+        assert!(left_base_a > 20, "PortA left side should have meter baseline (lit={left_base_a})");
+    }
+
+    #[test]
     fn programmatic_voice_decode() {
         // 程序断言: 渲染 → 解码 → 必须还原为 DreamPno (不靠人眼)
-        let mut mm = render_to_matrix("DreamPno", 0, 1, &[], &[]);
+        let mut mm = render_to_matrix("DreamPno", 0, 1, &[], &[], 1);
         let got = decode_run(&mm, 45, 0, 8);
         assert_eq!(got, "DreamPno", "voice name decode mismatch! got '{got}' at col 45..84");
     }
@@ -542,7 +618,7 @@ mod tests {
     #[test]
     fn programmatic_mainrow_decode() {
         // 程序断言: 第 2 行 bank/prg 是 ▶000▶001 (hollow▶ + 000 + solid▶ + 001)
-        let mut mm = render_to_matrix("DreamPno", 0, 1, &[], &[]);
+        let mut mm = render_to_matrix("DreamPno", 0, 1, &[], &[], 1);
         let got = decode_run(&mm, 45, 8, 8); // 8 字符: ▶000▶001
         let exp: String = [
             '\u{0080}', '0', '0', '0', '\u{0081}', '0', '0', '1',
@@ -649,7 +725,7 @@ mod tests {
         let mut levels = vec![0.0f32; 32];
         levels[0] = 1.0; // ch1 满
         levels[31] = 0.5; // ch32 半
-        let mm = render_to_matrix_32("GrandPno", 0, 1, &levels, &[0.0, 0.0]);
+        let mm = render_to_matrix_32("GrandPno", 0, 1, &levels, &[0.0, 0.0], 1);
         // ① 音色应从 col0 开始 (row0 最左 8 列有字)
         let mut left_lit = 0;
         for y in 0..8 { for x in 0..8 { left_lit += mm.get(x, y) as u32; } }
@@ -657,9 +733,9 @@ mod tests {
         // ② 前 18 bar (A1/A2+01..16) 的列位置必须与 16ch 模式完全一致
         // bar i 在 row15(基线) 占用列 c..c+1; 用齐平电平(满)时最高层 row0 也点亮, 对比列集
         let full = vec![1.0f32; 16];
-        let mm16_full = render_to_matrix("GrandPno", 0, 1, &full, &[1.0, 1.0]);
+        let mm16_full = render_to_matrix("GrandPno", 0, 1, &full, &[1.0, 1.0], 1);
         let levels_full = vec![1.0f32; 32];
-        let mm32_full = render_to_matrix_32("GrandPno", 0, 1, &levels_full, &[1.0, 1.0]);
+        let mm32_full = render_to_matrix_32("GrandPno", 0, 1, &levels_full, &[1.0, 1.0], 1);
         // 对每个 bar b (0..18), 16ch 的列 vs 32ch 的列 (最顶部点亮列相同)
         let bar_col_16: Vec<i32> = (0..18).map(|i| { let g = i / 2; let k = i % 2; g * 5 + if k == 1 { 3 } else { 0 } }).collect();
         let bar_col_32: Vec<i32> = (0..34).map(|i| { let g = i / 2; let k = i % 2; g * 5 + if k == 1 { 3 } else { 0 } }).collect();
