@@ -41,26 +41,32 @@ impl XgApp {
     /// 当前 channel 的音符列表 (SMF 优先, 无则演示 tracks): (start_tick, dur_ticks, pitch)
     fn pr_notes(&self, ch: u8) -> Vec<(u64, u64, u8)> {
         let idx = (ch.saturating_sub(1)) as usize;
+        // smf_views 在 Default 时是 16 个空 view (notes 为空, 见 lib.rs 1614),
+        // 所以先检查 notes 非空才用它, 否则回退到默认 pattern tracks
         if let Some(view) = self.smf_views.get(idx) {
-            view.notes
-                .iter()
-                .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
-                .collect()
-        } else if let Some(t) = self.tracks.get(idx) {
-            t.notes
-                .iter()
-                .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
-                .collect()
-        } else {
-            Vec::new()
+            if !view.notes.is_empty() {
+                return view
+                    .notes
+                    .iter()
+                    .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
+                    .collect();
+            }
         }
+        if let Some(t) = self.tracks.get(idx) {
+            return t
+                .notes
+                .iter()
+                .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
+                .collect();
+        }
+        Vec::new()
     }
 
     /// 钢琴卷帘: 左琴键(0-127) + 顶 bar/beat + 单 channel 音符 + playhead
     pub(crate) fn render_piano_roll(&mut self, ui: &mut egui::Ui) {
         let ch = self.cur_pr_channel; // 1..16
         let outer = ui.available_rect_before_wrap();
-        ui.allocate_rect(outer, egui::Sense::hover());
+        // 注意: 不要用 ui.allocate_rect(outer) 抢占空间 — 会让后续 ScrollArea 视口塌缩为 0 (内容全不可见)
 
         let t_end = if self.smf.is_some() {
             self.smf_end_tick.max(1)
@@ -110,9 +116,19 @@ impl XgApp {
 
         // ===== 内容区 (ScrollArea 纵向) : 左琴键 + 时间轴 =====
         let total_h = (MIDI_HIGH - MIDI_LOW) as f32 * ROW_H; // 128 行
-        egui::ScrollArea::vertical()
+        // 初始垂直滚动: 定位到音符 pitch 中位数附近 (音符在底部 C 区, 视口初始在顶部会看不到)
+        let notes = self.pr_notes(ch);
+        let mut pitches: Vec<i32> = notes.iter().map(|(_, _, p)| *p as i32).collect();
+        pitches.sort_unstable();
+        let median_pitch = pitches.get(pitches.len() / 2).copied().unwrap_or(60);
+        // 目标行 (像素) = (127 - pitch)*ROW_H; 偏移到让该行居中
+        let target_y = (MIDI_HIGH - 1 - median_pitch) as f32 * ROW_H;
+        let init_off = (target_y - 60.0).max(0.0);
+        let mut scroll = egui::ScrollArea::vertical()
             .auto_shrink([false, false])
-            .show(ui, |ui| {
+            .vertical_scroll_offset(init_off);
+        // 若音符 pitch 分散, 用能覆盖中位数的偏移即可
+        scroll.show(ui, |ui| {
                 // 内部坐标系: 视口顶 = ui.min_rect().top()
                 let c0 = ui.min_rect().top();
                 // 预留内容高度 (可滚动)
