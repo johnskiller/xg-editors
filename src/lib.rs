@@ -2361,30 +2361,32 @@ impl eframe::App for XgApp {
                     self.lcd_dirty = false;
                 }
                 let tex = self.lcd_tex.as_ref().expect("lcd_tex cached");
-                // 先记下整个内容区 (标题/控制栏之下), 供黑底铺满 — 必须在 allocate 之前取,
-                // 否则 available_rect_before_wrap() 已被推进为剩余区, 黑底画错位置
-                let content_rect = ui.available_rect_before_wrap();
-                let avail = ui.available_size();
-                // LCD 等比内接: 窗口缩小时 LCD 缩小, 放大时放大; 左上角贴齐内容区 (无居中偏移, 坐标确定)
-                let scale = (avail.x / self.lcd_side as f32)
-                    .min(avail.y / 256.0)
-                    .max(0.1); // 窗口太小时 LCD 不消失
-                let size = egui::vec2(self.lcd_side as f32 * scale, 256.0 * scale);
-                // allocate 内容尺寸 (egui 据此得知窗口需多大, 不塌缩)
-                let (rect, _) = ui.allocate_exact_size(size, egui::Sense::hover());
-                let p = ui.painter();
-                // 深色底铺满整个内容区 (先画, 在 LCD 之下) — 消除窗口比例不匹配时的浅色留白
-                p.rect_filled(content_rect, 0.0, egui::Color32::from_gray(12));
-                // LCD 纹理 (左上贴齐, 画在深底之上)
-                p.image(
-                    tex.id(),
-                    rect,
-                    egui::Rect::from_min_max(
-                        egui::pos2(0.0, 0.0),
-                        egui::pos2(1.0, 1.0)
-                    ),
-                    egui::Color32::WHITE,
-                );
+                // ScrollArea: 裁剪绘制到窗口内容区内 (LCD 永不跑出窗口) + auto_shrink=false 撑满可用区不塌缩。
+                // LCD 等比内接永远 <= 窗口, 不出 scrollbar (用户验证: 去 scroll 之前正常, 去掉后超出边界)
+                egui::ScrollArea::both()
+                    .auto_shrink([false, false])
+                    .show(ui, |ui| {
+                        let avail = ui.available_size();
+                        // LCD 等比内接: 窗口缩小时 LCD 缩小, 放大时放大; 左上贴齐 (坐标确定)
+                        let scale = (avail.x / self.lcd_side as f32)
+                            .min(avail.y / 256.0)
+                            .max(0.1); // 窗口太小时 LCD 不消失
+                        let size = egui::vec2(self.lcd_side as f32 * scale, 256.0 * scale);
+                        // 深色底铺满整个内容区 (先画, LCD 之下) — 消除窗口比例不匹配时的浅色留白
+                        ui.painter()
+                            .rect_filled(ui.max_rect(), 0.0, egui::Color32::from_gray(12));
+                        let (rect, _) = ui.allocate_exact_size(size, egui::Sense::hover());
+                        // LCD 纹理 (左上贴齐, 画在深底之上)
+                        ui.painter().image(
+                            tex.id(),
+                            rect,
+                            egui::Rect::from_min_max(
+                                egui::pos2(0.0, 0.0),
+                                egui::pos2(1.0, 1.0)
+                            ),
+                            egui::Color32::WHITE,
+                        );
+                    });
             });
 
         // 中央: 三视图切换(Piano Roll 静态时间轴 / Channel Notes 每行=一个channel / PlayView 播放画面)
