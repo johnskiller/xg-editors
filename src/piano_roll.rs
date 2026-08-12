@@ -38,8 +38,8 @@ fn midi_name(p: i32) -> String {
 }
 
 impl XgApp {
-    /// 当前 channel 的音符列表 (SMF 优先, 无则演示 tracks): (start_tick, dur_ticks, pitch)
-    fn pr_notes(&self, ch: u8) -> Vec<(u64, u64, u8)> {
+    /// 当前 channel 的音符列表 (SMF 优先, 无则演示 tracks): (start_tick, dur_ticks, pitch, vel)
+    fn pr_notes(&self, ch: u8) -> Vec<(u64, u64, u8, u8)> {
         let idx = (ch.saturating_sub(1)) as usize;
         // smf_views 在 Default 时是 16 个空 view (notes 为空, 见 lib.rs 1614),
         // 所以先检查 notes 非空才用它, 否则回退到默认 pattern tracks
@@ -48,7 +48,7 @@ impl XgApp {
                 return view
                     .notes
                     .iter()
-                    .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
+                    .map(|n| (n.start_tick, n.dur_ticks, n.pitch, n.vel))
                     .collect();
             }
         }
@@ -56,7 +56,7 @@ impl XgApp {
             return t
                 .notes
                 .iter()
-                .map(|n| (n.start_tick, n.dur_ticks, n.pitch))
+                .map(|n| (n.start_tick, n.dur_ticks, n.pitch, n.velocity))
                 .collect();
         }
         Vec::new()
@@ -111,7 +111,7 @@ impl XgApp {
         let mut init_off = 0.0;
         if need_init {
             let notes = self.pr_notes(ch);
-            let mut pitches: Vec<i32> = notes.iter().map(|(_, _, p)| *p as i32).collect();
+            let mut pitches: Vec<i32> = notes.iter().map(|(_, _, p, _)| *p as i32).collect();
             pitches.sort_unstable();
             let median_pitch = pitches.get(pitches.len() / 2).copied().unwrap_or(60);
             // 目标行 (像素) = (127 - pitch)*ROW_H; 偏移到让该行居中
@@ -201,6 +201,7 @@ impl XgApp {
                 }
                 // ===== bar 竖线 (贯穿时间轴内容区, 随 zoom/scroll 重画) =====
                 let time_w = (time_rect.width()).max(1.0);
+                let beat_ticks = ppq.max(1); // 每拍 tick (4/4: bar_ticks/4)
                 if bar_ticks > 0 {
                     let mut bt0 = (scroll / bar_ticks) * bar_ticks;
                     while bt0 <= last_tick_win {
@@ -209,16 +210,31 @@ impl XgApp {
                             p.vline(
                                 bxg,
                                 time_rect.y_range(),
-                                egui::Stroke::new(1.0, egui::Color32::from_rgba_unmultiplied(0x50, 0x70, 0x80, 60)),
+                                egui::Stroke::new(1.0, egui::Color32::from_rgba_unmultiplied(0x73, 0x84, 0x8f, 80)),
                             );
                         }
                         bt0 += bar_ticks;
                     }
+                    // ===== beat 竖线 (每拍, 比 bar 更淡; 只画非 bar 起点的拍) =====
+                    if beat_ticks > 0 {
+                        let mut vt = (scroll / beat_ticks) * beat_ticks;
+                        while vt <= last_tick_win {
+                            if vt >= scroll && vt % bar_ticks != 0 {
+                                let vxg = time_rect.left() + (vt - scroll) as f32 / win_ticks.max(1) as f32 * time_w;
+                                p.vline(
+                                    vxg,
+                                    time_rect.y_range(),
+                                    egui::Stroke::new(1.0, egui::Color32::from_rgba_unmultiplied(0x2f, 0x38, 0x42, 50)),
+                                );
+                            }
+                            vt += beat_ticks;
+                        }
+                    }
                 }
 
-                // ===== 单 channel 音符 (宽度 = 时长 dur/t_end) =====
+                // ===== 单 channel 音符 (宽度=时长; 明暗=力度 vel, 与 Channel 视图一致) =====
                 let notes = self.pr_notes(ch);
-                for (start, dur, pitch) in &notes {
+                for (start, dur, pitch, vel) in &notes {
                     let p_ = *pitch as i32;
                     if p_ < MIDI_LOW || p_ >= MIDI_HIGH {
                         continue;
@@ -236,7 +252,8 @@ impl XgApp {
                         egui::pos2(sx + sw, vy + ROW_H),
                     );
                     let ci = (ch - 1) as usize;
-                    let (r, g, b) = self.channel_note_color(ci, 100);
+                    // 力度 → 明暗: channel_note_color(vel) 内 bright = 40 + vel/127*215
+                    let (r, g, b) = self.channel_note_color(ci, *vel);
                     p.rect_filled(note_rect, 2.0, egui::Color32::from_rgb(r, g, b));
                 }
 

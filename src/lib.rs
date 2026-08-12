@@ -2662,6 +2662,19 @@ impl WebHandle {
                             });
                         if let Some(z) = z { app.pr_zoom = z; app.url_override_view = true; }
                     }
+                    // 调试/演示钩子: ?prc=N → 初始 Piano Roll 显示 channel (验证力度明暗/单通道)
+                    {
+                        let c = web_sys::window()
+                            .and_then(|w| w.location().search().ok())
+                            .and_then(|sr| {
+                                let p = sr.split('?').nth(1).unwrap_or("");
+                                p.split('&').find_map(|kv| {
+                                    let mut it = kv.split('=');
+                                    if it.next() == Some("prc") { it.next().and_then(|v| v.parse::<u8>().ok()) } else { None }
+                                })
+                            });
+                        if let Some(c) = c { app.cur_pr_channel = c.clamp(1, 16); app.url_override_view = true; }
+                    }
                     // 调试/演示钩子: ?smf=<url> 时启动后自动加载该 SMF (fetch → load_smf_bytes)
                     if let Some(url) = initial_smf {
                         wasm_bindgen_futures::spawn_local(async move {
