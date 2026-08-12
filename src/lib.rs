@@ -69,6 +69,61 @@ pub fn console_log(mark: &str, msg: impl std::fmt::Display) {
 #[cfg(not(target_arch = "wasm32"))]
 pub fn console_log(_mark: &str, _msg: impl std::fmt::Display) {}
 
+/// 顶部 bar/beat 时间标尺绘制 (Channel Notes 与 Piano Roll 共用, 用户 2026-08-12 定案).
+/// 两侧真正差异只是 time_left/width 与各自的 win_ticks/scroll; bar/beat 遍历/颜色/字号完全一致.
+/// 参数: 标尺整块(含深色底), 时间轴起始 x + 宽, 当前窗口 tick 语义 (win_ticks=end/zoom, scroll).
+pub(crate) fn draw_time_ruler(
+    p: &egui::Painter,
+    ruler_rect: egui::Rect,
+    time_left: f32,
+    time_width: f32,
+    win_ticks: u64,
+    scroll: u64,
+    ppq: u64,
+    bar_ticks: u64,
+) {
+    // 标尺深色底
+    p.rect_filled(ruler_rect, 0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e));
+    if bar_ticks == 0 || time_width <= 0.0 {
+        return;
+    }
+    let last_tick_win = scroll + win_ticks.max(1);
+    let win = win_ticks.max(1) as f32;
+    let first_bar = scroll / bar_ticks;
+    let last_bar = last_tick_win / bar_ticks + 1;
+    let mut bar_no = first_bar;
+    while bar_no <= last_bar {
+        let bt = bar_no * bar_ticks;
+        if bt <= last_tick_win {
+            let bx = time_left + (bt.saturating_sub(scroll)) as f32 / win * time_width;
+            // bar 起始竖线 (标尺内亮)
+            p.vline(bx, ruler_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_rgb(0x66, 0x88, 0x99)));
+            // bar 号 (1-based)
+            p.text(
+                egui::pos2(bx + 3.0, ruler_rect.top() + 1.0),
+                egui::Align2::LEFT_TOP,
+                (bar_no + 1).to_string(),
+                egui::FontId::monospace(10.0),
+                egui::Color32::from_gray(210),
+            );
+            // beat 子刻线: bar 内 1..次 (bar 起点已画)
+            let beat_t = ppq.max(1);
+            let mut b = 1;
+            while b < bar_ticks / beat_t {
+                let btk = bt + b * beat_t;
+                if btk <= last_tick_win {
+                    let bbx = time_left + (btk - scroll) as f32 / win * time_width;
+                    p.vline(bbx, ruler_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_rgb(0x3a, 0x4a, 0x58)));
+                }
+                b += 1;
+            }
+        }
+        bar_no += 1;
+    }
+    // 标尺底分隔线
+    p.hline(ruler_rect.y_range(), ruler_rect.bottom(), egui::Stroke::new(1.0, egui::Color32::from_gray(80)));
+}
+
 /// 下载文本为文件 (仅 wasm): 用 Blob + URL.createObjectURL + <a download>. 无需剪贴板权限.
 #[cfg(target_arch = "wasm32")]
 pub fn download_text(filename: &str, text: &str) -> Result<(), String> {
@@ -2549,6 +2604,19 @@ impl WebHandle {
                                 })
                             });
                         if let Some(s) = s { app.track_view_scroll_ticks = s; app.url_override_view = true; }
+                    }
+                    // 调试/演示钩子: ?pz=N → 初始 Piano Roll zoom (验证 zoom 重画 bar, 与 Channel 一致)
+                    {
+                        let z = web_sys::window()
+                            .and_then(|w| w.location().search().ok())
+                            .and_then(|sr| {
+                                let p = sr.split('?').nth(1).unwrap_or("");
+                                p.split('&').find_map(|kv| {
+                                    let mut it = kv.split('=');
+                                    if it.next() == Some("pz") { it.next().and_then(|v| v.parse().ok()) } else { None }
+                                })
+                            });
+                        if let Some(z) = z { app.pr_zoom = z; app.url_override_view = true; }
                     }
                     // 调试/演示钩子: ?smf=<url> 时启动后自动加载该 SMF (fetch → load_smf_bytes)
                     if let Some(url) = initial_smf {

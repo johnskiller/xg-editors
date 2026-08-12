@@ -75,43 +75,32 @@ impl XgApp {
         };
         let ppq = self.ppq.max(1);
         let beats_per_bar = 4u64; // 默认 4/4 (复杂拍号后续)
-        let zoom = self.pr_zoom.max(0.05);
 
-        // ===== 顶部 bar/beat 标尺 (allocate 占位, 固定) =====
+        // ===== 时间轴换算 (与 Channel 视图 panels.rs 499-715 完全一致) =====
+        // zoom 放大 → win_ticks 变小 → bar/音符横向变宽 → bar/beat 自动重画
+        let zoom = self.pr_zoom.max(0.002);
+        let win_ticks = (t_end.max(1) as f32 / zoom).round().max(1.0) as u64;
+        let scroll = self.pr_scroll_ticks;
+        let last_tick_win = scroll + win_ticks;
+        let bar_ticks = beats_per_bar * ppq; // 每小节 tick (4/4)
+
+        // ===== 顶部 bar/beat 标尺 (共用函数 draw_time_ruler, 与 Channel 视图一致) =====
         let (ruler_rect, _) =
             ui.allocate_exact_size(egui::vec2(outer.width(), RULER_H), egui::Sense::hover());
         let ruler_p = ui.painter();
-        ruler_p.rect_filled(ruler_rect, 0.0, egui::Color32::from_rgb(0x22, 0x22, 0x28));
         let ruler_time_rect = egui::Rect::from_min_max(
             egui::pos2(ruler_rect.left() + KEY_W, ruler_rect.top()),
             ruler_rect.max,
         );
-        let total_bars = (t_end / (ppq * beats_per_bar)).max(1);
-        for bar in 0..=total_bars {
-            let tick = bar * ppq * beats_per_bar;
-            let x = ruler_time_rect.left()
-                + (tick as f32 / t_end.max(1) as f32) * ruler_time_rect.width();
-            ruler_p.vline(x, ruler_time_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_gray(110)));
-            ruler_p.text(
-                egui::pos2(x + 3.0, ruler_time_rect.top() + 3.0),
-                egui::Align2::LEFT_TOP,
-                (bar + 1).to_string(),
-                egui::FontId::proportional(10.0),
-                egui::Color32::from_gray(215),
-            );
-            if zoom > 0.5 {
-                for b in 1..beats_per_bar {
-                    let bt = tick + b * ppq;
-                    let bx = ruler_time_rect.left()
-                        + (bt as f32 / t_end.max(1) as f32) * ruler_time_rect.width();
-                    ruler_p.vline(bx, ruler_time_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_gray(55)));
-                }
-            }
-        }
-        ruler_p.hline(
-            ruler_time_rect.y_range(),
-            ruler_time_rect.bottom(),
-            egui::Stroke::new(1.0, egui::Color32::from_gray(80)),
+        crate::draw_time_ruler(
+            ruler_p,
+            ruler_rect,
+            ruler_time_rect.left(),
+            ruler_time_rect.width(),
+            win_ticks,
+            scroll,
+            ppq,
+            bar_ticks,
         );
 
         // ===== 内容区 (ScrollArea 纵向) : 左琴键 + 时间轴 =====
@@ -124,11 +113,11 @@ impl XgApp {
         // 目标行 (像素) = (127 - pitch)*ROW_H; 偏移到让该行居中
         let target_y = (MIDI_HIGH - 1 - median_pitch) as f32 * ROW_H;
         let init_off = (target_y - 60.0).max(0.0);
-        let mut scroll = egui::ScrollArea::vertical()
+        let mut scroll_area = egui::ScrollArea::vertical()
             .auto_shrink([false, false])
             .vertical_scroll_offset(init_off);
         // 若音符 pitch 分散, 用能覆盖中位数的偏移即可
-        scroll.show(ui, |ui| {
+        scroll_area.show(ui, |ui| {
                 // 内部坐标系: 视口顶 = ui.min_rect().top()
                 let c0 = ui.min_rect().top();
                 // 预留内容高度 (可滚动)
@@ -200,30 +189,41 @@ impl XgApp {
                     let y = c0 + i as f32 * ROW_H;
                     p.hline(time_rect.x_range(), y, egui::Stroke::new(1.0, egui::Color32::from_gray(28)));
                 }
-                // bar 竖线
-                for bar in 0..=total_bars {
-                    let tick = bar * ppq * beats_per_bar;
-                    let x = time_rect.left()
-                        + (tick as f32 / t_end.max(1) as f32) * time_rect.width();
-                    p.vline(x, time_rect.y_range(), egui::Stroke::new(1.0, egui::Color32::from_rgb(0x3a, 0x44, 0x52)));
+                // ===== bar 竖线 (贯穿时间轴内容区, 随 zoom/scroll 重画) =====
+                let time_w = (time_rect.width()).max(1.0);
+                if bar_ticks > 0 {
+                    let mut bt0 = (scroll / bar_ticks) * bar_ticks;
+                    while bt0 <= last_tick_win {
+                        if bt0 >= scroll {
+                            let bxg = time_rect.left() + (bt0 - scroll) as f32 / win_ticks.max(1) as f32 * time_w;
+                            p.vline(
+                                bxg,
+                                time_rect.y_range(),
+                                egui::Stroke::new(1.0, egui::Color32::from_rgba_unmultiplied(0x50, 0x70, 0x80, 60)),
+                            );
+                        }
+                        bt0 += bar_ticks;
+                    }
                 }
 
                 // ===== 单 channel 音符 (宽度 = 时长 dur/t_end) =====
                 let notes = self.pr_notes(ch);
-                let scroll_tick = self.pr_scroll_ticks as f32;
-                let span = (t_end as f32 - scroll_tick).max(1.0);
                 for (start, dur, pitch) in &notes {
                     let p_ = *pitch as i32;
                     if p_ < MIDI_LOW || p_ >= MIDI_HIGH {
                         continue;
                     }
+                    // 只在窗口 [scroll, scroll+win_ticks] 内显示 (与 Channel 一致)
+                    if *start + *dur < scroll || *start > last_tick_win {
+                        continue;
+                    }
                     let row_idx = (MIDI_HIGH - 1 - p_) as usize;
                     let vy = c0 + row_idx as f32 * ROW_H;
-                    let sx = time_rect.left() + ((*start as f32 - scroll_tick) / span) * time_rect.width();
-                    let sw = ((*dur as f32) / span) * time_rect.width();
+                    let sx = time_rect.left() + (start.checked_sub(scroll).unwrap_or(0)) as f32 / win_ticks.max(1) as f32 * time_w;
+                    let sw = (*dur as f32 / win_ticks.max(1) as f32 * time_w).max(2.0);
                     let note_rect = egui::Rect::from_min_max(
                         egui::pos2(sx, vy),
-                        egui::pos2(sx + sw.max(2.0), vy + ROW_H),
+                        egui::pos2(sx + sw, vy + ROW_H),
                     );
                     let ci = (ch - 1) as usize;
                     let (r, g, b) = self.channel_note_color(ci, 100);
@@ -232,9 +232,10 @@ impl XgApp {
 
                 // ===== playhead =====
                 if self.playing || self.playhead_tick > 0 {
-                    let px = time_rect.left()
-                        + ((self.playhead_tick as f32 - scroll_tick) / span) * time_rect.width();
-                    p.vline(px, time_rect.y_range(), egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xd7, 0x00)));
+                    if self.playhead_tick >= scroll && self.playhead_tick <= last_tick_win {
+                        let px = time_rect.left() + (self.playhead_tick - scroll) as f32 / win_ticks.max(1) as f32 * time_w;
+                        p.vline(px, time_rect.y_range(), egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xd7, 0x00)));
+                    }
                 }
             });
     }

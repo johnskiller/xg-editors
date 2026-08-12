@@ -510,58 +510,14 @@ impl XgApp {
                 let notes_right = rect.right();
                 let notes_width = (notes_right - notes_left).max(1.0);
 
-                // ===== 顶部 bar/tick 标尺 =====
+                // ===== 顶部 bar/tick 标尺 (共用 draw_time_ruler, 与 Piano Roll 一致) =====
                 let ruler_h = 22.0;
                 let ruler_top = rect.top();
                 let ruler_bot = ruler_top + ruler_h;
-                p.rect_filled(
-                    egui::Rect::from_min_max(egui::pos2(rect.left(), ruler_top), egui::pos2(rect.right(), ruler_bot)),
-                    0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e),
-                );
+                let ruler_rect = egui::Rect::from_min_max(egui::pos2(rect.left(), ruler_top), egui::pos2(rect.right(), ruler_bot));
+                crate::draw_time_ruler(p, ruler_rect, notes_left, notes_width, win_ticks, scroll, self.ppq.max(1), 4 * self.ppq.max(1));
                 // 行网格顶 = 标尺之下(自洽, 不再依赖左栏绝对 Y)
                 let grid_top = ruler_bot;
-                // bar 刻线: 每小节 tick = ppq * 4 (4/4)
-                let bar_ticks = 4 * self.ppq.max(1);
-                let last_tick = scroll + win_ticks;
-                if bar_ticks > 0 {
-                    let first_bar = scroll / bar_ticks;
-                    let last_bar = last_tick / bar_ticks + 1;
-                    let mut bar_no = first_bar;
-                    while bar_no <= last_bar {
-                        let bt = bar_no * bar_ticks;
-                        if bt <= last_tick {
-                            let bx = notes_left + (bt - scroll) as f32 / win_ticks as f32 * notes_width;
-                            // bar 起始竖线(只在标尺内亮, 全局淡)
-                            p.line_segment(
-                                [egui::pos2(bx, ruler_top + 8.0), egui::pos2(bx, ruler_bot)],
-                                egui::Stroke::new(1.0, egui::Color32::from_rgb(0x66, 0x88, 0x99)),
-                            );
-                            // bar 号 (1-based)
-                            p.text(
-                                egui::pos2(bx + 3.0, ruler_top + 1.0),
-                                egui::Align2::LEFT_TOP,
-                                format!("{}", bar_no + 1),
-                                egui::FontId::monospace(10.0),
-                                egui::Color32::from_gray(210),
-                            );
-                            // beat 子刻线: 每小节内 4 拍 (bar 起点除外), 比 bar 淡, 只在标尺内
-                            let beat_t = self.ppq.max(1);
-                            let mut b = 1; // beat index 1..3 (0 = bar 起点已画)
-                            while b < 4 {
-                                let btk = bt + b * beat_t;
-                                if btk <= last_tick {
-                                    let bbx = notes_left + (btk - scroll) as f32 / win_ticks as f32 * notes_width;
-                                    p.line_segment(
-                                        [egui::pos2(bbx, ruler_top + 12.0), egui::pos2(bbx, ruler_bot)],
-                                        egui::Stroke::new(1.0, egui::Color32::from_rgb(0x3a, 0x4a, 0x58)),
-                                    );
-                                }
-                                b += 1;
-                            }
-                        }
-                        bar_no += 1;
-                    }
-                }
 
                 // 通道行背景 + 行头 + 音符
                 // SMF 加载后 16 行 (每行 = 1 MIDI channel); 否则默认 tracks rows
@@ -700,6 +656,8 @@ impl XgApp {
                     p.vline(ph_x, egui::Rangef::new(grid_top, rect.bottom()), egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xd0, 0x40)));
                 }
                 // bar 起始竖线贯穿全部行(淡, 辅助对齐)
+                let bar_ticks = 4 * self.ppq.max(1);
+                let last_tick = scroll + win_ticks;
                 if bar_ticks > 0 {
                     let mut bt0 = (scroll / bar_ticks) * bar_ticks;
                     while bt0 <= last_tick {
