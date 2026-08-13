@@ -695,6 +695,13 @@ pub struct XgApp {
     pub pr_scroll_ticks: u64,
     /// Piano Roll 首帧是否已设定初始垂直滚动 (之后放弃控制, 交给用户滚动)
     pub pr_scrolled_once: bool,
+    /// Channel View 每行高度 (16..64, 默认=CHANNEL_ROW_H=28; zoom slider 控制, John 2026-08-13)
+    /// 中央 channel 行 + 左侧栏行网格共用, 保持对齐
+    pub channel_row_h: f32,
+    /// Channel View 压缩钢琴卷帘的可见音高范围 (pitch 0-127 映射到行高; 默认全范围 0..127)
+    /// 未来可加 slider 聚焦音域; 目前固定全范围
+    pub channel_view_pitch_low: u8,
+    pub channel_view_pitch_high: u8,
     /// 是否已为 app 设置滚动条样式 (宽/常显)
     pub ui_scroll_style_done: bool,
     /// 发送测试的异步结果 cell(wasm)
@@ -1723,6 +1730,9 @@ impl Default for XgApp {
             pr_zoom: 1.0,
             pr_scroll_ticks: 0,
             pr_scrolled_once: false,
+            channel_row_h: CHANNEL_ROW_H,
+            channel_view_pitch_low: 0,
+            channel_view_pitch_high: 127,
             ui_scroll_style_done: false,
             #[cfg(target_arch = "wasm32")]
             midi_probe_cell: None,

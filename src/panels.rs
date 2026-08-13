@@ -447,6 +447,18 @@ impl XgApp {
                 ui.add(egui::Slider::new(&mut scf, 0.0..=max_scroll).step_by((win.max(1) / 20).max(1) as f64).custom_formatter(|v, _| format!("{}t", v as i64)));
                 self.track_view_scroll_ticks = scf.max(0.0) as u64;
                 } // end Zoom/Scroll (非 PlayView)
+                // Channel View: 行高 zoom slider (16..64 px; 压缩钢琴卷帘时放大行内音高分辨用)
+                if self.central_view == CentralView::ChannelNotes {
+                    ui.separator();
+                    ui.label("RowH");
+                    ui.add(
+                        egui::Slider::new(&mut self.channel_row_h, 16.0..=64.0)
+                            .logarithmic(true)
+                            .show_value(false)
+                            .custom_formatter(|v, _| format!("{:.0}px", v))
+                            .custom_parser(|s| s.trim_end_matches("px").parse::<f64>().ok()),
+                    );
+                }
             });
             // ===== 视图分发 (Channel/Play 共用播放状态; Piano Roll 已到底栏) =====
             match self.central_view {
@@ -526,9 +538,10 @@ impl XgApp {
                 crate::draw_time_ruler(panel_p0, ruler_rect, notes_left, notes_width, win_ticks, scroll, self.ppq.max(1), 4 * self.ppq.max(1));
                 ui.allocate_rect(ruler_rect, egui::Sense::hover());
 
-                // 内容总高 (滚动区): ch_rows * CHANNEL_ROW_H
+                // 内容总高 (滚动区): ch_rows * row_h (row_h 可调 16..64, John 2026-08-13)
+                let row_h = self.channel_row_h;
                 let ch_rows = if self.smf.is_some() { 16 } else { self.tracks.len().max(1) };
-                let total_h = ch_rows as f32 * CHANNEL_ROW_H;
+                let total_h = ch_rows as f32 * row_h;
 
                 // ===== 内容区 ScrollArea (纵向滚动, 复用 piano_roll 成熟模式) =====
                 egui::ScrollArea::vertical()
@@ -552,10 +565,10 @@ impl XgApp {
                         // 通道行背景 + 行头 + 音符
                     // SMF: 16 行; 否则 tracks 行数
                     for i in 0..ch_rows {
-                        let y0 = c0 + i as f32 * CHANNEL_ROW_H;
+                        let y0 = c0 + i as f32 * row_h;
                         let row_rect = egui::Rect::from_min_max(
                             egui::pos2(c_left, y0),
-                            egui::pos2(c_right, (y0 + CHANNEL_ROW_H).min(content_bottom)),
+                            egui::pos2(c_right, (y0 + row_h).min(content_bottom)),
                         );
                     // 该行显示数据 (SMF: 16 ch, 音色/电平来自 live_*; 否则 tracks)
                     let (row_name, row_voice, row_level): (String, String, f32) = if self.smf.is_some() {
@@ -615,60 +628,52 @@ impl XgApp {
                         // (电平条后不显示百分比数字 — John: 变动太快看不清)
                         // gutter 与音符区之间的分隔竖线
                         p.line_segment(
-                            [egui::pos2(c_left + gutter_w, y0), egui::pos2(c_left + gutter_w, (y0 + CHANNEL_ROW_H).min(content_bottom))],
+                            [egui::pos2(c_left + gutter_w, y0), egui::pos2(c_left + gutter_w, (y0 + row_h).min(content_bottom))],
                             egui::Stroke::new(1.0, egui::Color32::from_gray(45)),
                         );
                     }
                     // 音符区 (gutter 右缘起, 同一时间映射)
                     let inner = egui::Rect::from_min_max(
                         egui::pos2(notes_left + 4.0, y0 + 4.0),
-                        egui::pos2(notes_right - 4.0, (y0 + CHANNEL_ROW_H).min(content_bottom) - 4.0),
+                        egui::pos2(notes_right - 4.0, (y0 + row_h).min(content_bottom) - 4.0),
                     );
                     let ch = i + 1; // channel 1..16
-                    // 低 zoom 音符过密(<2px)时合并成"密度带": 同一窗口内音符并成一段
-                    let merge_gap = ((win_ticks as f32 / inner.width()) * 2.0) as u64; // 2px 对应 tick
-                    let merge_gap = merge_gap.max(1);
-                    // 无 SMF 时走 self.tracks 渲染
+                    // ★ 压缩 piano roll: 每个 note = 1px 水平线 (John 2026-08-13)
+                    //   x = 时间, 长度 = 时长, 颜色 = 力度, y(行内) = 音高 0-127 映射到行高(高音在上)
+                    //   → 同 tick 和弦因音高不同垂直分离, 重叠可见 (旧"点"渲染无法区分和弦)
+                    let pitch_low = self.channel_view_pitch_low;
+                    let pitch_high = self.channel_view_pitch_high;
+                    let p_range = (pitch_high - pitch_low).max(1u8) as f32;
+                    let p_y = |pitch: u8| -> f32 {
+                        // 高音在上: inner.bottom() - 相对位置*inner.height()
+                        inner.bottom() - ((pitch as f32 - pitch_low as f32) / p_range * inner.height()).clamp(0.0, inner.height())
+                    };
                     if self.smf.is_none() {
                         let def_notes = &self.tracks[i].notes;
                         for n in def_notes {
                             if n.start_tick < scroll || n.start_tick > scroll + win_ticks { continue; }
                             let nx = inner.left() + (n.start_tick - scroll) as f32 / win_ticks as f32 * inner.width();
                             let nw = (n.dur_ticks as f32 / win_ticks as f32 * inner.width()).max(2.0);
-                            let ny = row_rect.center().y - CHANNEL_ROW_H * 0.25;
-                            let nh = CHANNEL_ROW_H * 0.5;
-                            let (gr, rr, bb) = if self.playing && (self.playhead_tick >= n.start_tick % (win_ticks + scroll).max(1) && self.playhead_tick <= (n.start_tick % (win_ticks + scroll).max(1)) + n.dur_ticks) {
-                                (0xff, 0xd0, 0x30)
-                            } else {
-                                (0x2e, 0xcc - (i % 3) as u8 * 20, 0x40)
-                            };
-                            let note_col = egui::Color32::from_rgb(gr, rr, bb);
-                            p.rect_filled(
-                                egui::Rect::from_min_size(egui::pos2(nx, ny), egui::vec2(nw, nh)),
-                                2.0,
-                                note_col,
+                            let ny = p_y(n.pitch).clamp(inner.top(), inner.bottom() - 1.0);
+                            let (gr, rr, bb) = self.channel_note_color(i, n.velocity);
+                            p.line_segment(
+                                [egui::pos2(nx, ny), egui::pos2(nx + nw, ny)],
+                                egui::Stroke::new(1.0, egui::Color32::from_rgb(gr, rr, bb)),
                             );
                         }
                     } else {
-                        // SMF 视图: 每个 MIDI 事件(NoteOn)= 一个小方块点 (John 拍板:
-                        // track view 看"哪里有事件", 不画长度/不要 note off; 长度在 piano roll 看)
+                        // SMF 视图: 每个 NoteOn 用真实 dur_ticks 画线 (John 2026-08-13: 与 piano roll 同数据源,
+                        // 时长必须一致; 旧实现画 3px 短线是 bug)
                         let t_notes: &[smf::SmfNote] = self.smf_views.get(i).map(|v| v.notes.as_slice()).unwrap_or(&[]);
-                        // 每通道一个事件 = 一个点; 只画在当前可视窗口内的
-                        let dot_w = 6.0f32;
-                        let dot_h = (CHANNEL_ROW_H * 0.55).clamp(6.0, 12.0);
-                        let ny = row_rect.center().y - dot_h * 0.5;
                         for n in t_notes {
                             if n.start_tick < scroll || n.start_tick > scroll + win_ticks { continue; }
                             let nx = inner.left() + (n.start_tick - scroll) as f32 / win_ticks as f32 * inner.width();
-                            // 同 tick 多音(和弦)时横向加 1px 位移, 避免完全重叠成一个点
-                            let _ = nx;
-                            let anchored = nx - dot_w * 0.5;
+                            let nw = (n.dur_ticks as f32 / win_ticks as f32 * inner.width()).max(2.0);
+                            let ny = p_y(n.pitch).clamp(inner.top(), inner.bottom() - 1.0);
                             let (gr, rr, bb) = self.channel_note_color(i, n.vel);
-                            let note_col = egui::Color32::from_rgb(gr, rr, bb);
-                            p.rect_filled(
-                                egui::Rect::from_min_size(egui::pos2(anchored, ny), egui::vec2(dot_w, dot_h)),
-                                1.5,
-                                note_col,
+                            p.line_segment(
+                                [egui::pos2(nx, ny), egui::pos2(nx + nw, ny)],
+                                egui::Stroke::new(1.0, egui::Color32::from_rgb(gr, rr, bb)),
                             );
                         }
                     }

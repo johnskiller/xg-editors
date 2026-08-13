@@ -359,7 +359,11 @@ pub fn build_track_views(smf: &Smf) -> Vec<SmfTrackView> {
             all.push(e);
         }
     }
-    // 按 tick 排序 (同等 tick: NoteOff 先于 NoteOn, 其余按事件优先级)
+    // 按 tick 排序。★ 2026-08-13 John: 琶音器 MIDI(ch03)出现超长音符.
+    //   根因 = 旧排序强行"同 tick NoteOff 先于 NoteOn" → 破坏文件内同音断奏配对
+    //   (同 tick 的 on(X)/off(X) 文件序已隐含"先闭再开"; 强制 off 先行 → 旧 on 悬空等到下个同音 → 超长).
+    //   修复: 只按 tick 排序 (Rust sort_by_key 稳定), 同 tick 保留文件原始相对顺序 → 配对正确.
+    //   代价: format1 多轨同 tick 的相对顺序按 track 输入序(合理).
     fn evt_tick(e: &SmfEvent) -> u64 {
         match e {
             SmfEvent::NoteOn { tick, .. } | SmfEvent::NoteOff { tick, .. }
@@ -367,11 +371,7 @@ pub fn build_track_views(smf: &Smf) -> Vec<SmfTrackView> {
             | SmfEvent::Cc { tick, .. } | SmfEvent::Program { tick, .. } => *tick,
         }
     }
-    all.sort_by_key(|e| match e {
-        SmfEvent::NoteOff { tick, .. } => (*tick, 0u8),
-        SmfEvent::NoteOn { tick, .. } => (*tick, 1u8),
-        _ => (evt_tick(e), 2u8),
-    });
+    all.sort_by_key(|e| evt_tick(e));
     // 展开 on/off 配对
     // 用一个近似: 每个 (channel,pitch) 维护未闭合 on 栈
     let mut active_start: Vec<Vec<u64>> = vec![Vec::new(); 256]; // channel*16+pitch 简化: 用 key
@@ -735,3 +735,40 @@ fn test_file_11_track3() {
         }
     }
 }
+
+/// ★ 2026-08-13 John bug 回归: 琶音器 MIDI ch03 出现超长音符(150拍).
+///   根因: build_track_views 排序强行"同 tick NoteOff 先于 NoteOn", 破坏文件内
+///   同音断奏配对(on(X)/off(X) 同 tick 交错) → on 悬空等很久 → 超长.
+///   修复: 只按 tick 稳定排序, 同 tick 保留文件原始顺序.
+///   本测试: 解析用户提供的文件, 断言无 >8拍(192tick) 的超长 note.
+#[test]
+fn test_arpeggio_no_superlong_notes() {
+    let bytes = include_bytes!("../11 - I Sawed The Demons (E2M1) user_repro.mid");
+    let smf_file = match parse_smf(bytes) {
+        Ok(s) => s,
+        Err(e) => panic!("parse_smf failed: {e:?}"),
+    };
+    let views = build_track_views(&smf_file);
+    let ppq = smf_file.ppq.max(1) as u64;
+    let gate = 8 * ppq; // 8拍
+    let mut worst: (u64, u64, u64, u64) = (0, 0, 0, 0); // (dur, ch, pitch, start)
+    let mut total_long = 0u64;
+    for (ci, v) in views.iter().enumerate() {
+        for n in &v.notes {
+            if n.dur_ticks > gate {
+                total_long += 1;
+                if n.dur_ticks > worst.0 {
+                    worst = (n.dur_ticks, ci as u64, n.pitch as u64, n.start_tick);
+                }
+            }
+        }
+    }
+    // 修复前(旧排序 off_first): 本文件 43 个超长(雪花式假长音) — 排序错配导致.
+    // 修复后(只按tick稳定): 3 个超长, 均为文件内真实长持音
+    //   (ch3 pitch31 @1055→2111 持续低音叠琶音; ch6 pitch24/pitch21 长音),
+    //   on→off 配对闭环, 非错配. 断言 < 10 (远小于 bug 时的 43) 即可锁死回归.
+    assert!(total_long < 10,
+        "排序修复后不应有雪花式假超长(修复前=43); 实际 {total_long} 个(应只剩真实长持音 <10), 最坏 ch{} pitch{} start{} dur={} tick",
+        worst.1, worst.2, worst.3, worst.0);
+}
+
