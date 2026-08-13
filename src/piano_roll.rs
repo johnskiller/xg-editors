@@ -198,6 +198,21 @@ impl XgApp {
                         p.rect_filled(row, 1.0, egui::Color32::from_rgb(0x1a, 0x1a, 0x20));
                     }
                     p.rect_stroke(row, 1.0, egui::Stroke::new(1.0, egui::Color32::from_gray(90)));
+                    // ★★ 2026-08-13 playable: 琴键点击 = 切换发声 (on→off/off→on).
+                    //   简单可预期: 点一下响(短音, t0=now 自动 300ms off), 再点一下静音.
+                    let key_id = ui.make_persistent_id(("pr_key_sound", p_));
+                    let kr = ui.interact(row, key_id, egui::Sense::click());
+                    let pitch = p_ as u8;
+                    if kr.clicked() {
+                        let ch0 = (ch % 16) as usize;
+                        let held = self.preview_notes[ch0].contains_key(&pitch);
+                        if held {
+                            self.preview_note(ch, pitch, 100, false, -1.0);
+                        } else {
+                            let now = ui.input(|i| i.time);
+                            self.preview_note(ch, pitch, 100, true, now);
+                        }
+                    }
                     // C 标注 (画在琴键接近右端, 用户 2026-08-12: 左缘会被窗口/内边距截断, 改右端确保可见)
                     if p_.rem_euclid(12) == 0 {
                         let col = if is_white {
@@ -281,6 +296,13 @@ impl XgApp {
                     // 力度 → 明暗: channel_note_color(vel) 内 bright = 40 + vel/127*215
                     let (r, g, b) = self.channel_note_color(ci, *vel);
                     p.rect_filled(note_rect, 2.0, egui::Color32::from_rgb(r, g, b));
+                    // ★★ 2026-08-13 playable: 点击 note → 采样式短音 (NoteOn, 300ms 自动 off)
+                    let note_id = ui.make_persistent_id(("pr_note_sound", start, pitch));
+                    let nr = ui.interact(note_rect, note_id, egui::Sense::click());
+                    if nr.clicked() {
+                        let now = ui.input(|i| i.time);
+                        self.preview_note(ch, *pitch, *vel, true, now);
+                    }
                 }
 
                 // ===== playhead =====

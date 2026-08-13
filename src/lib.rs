@@ -674,6 +674,11 @@ pub struct XgApp {
     pub channel_solos: [bool; 16],
     /// TopBar Record armed (点击红点亮灭; 功能预留不接逻辑, 会话级不持久化)
     pub rec_armed: bool,
+    /// Div 2026-08-13 playable piano roll: 点按发声挂音 (通道 → pitch → (vel, 起声 egui time)).
+    /// 点琴键按住 = NoteOn; 松开/移出 = NoteOff; note 点击 = 采样短音 (起声后 ~300ms 自动 off)。
+    pub preview_notes: Vec<std::collections::BTreeMap<u8, (u8, f64)>>,
+    /// Event List: 选中行索引 (指向过滤+排序后的当前 channel 事件 vec); None=未选中
+    pub event_list_sel: Option<usize>,
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -1739,6 +1744,8 @@ impl Default for XgApp {
             channel_mutes: [false; 16],
             channel_solos: [false; 16],
             rec_armed: false,
+            preview_notes: (0..16).map(|_| std::collections::BTreeMap::new()).collect(),
+            event_list_sel: None,
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -1999,6 +2006,9 @@ impl eframe::App for XgApp {
         } else {
             self.last_play_frame_ms = 0.0;
         }
+        // 采样式预览短音自动 off (30ms 帧循环, ctx.input().time 秒)
+        let now = ctx.input(|i| i.time);
+        self.expire_preview_notes(now);
 
         // 顶栏 (44px 高 + 上下 padding, TopBar 美化 v0.1.23)
         // frame 自带 inner_margin = 四周对称 padding (顶/底/左/右), 背景同色.
@@ -3810,5 +3820,48 @@ mod tests {
             let _b = TransportButton::new(kind).active(true).size(24.0);
         }
         // active(true) 合成不 panic; 行为由浏览器像素验证覆盖
+    }
+
+    #[test]
+    fn preview_note_manages_hanging_and_expiry() {
+        // Playable Piano Roll: preview_note on/off + expire_preview_notes 300ms 短音自动 off
+        let mut app = XgApp::default();
+        // 未 muted → preview on 登记挂音 (MIDI ch N → 数组下标 N, 与 playback 一致)
+        app.preview_note(1, 60, 100, true, -1.0); // t0=-1: 按住未放
+        assert_eq!(app.preview_notes[1].get(&60), Some(&(100, -1.0)), "ch1 C4 挂音");
+        app.preview_note(1, 60, 100, false, -1.0); // 松开
+        assert!(!app.preview_notes[1].contains_key(&60), "松开后移除");
+
+        // mute 通道不发声 (preview_note 走 channel_is_effectively_muted 过滤)
+        app.channel_mutes[2] = true;
+        app.preview_note(2, 62, 80, true, -1.0);
+        assert!(!app.preview_notes[2].contains_key(&62), "muted 通道不登记挂音");
+        app.channel_mutes[2] = false;
+
+        // 采样式短音: t0=now, 300ms 后 expire 自动 off
+        app.preview_note(3, 64, 90, true, 0.0); // t0=0
+        assert!(app.preview_notes[3].contains_key(&64));
+        // now=0.2 (<0.30) 不过期
+        app.expire_preview_notes(0.2);
+        assert!(app.preview_notes[3].contains_key(&64), "0.2s 未过期");
+        // now=0.5 (>0.30) 过期
+        app.expire_preview_notes(0.5);
+        assert!(!app.preview_notes[3].contains_key(&64), "0.5s 后自动 off");
+
+        // 按住未放 (t0<0) 永不过期
+        app.preview_note(4, 65, 100, true, -1.0);
+        app.expire_preview_notes(999.0);
+        assert!(app.preview_notes[4].contains_key(&65), "t0<0 按住不受 expire 影响");
+    }
+
+    #[test]
+    fn preview_note_respects_solo() {
+        // Solo ch2 → 其他通道 preview 静默 (与播放一致; MIDI ch N → 下标 N)
+        let mut app = XgApp::default();
+        app.channel_solos[2] = true; // solo ch2
+        app.preview_note(1, 60, 100, true, -1.0); // ch1 非 solo → 静默
+        assert!(!app.preview_notes[1].contains_key(&60), "solo ch2 时 ch1 preview 静默");
+        app.preview_note(2, 62, 80, true, -1.0); // ch2 (solo) → 发声
+        assert!(app.preview_notes[2].contains_key(&62), "solo 通道可 preview");
     }
 }

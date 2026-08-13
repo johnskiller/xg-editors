@@ -571,6 +571,58 @@ impl XgApp {
         let _ = fired; // native: midi_wasm stub 静默
     }
 
+    /// Playable Piano Roll (2026-08-13): 点按琴键/音符 → 即时发声预览.
+    /// on=true 发 NoteOn 并登记挂音; on=false 发 NoteOff 并移除挂音.
+    /// 挂音条目 (pitch → (vel, t0)): t0<0 表示"按住未放"(琴键, 只有 on=false 才 off);
+    ///   t0>=0 表示"采样式短音"(note/琴键点击, 由 expire_preview_notes 超时自动 off).
+    /// 尊重 Mute/Solo; native 或 Web MIDI 全静默降级.
+    pub fn preview_note(&mut self, ch: u8, pitch: u8, vel: u8, on: bool, t0: f64) {
+        let idx = (ch % 16) as usize;
+        // Mute/Solo: 被静音的通道预览不发声 (与播放输出层一致)
+        if self.channel_is_effectively_muted(idx) {
+            return;
+        }
+        let p = pitch & 0x7f;
+        if on {
+            self.preview_notes[idx].insert(p, (vel & 0x7f, t0));
+        } else {
+            self.preview_notes[idx].remove(&p);
+        }
+        let ev = PlayEvent::note(ch % 16, p, vel, 0, on);
+        #[cfg(target_arch = "wasm32")]
+        {
+            let part = (ch as u8) % 32;
+            let target = self.midi_topology.route_for_part(part)
+                .map(|r| r.name.clone())
+                .or_else(|| self.active_outputs().first().cloned());
+            if let Some(dev) = target {
+                let bytes = ev.bytes.clone();
+                wasm_bindgen_futures::spawn_local(async move {
+                    let _ = midi_wasm::send_sync(&dev, &bytes).await;
+                });
+            }
+        }
+        #[cfg(not(target_arch = "wasm32"))]
+        let _ = ev; // native stub
+    }
+
+    /// 采样式短音自动关闭: 对 t0>=0 且 (now - t0) > 0.30s 的挂音发 NoteOff (不碰按住未放的 t0<0 琴键).
+    /// update() 每帧调用 (30ms repaint), now = egui ctx.time (秒).
+    pub fn expire_preview_notes(&mut self, now: f64) {
+        // 先全量收集过期音符, 再逐个发 off (避免 self.preview_note(&mut) 与借用冲突)
+        let mut expired_all: Vec<(u8, u8, u8)> = Vec::new();
+        for (ch, map) in self.preview_notes.iter().enumerate() {
+            for (&p, &(v, t0)) in map.iter() {
+                if t0 >= 0.0 && (now - t0) > 0.30 {
+                    expired_all.push((ch as u8, p, v));
+                }
+            }
+        }
+        for (ch, p, v) in expired_all {
+            self.preview_note(ch, p, v, false, 0.0);
+        }
+    }
+
     /// 停止播放时清除所有挂音: 对所有 16 通道发 All Notes Off (CC123) + All Sound Off (CC120).
     /// 防止"按下 Stop 后仍有音符持续响"(用户报告) —— 播放停止不静音设备, 需要显式清音.
     pub fn send_all_sound_off(&mut self) {
