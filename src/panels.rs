@@ -112,13 +112,18 @@ impl XgApp {
                 //   中央面板把所有绘制 clip 到中央区(侧栏右侧) → "Ch" 被裁、"01"贴边、侧栏宽度一变位置就错.
                 //   修复: 用 available_rect 真实左缘(egui 自动避开侧栏) → 位置动态跟随侧栏宽度.
                 let outer = ui.available_rect_before_wrap();
-                let panel_left = ui.clip_rect().left(); // 中央面板真实左缘(侧栏之后)
+                // ★★ 2026-08-13 参考 piano roll 成熟模式: 全视图统一用 outer(available_rect_before_wrap),
+                //    不自己取 clip_rect — egui 自动避开左右侧栏 → 左右无黑 padding / 背景铺满无缝.
+                //    (此前混用 panel_left/panel_right 导致背景铺到内容区外 → 左右黑 padding, John 反馈)
+                let panel_left = outer.left();
+                let panel_right = outer.right();
                 let panel_p0 = ui.painter();
-                // 深色底 flush 到面板左缘(覆盖 padding), 但内容坐标用 outer(available_rect)
-                panel_p0.rect_filled(
-                    egui::Rect::from_min_max(egui::pos2(panel_left, outer.top()), outer.max),
-                    0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e),
+                // 深色底 flush 到 outer (available_rect) 全范围
+                let bg_rect = egui::Rect::from_min_max(
+                    egui::pos2(panel_left, outer.top()),
+                    egui::pos2(panel_right, outer.bottom()),
                 );
+                panel_p0.rect_filled(bg_rect, 0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e));
 
                 // ===== 时间映射 (zoom/scroll) 全视图共用一份 =====
                 let zoom = self.track_view_zoom.max(0.002);
@@ -131,21 +136,20 @@ impl XgApp {
                 // 2026-08-13 mute/solo 加入: 158 → 192 (放得下 M/S 按钮)
                 let gutter_w = 192.0;
                 let notes_left = outer.left() + gutter_w;
-                let notes_right = outer.right();
+                // ★ 右缘 = 中央面板真右缘 (panel_right) — 音符/数字画到 params 面板前为止
+                let notes_right = panel_right;
                 let notes_width = (notes_right - notes_left).max(1.0);
 
                 // ===== 顶部 bar/tick 标尺 (共用 draw_time_ruler) — 固定不滚动 =====
                 let ruler_h = 22.0;
                 let ruler_top = outer.top();
                 let ruler_bot = ruler_top + ruler_h;
-                // ★ 标尺背景铺满中央面板真实右缘 (panel_right = clip_rect.right()),
-                //   而不只是 outer.right() (available_rect 到 params 面板前会被截断) —
-                //   否则 bar rule 背景在 params 侧栏左侧留 3px 空隙 (John 2026-08-13: "bar rule没到头")
-                let panel_right = panel_p0.clip_rect().right();
+                // ★ 标尺背景铺满中央面板真实右缘 (panel_right, 而非 outer.right() —
+                //   available_rect 到 params 面板前会被截断) → bar rule 背景不露 3px 空隙 (John 2026-08-13)
                 let ruler_rect = egui::Rect::from_min_max(egui::pos2(panel_left, ruler_top), egui::pos2(panel_right, ruler_bot));
                 // 画标尺后推进 cursor → ScrollArea 从标尺下方开始, 不再覆盖标尺 (John 2026-08-13: 标尺消失)
                 crate::draw_time_ruler(panel_p0, ruler_rect, notes_left, notes_width, win_ticks, scroll, self.ppq.max(1), 4 * self.ppq.max(1));
-                ui.allocate_rect(ruler_rect, egui::Sense::hover());
+                ui.allocate_rect(ruler_rect, egui::Sense::hover()); // panel_p0 借用在此结束
 
                 // 内容总高 (滚动区): ch_rows * row_h (row_h 可调 16..64, John 2026-08-13)
                 let row_h = self.channel_row_h;
@@ -166,8 +170,12 @@ impl XgApp {
                         // ★ 内容区边界: 统一用 outer(available_rect) 左缘做基准 — 这是屏幕坐标(避开侧栏),
                         //   ScrollArea 内部 painter 用相同坐标绘制, 与 gutter/notes 严格对齐.
                         //   (曾用 ui.min_rect().left() 导致与 notes_left(outer) 基准不一致 → 错位/贴边)
+                        // ★★ 2026-08-13 John: bar 数字/音符右扩到 params 面板 (宽窗口 outer.right()
+                        //     > 中央面板 clip_rect.right()) → 右缘统一 clamp 到 clip_rect.right() (面板真右缘),
+                        //     否则 note 线段/bar 数字超出其深色背景 (John: "bar 9 数字超出 rule 背景").
+                        //     行背景(c_right)铺满到面板真右缘 panel_right (John: "行背景不到 params 左缘"),
                         let c_left = outer.left();
-                        let c_right = outer.right();
+                        let c_right = panel_right; // 行背景铺到面板真右缘, 不留缝
                         let content_bottom = c0 + total_h;
 
                         // 通道行背景 + 行头 + 音符
