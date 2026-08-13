@@ -39,6 +39,110 @@ pub struct VoiceBank {
     msb_index: HashMap<u8, Vec<usize>>,
 }
 
+/// 音色类别(第一层分组) — 由 msb+prg 推导 (GM 标准分区, data.rs)
+/// 用于分级音色选择器 (voice picker 3-level)
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Hash)]
+pub enum VoiceCategory {
+    Piano,
+    ChromaticPercussion,
+    Organ,
+    Guitar,
+    Bass,
+    Strings,
+    Ensemble,
+    Brass,
+    Reed,
+    Pipe,
+    SynthLead,
+    SynthPad,
+    SynthEffects,
+    Ethnic,
+    Percussive,
+    SoundEffects,
+    SfxKit,
+    DrumKits,
+}
+
+impl VoiceCategory {
+    /// GM 标准顺序 (John 2026-08-13: 熟记 GM 的人按此顺序找, 不做字母排序)
+    pub const ALL: [VoiceCategory; 18] = [
+        VoiceCategory::Piano,
+        VoiceCategory::ChromaticPercussion,
+        VoiceCategory::Organ,
+        VoiceCategory::Guitar,
+        VoiceCategory::Bass,
+        VoiceCategory::Strings,
+        VoiceCategory::Ensemble,
+        VoiceCategory::Brass,
+        VoiceCategory::Reed,
+        VoiceCategory::Pipe,
+        VoiceCategory::SynthLead,
+        VoiceCategory::SynthPad,
+        VoiceCategory::SynthEffects,
+        VoiceCategory::Ethnic,
+        VoiceCategory::Percussive,
+        VoiceCategory::SoundEffects,
+        VoiceCategory::SfxKit,
+        VoiceCategory::DrumKits,
+    ];
+
+    pub fn label(&self) -> &'static str {
+        use VoiceCategory::*;
+        match self {
+            Piano => "Piano",
+            ChromaticPercussion => "CP",
+            Organ => "Organ",
+            Guitar => "Guitar",
+            Bass => "Bass",
+            Strings => "Strings",
+            Ensemble => "Ensemble",
+            Brass => "Brass",
+            Reed => "Reed",
+            Pipe => "Pipe",
+            SynthLead => "Synth Lead",
+            SynthPad => "Synth Pad",
+            SynthEffects => "Synth FX",
+            Ethnic => "Ethnic",
+            Percussive => "Percussive",
+            SoundEffects => "SFX",
+            SfxKit => "SFX Kit",
+            DrumKits => "Drum Kits",
+        }
+    }
+
+    /// msb+prg → 类别 (GM 标准 16 区; MSB=127 鼓组; MSB=64/126 SFX)
+    pub fn from_msb_prg(msb: u8, prg: u8) -> VoiceCategory {
+        use VoiceCategory::*;
+        match msb {
+            127 => DrumKits,
+            126 => SfxKit,
+            64 => SoundEffects,
+            _ => {
+                // MSB=0 (及非常规 melodic) 按 GM prg 分区
+                match prg / 8 {
+                    0 => Piano,
+                    1 => ChromaticPercussion,
+                    2 => Organ,
+                    3 => Guitar,
+                    4 => Bass,
+                    5 => Strings,
+                    6 => Ensemble,
+                    7 => Brass,
+                    8 => Reed,
+                    9 => Pipe,
+                    10 => SynthLead,
+                    11 => SynthPad,
+                    12 => SynthEffects,
+                    13 => Ethnic,
+                    14 => Percussive,
+                    _ => SoundEffects, // 15 => SFX
+                }
+            }
+        }
+    }
+}
+
+
 impl VoiceBank {
     /// 从 JSON 文件加载音色表 (native 用; wasm 无文件 IO)
     pub fn load(path: &str) -> Result<Self, String> {
@@ -325,5 +429,39 @@ mod tests {
         }
         // 若 bank72 真在权威表有 pc40, 应仅在确实有音色时出现 — MU90 官方表该区为空
         assert!(bank.find(48, 21, 8).is_none(), "Glocken+ 也不应在 MU90");
+    }
+
+    #[test]
+    fn voice_category_mapping_locked() {
+        // John 2026-08-13: 分级音色选择器依赖 GM 分区
+        use VoiceCategory as C;
+        // 边界: 每 8 个 prg 一组
+        assert_eq!(C::from_msb_prg(0, 0), C::Piano);
+        assert_eq!(C::from_msb_prg(0, 7), C::Piano);
+        assert_eq!(C::from_msb_prg(0, 8), C::ChromaticPercussion);
+        assert_eq!(C::from_msb_prg(0, 15), C::ChromaticPercussion);
+        assert_eq!(C::from_msb_prg(0, 16), C::Organ);
+        assert_eq!(C::from_msb_prg(0, 24), C::Guitar);
+        assert_eq!(C::from_msb_prg(0, 32), C::Bass);
+        assert_eq!(C::from_msb_prg(0, 40), C::Strings);
+        assert_eq!(C::from_msb_prg(0, 48), C::Ensemble);
+        assert_eq!(C::from_msb_prg(0, 56), C::Brass);
+        assert_eq!(C::from_msb_prg(0, 64), C::Reed);
+        assert_eq!(C::from_msb_prg(0, 80), C::SynthLead);
+        assert_eq!(C::from_msb_prg(0, 88), C::SynthPad);
+        assert_eq!(C::from_msb_prg(0, 96), C::SynthEffects);
+        assert_eq!(C::from_msb_prg(0, 104), C::Ethnic);
+        assert_eq!(C::from_msb_prg(0, 112), C::Percussive);
+        assert_eq!(C::from_msb_prg(0, 127), C::SoundEffects);
+        // MSB 特例
+        assert_eq!(C::from_msb_prg(127, 0), C::DrumKits);
+        assert_eq!(C::from_msb_prg(64, 0), C::SoundEffects);
+        assert_eq!(C::from_msb_prg(126, 0), C::SfxKit);
+        // label 非 empty
+        for c in [
+            C::Piano, C::DrumKits, C::SoundEffects, C::SfxKit, C::SynthEffects, C::ChromaticPercussion,
+        ] {
+            assert!(!c.label().is_empty());
+        }
     }
 }

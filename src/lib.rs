@@ -2215,33 +2215,78 @@ impl eframe::App for XgApp {
                                     }
                                 }
                             }
-                            // ---- 硬件过滤的音色快捷选择 (用户定案: 3轴滑块自由, 菜单按硬件过滤) ----
+                            // ---- 音色快捷选择 (John 2026-08-13: 分级钻取 类别→乐器→variation) ----
                             ui.add_space(4.0);
                             ui.horizontal(|ui| {
                                 ui.label("pick:");
-                                // 先把要选的值记下来, 循环结束后再应用 (避免 closure 里 mut borrow self 与 voices 的 imm borrow 冲突)
+                                // 一级=egui 浮层菜单(弹出覆盖, 不挤面板布局); 二三级=菜单内钻取.
+                                // 类别按 GM 标准顺序 (VoiceCategory::ALL), 不用字母序.
                                 let mut picked: Option<(u8, u8, u8)> = None;
-                                let voices = self
+                                let voices: Vec<&crate::data::Voice> = self
                                     .voice_bank
                                     .as_ref()
                                     .map(|b| b.voices_for_device(self.device))
                                     .unwrap_or_default();
-                                // 当前选中音色名做默认显示
-                                let cur = self.cur_voice.clone();
-                                egui::ComboBox::from_id_salt("voice_picker")
-                                    .width(220.0)
-                                    .selected_text(format!("{} (msb{} lsb{} pc{})", self.cur_voice, self.current_msb(), self.current_lsb(), self.cur_prog))
-                                    .show_ui(ui, |ui| {
-                                        for v in &voices {
-                                            let label = format!("{:04}/{:04}/{:04}  {}", v.msb, v.lsb, v.prg + 1, v.name);
-                                            if ui
-                                                .selectable_label(cur == v.name, label)
-                                                .clicked()
-                                            {
-                                                picked = Some((v.msb, v.lsb, v.prg));
-                                            }
+                                ui.menu_button(
+                                    format!("{} (msb{} lsb{} pc{})", self.cur_voice, self.current_msb(), self.current_lsb(), self.cur_prog),
+                                    |ui| {
+                                        // 三级钻取: 选择结果用闭包内局部变量传出 (避免 closure 捕获 self 的 mut)
+                                        let mut pick_var: Option<(u8, u8, u8)> = None;
+                                        // ===== 第一层: 类别 (GM 顺序) =====
+                                        for cat in crate::data::VoiceCategory::ALL {
+                                            // 该类别是否有音色
+                                            let has = voices
+                                                .iter()
+                                                .any(|v| crate::data::VoiceCategory::from_msb_prg(v.msb, v.prg) == cat);
+                                            if !has { continue; }
+                                            // 第二层: 乐器 (该类别下 prg, 取 lsb=0 名)
+                                            ui.menu_button(cat.label(), |ui| {
+                                                let mut prgs: Vec<(u8, String)> = voices
+                                                    .iter()
+                                                    .filter(|v| crate::data::VoiceCategory::from_msb_prg(v.msb, v.prg) == cat)
+                                                    .map(|v| (v.prg, v.name.clone()))
+                                                    .collect();
+                                                prgs.sort_by_key(|(p, _)| *p);
+                                                prgs.dedup_by_key(|(p, _)| *p);
+                                                // 长列表 (SFX 等 49 项) 超出屏幕 → 限高 + 滚动 (John 2026-08-13)
+                                                egui::ScrollArea::vertical()
+                                                    .max_height(ui.available_height().min(460.0).max(120.0))
+                                                    .show(ui, |ui| {
+                                                for (p, _name) in &prgs {
+                                                    // 第三层: variations (该 prg 下所有 lsb)
+                                                    let mut vars: Vec<(u8, u8, String)> = voices
+                                                        .iter()
+                                                        .filter(|v| crate::data::VoiceCategory::from_msb_prg(v.msb, v.prg) == cat && v.prg == *p)
+                                                        .map(|v| (v.msb, v.lsb, v.name.clone()))
+                                                        .collect();
+                                                    vars.sort_by_key(|(_, l, _)| *l);
+                                                    // 单变体 → 直接可点; 多变体 → 子菜单
+                                                    if vars.len() == 1 {
+                                                        let vo = &vars[0];
+                                                        if ui.button(format!("PGM# {:03}  {}", *p + 1, vo.2)).clicked() {
+                                                            pick_var = Some((vo.0, vo.1, *p));
+                                                            ui.close_menu();
+                                                        }
+                                                    } else {
+                                                        ui.menu_button(format!("PGM# {:03}  {}", *p + 1, vars[0].2), |ui2| {
+                                                            for (msb, lsb, name) in &vars {
+                                                                if ui2.button(format!("lsb {lsb:03}  {name}")).clicked() {
+                                                                    pick_var = Some((*msb, *lsb, *p));
+                                                                    ui2.close_menu();
+                                                                }
+                                                            }
+                                                        });
+                                                    }
+                                                }
+                                                    }); // ScrollArea
+                                            });
                                         }
-                                    });
+                                        // 把选择传出去 (menu 外应用)
+                                        if let Some(v) = pick_var {
+                                            picked = Some(v);
+                                        }
+                                    },
+                                );
                                 if let Some((msb, lsb, prg0)) = picked {
                                     self.set_voice_from_quickpick(msb, lsb, prg0);
                                 }
