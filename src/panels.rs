@@ -138,7 +138,11 @@ impl XgApp {
                 let ruler_h = 22.0;
                 let ruler_top = outer.top();
                 let ruler_bot = ruler_top + ruler_h;
-                let ruler_rect = egui::Rect::from_min_max(egui::pos2(outer.left(), ruler_top), egui::pos2(outer.right(), ruler_bot));
+                // ★ 标尺背景铺满中央面板真实右缘 (panel_right = clip_rect.right()),
+                //   而不只是 outer.right() (available_rect 到 params 面板前会被截断) —
+                //   否则 bar rule 背景在 params 侧栏左侧留 3px 空隙 (John 2026-08-13: "bar rule没到头")
+                let panel_right = panel_p0.clip_rect().right();
+                let ruler_rect = egui::Rect::from_min_max(egui::pos2(panel_left, ruler_top), egui::pos2(panel_right, ruler_bot));
                 // 画标尺后推进 cursor → ScrollArea 从标尺下方开始, 不再覆盖标尺 (John 2026-08-13: 标尺消失)
                 crate::draw_time_ruler(panel_p0, ruler_rect, notes_left, notes_width, win_ticks, scroll, self.ppq.max(1), 4 * self.ppq.max(1));
                 ui.allocate_rect(ruler_rect, egui::Sense::hover());

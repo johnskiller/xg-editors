@@ -3492,6 +3492,42 @@ mod tests {
     }
 
     #[test]
+    fn pr_notes_no_ghost_after_smf_load() {
+        // John 2026-08-13: 加载 MIDI 后无音符的 channel 仍残留 demo(ghost) notes.
+        // 根因: pr_notes 用"该 view notes 非空"判断 → 空轨回退到默认 demo tracks.
+        // 修复: smf 已加载就只用 SMF 数据, 空轨返回空 (demo 仅限未加载时).
+        // 构造只有一个 channel 有音符的 SMF (ch1 一个音), 其余 15 通道无音符.
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x60]); // 1 track, ppq 96
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        // delta 0 初始 tempo
+        trk.extend_from_slice(&[0x00, 0xFF, 0x51, 0x03, 0x07, 0xA1, 0x20]);
+        // delta 0: NoteOn ch0 pitch 60
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // delta 96: NoteOff ch0
+        trk.extend_from_slice(&[0x81, 0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        assert!(app.load_smf_bytes("ghost.mid", &data).is_ok());
+        // ch1 (有音符) → 应有 1 个 note
+        let n1 = app.pr_notes(1);
+        assert_eq!(n1.len(), 1, "Ch1 应有 SMF 的 1 个音符, got {}", n1.len());
+        // ch2 (无音符) → 必须为空 (ghost 修复)
+        let n2 = app.pr_notes(2);
+        assert!(n2.is_empty(), "Ch2 无音符应返回空, 不得残留 demo: got {}", n2.len());
+        // ch16 也无音符 → 空
+        assert!(app.pr_notes(16).is_empty(), "Ch16 无音符应返回空");
+        // 未加载 SMF 时 (默认) → ch1 应有 demo 音符
+        let app2 = XgApp::default();
+        assert!(!app2.pr_notes(1).is_empty(), "未加载 SMF 时 Ch1 应有 demo 音符");
+    }
+
+    #[test]
     fn params_lcd_cutoff_no_bar() {
         let mut app = XgApp::default();
         // Cutoff(8) 无 LCD 条 → 设满不应影响任何 LCD 条 (不 panic + 像素有效)
