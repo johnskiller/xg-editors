@@ -31,7 +31,7 @@ const MIDI_HIGH: i32 = 128;
 const WHITE_PC: [i32; 7] = [0, 2, 4, 5, 7, 9, 11];
 
 /// MIDI 音符名 (C-1..G9); 0-127 全范围
-fn midi_name(p: i32) -> String {
+pub(crate) fn midi_name(p: i32) -> String {
     let names = ["C", "C#", "D", "D#", "E", "F", "F#", "G", "G#", "A", "A#", "B"];
     let oct = p / 12 - 1;
     format!("{}{oct}", names[(p.rem_euclid(12)) as usize])
@@ -275,6 +275,16 @@ impl XgApp {
 
                 // ===== 单 channel 音符 (宽度=时长; 明暗=力度 vel, 与 Channel 视图一致) =====
                 let notes = self.pr_notes(ch);
+                // 2026-08-13 event list 联动: 预取选中行 (只算一次, 避免每 note 全量重算)
+                let sel_note_on: Option<(u8, u64)> = self.event_list_sel.and_then(|sel| {
+                    let rows = self.smf.as_ref()
+                        .map(|s| crate::smf::event_list_for_channel(s, ch))
+                        .unwrap_or_default();
+                    rows.get(sel).and_then(|row| match row.kind {
+                        crate::smf::EventKind::NoteOn { pitch, .. } => Some((pitch, row.tick)),
+                        _ => None,
+                    })
+                });
                 for (start, dur, pitch, vel) in &notes {
                     let p_ = *pitch as i32;
                     if p_ < MIDI_LOW || p_ >= MIDI_HIGH {
@@ -296,6 +306,12 @@ impl XgApp {
                     // 力度 → 明暗: channel_note_color(vel) 内 bright = 40 + vel/127*215
                     let (r, g, b) = self.channel_note_color(ci, *vel);
                     p.rect_filled(note_rect, 2.0, egui::Color32::from_rgb(r, g, b));
+                    // ★★ 2026-08-13 event list 联动: 选中 NoteOn 且 pitch 匹配 → 高亮
+                    if let Some((sp, st)) = sel_note_on {
+                        if sp == *pitch && *start <= st && st < *start + *dur {
+                            p.rect_stroke(note_rect, 2.0, egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xc6, 0x4d)));
+                        }
+                    }
                     // ★★ 2026-08-13 playable: 点击 note → 采样式短音 (NoteOn, 300ms 自动 off)
                     let note_id = ui.make_persistent_id(("pr_note_sound", start, pitch));
                     let nr = ui.interact(note_rect, note_id, egui::Sense::click());

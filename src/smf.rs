@@ -440,6 +440,51 @@ pub fn build_track_views(smf: &Smf) -> Vec<SmfTrackView> {
     views
 }
 
+/// Event List 单行 (2026-08-13 新功能): 可显示的通道事件.
+/// 过滤当前 channel 的 NoteOn/NoteOff/Cc/Program, 按 tick 升序稳定排序.
+/// 保留"同 tick 文件原始相对序" (与 build_track_views 的排序哲学一致).
+#[derive(Debug, Clone, PartialEq)]
+pub struct EventRow {
+    pub tick: u64,
+    pub kind: EventKind,
+}
+
+/// Event List 事件种类 (显示 + 联动)
+#[derive(Debug, Clone, PartialEq)]
+pub enum EventKind {
+    NoteOn { pitch: u8, vel: u8 },
+    NoteOff { pitch: u8 },
+    Cc { num: u8, val: u8 },
+    Program { program: u8 },
+}
+
+/// 当前 channel (1..16, MIDI 语义) 的全部可显示事件, tick 升序, 同 tick 保序.
+/// 来源: smf.tracks 原始事件 (含轨号, 便于追溯); Tempo/TimeSig 全局事件不计入通道列表.
+pub fn event_list_for_channel(smf: &Smf, channel: u8) -> Vec<EventRow> {
+    let ch = channel & 0x0f;
+    let mut rows: Vec<(u64, usize, EventRow)> = Vec::new(); // (tick, 轨序, row)
+    for (ti, t) in smf.tracks.iter().enumerate() {
+        for (i, e) in t.events.iter().enumerate() {
+            let (tick, row) = match e {
+                SmfEvent::NoteOn { tick, channel: c, pitch, vel } if *c == ch =>
+                    (*tick, EventRow { tick: *tick, kind: EventKind::NoteOn { pitch: *pitch, vel: *vel } }),
+                SmfEvent::NoteOff { tick, channel: c, pitch } if *c == ch =>
+                    (*tick, EventRow { tick: *tick, kind: EventKind::NoteOff { pitch: *pitch } }),
+                SmfEvent::Cc { tick, channel: c, num, val } if *c == ch =>
+                    (*tick, EventRow { tick: *tick, kind: EventKind::Cc { num: *num, val: *val } }),
+                SmfEvent::Program { tick, channel: c, program } if *c == ch =>
+                    (*tick, EventRow { tick: *tick, kind: EventKind::Program { program: *program } }),
+                _ => continue,
+            };
+            rows.push((tick, ti * 10000 + i, row)); // 轨序为主分组, 同轨内事件序为次
+        }
+    }
+    // 按 (tick, 轨内序) 稳定升序
+    rows.sort_by(|a, b| a.1.cmp(&b.1));
+    rows.sort_by(|a, b| a.0.cmp(&b.0));
+    rows.into_iter().map(|(_, _, r)| r).collect()
+}
+
 // ---------- Tempo Map (时间系统) ----------
 
 /// 分段 tempo 映射: 绝对 tick → 累积秒. 用于 tick→秒 与 秒→tick.

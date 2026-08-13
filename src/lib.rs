@@ -2417,26 +2417,78 @@ impl eframe::App for XgApp {
                             ui.label(egui::RichText::new("SysEx: (drag params to generate)").weak().size(10.0));
                         }
                         ui.label("Rev: Hall | Cho: Chorus1 | Var: off");
-                        // 32-part dump 表 (John 指定位置: 右栏 Rev: Hall 行后, 2026-08-09)
-                        let parsed_n = self.read_parts.iter().filter(|x| x.is_some()).count();
+                        // ===== Event List (2026-08-13 John 指定: 占 params 面板下部原 PARTS 位置) =====
                         ui.separator();
-                        ui.monospace(egui::RichText::new(format!("PARTS  ({parsed_n}/32)")).strong().size(11.0));
-                        if parsed_n == 0 {
-                            ui.monospace(egui::RichText::new("(no data — do panel dump + Capture ON, then Analyze dump)").weak().size(10.0));
+                        // Event List 依赖 SMF 已加载; 无 SMF 时提示
+                        if self.smf.is_none() {
+                            ui.monospace(egui::RichText::new("EVENTS (ch N) — load a .mid").weak().size(11.0));
+                            ui.monospace(egui::RichText::new("(no SMF — event list unavailable)").weak().size(10.0));
                         } else {
-                            ui.monospace("  n  MSB LSB  PC  Name");
-                            egui::ScrollArea::vertical().id_salt("right_parts").max_height(240.0).show(ui, |ui| {
-                                for (i, r) in self.read_parts.iter().enumerate() {
-                                    if let Some((msb, lsb, pc)) = r {
-                                        let name = self.voice_bank.as_ref()
-                                            .and_then(|b| b.find(*msb, *pc, *lsb))
-                                            .map(|v| v.name.clone())
-                                            .unwrap_or_default();
-                                        ui.monospace(format!("{:>2}   {:>3} {:>3} {:>3}  {}", i + 1, msb, lsb, pc, name));
+                            let rows = crate::smf::event_list_for_channel(
+                                self.smf.as_ref().unwrap(), self.cur_pr_channel);
+                            let ch = self.cur_pr_channel;
+                            ui.horizontal(|ui| {
+                                ui.monospace(egui::RichText::new(format!("EVENTS (ch {ch})")).strong().size(11.0));
+                                ui.monospace(egui::RichText::new(format!("{} rows", rows.len())).weak().size(10.0));
+                            });
+                            // 表头
+                            ui.monospace(egui::RichText::new("  tick   type  data").weak().size(10.0));
+                            egui::ScrollArea::vertical()
+                                .id_salt("event_list")
+                                .max_height(260.0)
+                                .show(ui, |ui| {
+                                    let mut click_tick: Option<u64> = None;
+                                    for (i, row) in rows.iter().enumerate() {
+                                        let text = match &row.kind {
+                                            crate::smf::EventKind::NoteOn { pitch, vel } =>
+                                                format!("{:>6}  ON    {}  v{}", row.tick, crate::piano_roll::midi_name(*pitch as i32), vel),
+                                            crate::smf::EventKind::NoteOff { pitch } =>
+                                                format!("{:>6}  OFF   {}", row.tick, crate::piano_roll::midi_name(*pitch as i32)),
+                                            crate::smf::EventKind::Cc { num, val } =>
+                                                format!("{:>6}  CC{}  {}", row.tick, num, val),
+                                            crate::smf::EventKind::Program { program } =>
+                                                format!("{:>6}  PG  {}", row.tick, program + 1),
+                                        };
+                                        let selected = self.event_list_sel == Some(i);
+                                        let resp = if selected {
+                                            ui.selectable_label(true, egui::RichText::new(text).monospace().size(10.0))
+                                        } else {
+                                            ui.selectable_label(false, egui::RichText::new(text).monospace().size(10.0))
+                                        };
+                                        if resp.clicked() {
+                                            self.event_list_sel = Some(i);
+                                            click_tick = Some(row.tick);
+                                        }
                                     }
+                                    // 选中行 → 联动 piano roll 滚动到该 tick (让对应音符移入视野)
+                                    if let Some(t) = click_tick {
+                                        self.pr_scroll_ticks = t.saturating_sub(8);
+                                    }
+                                });
+                        }
+                        // 32-part dump 表折叠 (2026-08-09 原位置; 2026-08-13 移入 CollapsingHeader)
+                        let parsed_n = self.read_parts.iter().filter(|x| x.is_some()).count();
+                        egui::CollapsingHeader::new(format!("PARTS dump ({parsed_n}/32)"))
+                            .id_salt("parts_dump_collapse")
+                            .default_open(false)
+                            .show(ui, |ui| {
+                                if parsed_n == 0 {
+                                    ui.monospace(egui::RichText::new("(no data — panel dump + Analyze)").weak().size(10.0));
+                                } else {
+                                    ui.monospace("  n  MSB LSB  PC  Name");
+                                    egui::ScrollArea::vertical().id_salt("right_parts").max_height(200.0).show(ui, |ui| {
+                                        for (i, r) in self.read_parts.iter().enumerate() {
+                                            if let Some((msb, lsb, pc)) = r {
+                                                let name = self.voice_bank.as_ref()
+                                                    .and_then(|b| b.find(*msb, *pc, *lsb))
+                                                    .map(|v| v.name.clone())
+                                                    .unwrap_or_default();
+                                                ui.monospace(format!("{:>2}   {:>3} {:>3} {:>3}  {}", i + 1, msb, lsb, pc, name));
+                                            }
+                                        }
+                                    });
                                 }
                             });
-                        }
                     } else {
                         let rect = ui.max_rect();
                         if rail_triangle_ui(ui, rect, "right_rail", "<").clicked() {
@@ -3863,5 +3915,37 @@ mod tests {
         assert!(!app.preview_notes[1].contains_key(&60), "solo ch2 时 ch1 preview 静默");
         app.preview_note(2, 62, 80, true, -1.0); // ch2 (solo) → 发声
         assert!(app.preview_notes[2].contains_key(&62), "solo 通道可 preview");
+    }
+
+    #[test]
+    fn event_list_filters_and_sorts_by_channel() {
+        // Event List: 只列当前 channel 事件, tick 升序, 同 tick 保序
+        use crate::smf::{Smf, TrackEvents, SmfEvent};
+        let mut trk = Vec::new();
+        trk.push(SmfEvent::NoteOn { tick: 0, channel: 1, pitch: 60, vel: 100 });
+        trk.push(SmfEvent::NoteOff { tick: 96, channel: 1, pitch: 60 });
+        trk.push(SmfEvent::NoteOn { tick: 192, channel: 2, pitch: 62, vel: 80 }); // 其他通道(不入)
+        trk.push(SmfEvent::Cc { tick: 48, channel: 1, num: 7, val: 100 });
+        trk.push(SmfEvent::Program { tick: 48, channel: 1, program: 5 });
+        trk.push(SmfEvent::Tempo { tick: 0, us_per_qn: 500_000 }); // 全局(不入)
+        let smf = Smf { format: 1, ntracks: 1, ppq: 96, tracks: vec![TrackEvents { events: trk }], meta_tempo_count: 1, meta_timesig_count: 0 };
+
+        let rows = crate::smf::event_list_for_channel(&smf, 1);
+        // 顺序: tick0 NoteOn, tick48 Cc, tick48 Program (同tick保序), tick96 NoteOff; 不含 ch2/Tempo
+        use crate::smf::EventKind;
+        assert_eq!(rows.len(), 4, "ch1 应 4 事件, got {}", rows.len());
+        assert_eq!(rows[0].tick, 0);
+        assert!(matches!(rows[0].kind, EventKind::NoteOn { pitch: 60, vel: 100 }));
+        assert_eq!(rows[1].tick, 48);
+        assert!(matches!(rows[1].kind, EventKind::Cc { num: 7, val: 100 }));
+        assert_eq!(rows[2].tick, 48);
+        assert!(matches!(rows[2].kind, EventKind::Program { program: 5 }));
+        assert_eq!(rows[3].tick, 96);
+        assert!(matches!(rows[3].kind, EventKind::NoteOff { pitch: 60 }));
+
+        // ch2 只有 1 事件 (其 NoteOn)
+        let rows2 = crate::smf::event_list_for_channel(&smf, 2);
+        assert_eq!(rows2.len(), 1, "ch2 应 1 事件");
+        assert!(matches!(rows2[0].kind, EventKind::NoteOn { pitch: 62, vel: 80 }));
     }
 }
