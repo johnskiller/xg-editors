@@ -57,22 +57,48 @@ impl XgApp {
             ui.separator();
 
             // ============ 标题 + 版本 ============
-            ui.label(
-                egui::RichText::new(format!("XG Editor v{}", self.app_version))
-                    .size(15.0)
-                    .strong(),
-            );
+            // egui .strong() 只调色不改变粗细 (默认字体 Ubuntu-Light 无 bold 字形)
+            // → 双次绘制 fake-bold (1px 偏移), 颜色显式亮白 (深底 #1f2f45)
+            {
+                let text_galley = ui
+                    .painter()
+                    .layout_no_wrap(
+                        format!("XG Editor v{}", self.app_version),
+                        egui::FontId::proportional(17.0),
+                        egui::Color32::from_rgb(0xff, 0xff, 0xff),
+                    );
+                let pos = ui.cursor().min;
+                let painter = ui.painter();
+                // 第 1 遍 白字
+                painter.galley(pos, text_galley.clone(), egui::Color32::from_rgb(0xff, 0xff, 0xff));
+                // 第 2 遍 右移 1px → fake bold (粗体)
+                painter.galley(
+                    egui::pos2(pos.x + 1.0, pos.y),
+                    text_galley.clone(),
+                    egui::Color32::from_rgb(0xff, 0xff, 0xff),
+                );
+                // 占位: 让 horizontal 布局把内容宽度算进去
+                ui.allocate_space(egui::vec2(text_galley.size().x + 1.0, text_galley.size().y));
+            }
             ui.separator();
 
             // ============ Tempo + 拍号 (保留, 组件化, 字体稍大) ============
-            ui.label(egui::RichText::new("Tempo").size(13.5));
+            ui.label(
+                egui::RichText::new("Tempo")
+                    .size(13.5)
+                    .color(egui::Color32::from_rgb(0xd5, 0xdc, 0xe6)), // 深底强制浅色
+            );
             ui.add(
                 egui::DragValue::new(&mut self.tempo_bpm)
                     .speed(0.1)
                     .suffix(" bpm")
                     .range(30.0..=240.0),
             );
-            ui.label(egui::RichText::new("4/4").size(13.5));
+            ui.label(
+                egui::RichText::new("4/4")
+                    .size(13.5)
+                    .color(egui::Color32::from_rgb(0xd5, 0xdc, 0xe6)), // 深底强制浅色
+            );
             ui.separator();
 
             // ============ 播放 count (bar:beat:tick) 组件化 + 字体放大 + 开发者选色 ============

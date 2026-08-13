@@ -1796,6 +1796,19 @@ impl eframe::App for XgApp {
         if !self.ui_scroll_style_done {
             self.ui_scroll_style_done = true;
             let mut style = (*ctx.style()).clone();
+            // 全局深色主题 (John 2026-08-13: ☰ 菜单要深色和 transport 一致)
+            // 注意: 底部状态栏/钢琴盘有显式浅色 frame (已在下方面板里保持), 不受影响.
+            let mut v = egui::Visuals::dark();
+            // 菜单/弹窗背景 = 深蓝灰 (呼应 Channel View / 顶栏 #1f2f45)
+            v.panel_fill = egui::Color32::from_rgb(0x1f, 0x2f, 0x45);
+            v.window_fill = egui::Color32::from_rgb(0x1a, 0x29, 0x3d);
+            // 按钮文字/正文 = 浅色
+            v.widgets.inactive.fg_stroke.color = egui::Color32::from_rgb(0xd5, 0xdc, 0xe6);
+            v.widgets.hovered.fg_stroke.color = egui::Color32::from_rgb(0xff, 0xff, 0xff);
+            v.widgets.active.fg_stroke.color = egui::Color32::from_rgb(0xff, 0xff, 0xff);
+            // 不设 override_text_color: 它会覆盖所有显式 RichText color (标题白/count 亮金)
+            v.selection.bg_fill = egui::Color32::from_rgb(0x2b, 0x43, 0x63);
+            style.visuals = v;
             // floating 滚动条不占布局 → 标尺/琴键/网格同宽, bar 竖线上下对齐。
             // 用 floating.allocated_width + 高对比 + 半透明常显, 兼顾"可见可拖"。
             style.spacing.scroll.floating = true;
@@ -2425,8 +2438,19 @@ impl eframe::App for XgApp {
 
         // 底部 status 栏 (2026-08-09 John 要求): 文件名 / 加载结果 / 日志 —— 顶部塞太多, 状态挪底部.
         // egui 语义: 先声明的 bottom 面板放最外层/最底 (John 真机验证 v45 顺序正确) → 须在 LCD 之前声明.
-        egui::TopBottomPanel::bottom("bottom_status").show(ctx, |ui| {
-            ui.horizontal(|ui| {
+        // 全局已是深色 → 此栏保持浅色 frame + 深色文字 (John: 底部状态浅色可读)
+        egui::TopBottomPanel::bottom("bottom_status")
+            .frame(
+                egui::Frame::none()
+                    .fill(egui::Color32::from_gray(248))
+                    .inner_margin(egui::Margin::symmetric(8.0, 4.0)),
+            )
+            .show(ctx, |ui| {
+                // 浅底 → 文字强制深色
+                let dark_txt = egui::Color32::from_rgb(0x2c, 0x2c, 0x2c);
+                ui.visuals_mut().override_text_color = Some(dark_txt);
+                ui.visuals_mut().widgets.inactive.fg_stroke.color = dark_txt;
+                ui.horizontal(|ui| {
                 // 文件名 (如有)
                 if self.smf_name.is_empty() {
                     ui.label(egui::RichText::new("no file").weak());
@@ -2469,11 +2493,11 @@ impl eframe::App for XgApp {
             let mut panel = egui::TopBottomPanel::bottom(panel_id)
                 .resizable(open)
                 .default_height(self.piano_height)
-                // 标题行要浅色/白: frame 要显式填 panel 浅色(透明会露深层 → 标题变深)。
-                // 内容区(render_piano_roll)自己铺深色; 深色只作用内容, 标题/左侧 padding 白。
-                // (用户 2026-08-12: 标题底色不要深色, 保持白色)
+                // 标题行与全局深色统一 (2026-08-13 起全局 dark; Piano topbar 不再白)
+                // 注释: 早期 (2026-08-12) 用户要求"标题底色保持白色"; 全局深色化后连同深色.
+                // 内容区(render_piano_roll)自己铺深色; 标题行也深色 → 整体一致.
                 .frame(egui::Frame::default()
-                    .fill(egui::Color32::from_gray(248))
+                    .fill(egui::Color32::from_rgb(0x1f, 0x2f, 0x45))
                     .inner_margin(egui::Margin {
                         left: 0.0,
                         right: 0.0,
