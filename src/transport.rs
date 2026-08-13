@@ -50,16 +50,16 @@ impl TransportButton {
         match self.kind {
             Transport::Play | Transport::Pause | Transport::Stop => {
                 if self.active {
-                    Color32::from_rgb(0x5a, 0xd0, 0x7a) // 播放中 → 绿
+                    Color32::from_rgb(0x1e, 0x8a, 0x3e) // 播放中 → 深绿 (浅色主题可读)
                 } else {
-                    Color32::from_rgb(0xe8, 0xe8, 0xe8) // 常态灰白
+                    Color32::from_rgb(0x33, 0x33, 0x33) // 常态深灰黑 (浅色主题可读)
                 }
             }
             Transport::Record => {
                 if self.active {
-                    Color32::from_rgb(0xff, 0x3b, 0x30) // armed → 红
+                    Color32::from_rgb(0xcc, 0x22, 0x22) // armed → 深红
                 } else {
-                    Color32::from_rgb(0xe8, 0xe8, 0xe8) // 常态灰
+                    Color32::from_rgb(0x33, 0x33, 0x33) // 常态深灰黑
                 }
             }
         }
@@ -73,9 +73,9 @@ impl Widget for TransportButton {
             let painter = ui.painter();
             let response = &resp;
             let (bg, fg) = if response.hovered() {
-                // hover 提亮: 半透明浅色底 + 亮字形
-                (Color32::from_rgba_unmultiplied(0xff, 0xff, 0xff, 0x14),
-                 self.glyph_color().gamma_multiply(1.3))
+                // hover: 浅灰底 (浅色主题可见) + 深色字形
+                (Color32::from_rgb(0xd8, 0xd8, 0xd8),
+                 self.glyph_color())
             } else {
                 (Color32::TRANSPARENT, self.glyph_color())
             };

@@ -62,7 +62,7 @@ impl XgApp {
                 egui::RichText::new(format!("{:>3}:{:02}.{:02}", bb.0, bb.1, bb.2))
                     .size(18.0)
                     .monospace()
-                    .color(egui::Color32::from_rgb(0xff, 0xc0, 0x66)), // amber/gold, 暗底可读
+                    .color(egui::Color32::from_rgb(0xe6, 0x9d, 0x1f)), // 深金 (浅色主题可读)
             );
             ui.separator();
 
