@@ -10,6 +10,10 @@ license = "LGPL-3.0"
 eframe = "0.29"
 serde = { version = "1", features = ["derive"] }
 serde_json = "1"
+# epaint = egui 的底层文本/纹理 (FontDefinitions 拿内置字体字节, 零新字体文件)
+epaint = "0.29"
+# ab_glyph = epaint 同款字体光栅化 (已在依赖树, 版本锁定 0.2.32, 零新下载) — LCD 位图内矢量小字
+ab_glyph = "0.2.32"
 
 # wasm 目标: eframe 会在 wasm 下自动用 WebGL/WebGPU 渲染
 # Web MIDI 走 web-sys

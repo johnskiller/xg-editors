@@ -3878,8 +3878,10 @@ dependencies = [
 name = "xg-editor"
 version = "0.1.0"
 dependencies = [
+ "ab_glyph",
  "console_error_panic_hook",
  "eframe",
+ "epaint",
  "js-sys",
  "log",
  "serde",

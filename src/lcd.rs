@@ -3,6 +3,14 @@
 // 纯像素生成 → 840x256 RGBA, 不依赖 canvas/DOM → wasm/native 共用
 use crate::xg_font::{XG_FONT_BITS, XG_FONT_CODES};
 use crate::xg_icons::{Icon, ICONS};
+use ab_glyph::{Font, FontArc, Glyph, PxScale, ScaleFont};
+use std::collections::HashMap;
+use std::sync::{LazyLock, Mutex};
+
+// 通道标签/BANK/PGM# 用 egui 内置字体 (Ubuntu-Light) 光栅化的矢量小字
+// 方案 B (2026-08-13): 从 epaint FontDefinitions 偷内置字体字节 → ab_glyph 光栅化到位图
+// 只光栅化需要的字符 (0-9, A, B, #, P, G, M), 不做整库
+pub const SMALL_FONT_PX: f32 = 16.0;  // 与用户敲定的字号一致 (真机通道号=BANK/PGM# 同大)
 
 // 背光液晶物理模型 (用户权威 2026-08-07):
 // - 底色 = 均匀绿色背光 (偏黄)
@@ -290,21 +298,9 @@ pub fn blit(pixels: &mut [u8], mm: &MuMatrix, pm: &MuMatrix, params: &[f32; 8]) 
             fill_rect(pixels, px, py, 7, 7, on);
         }
     }
-    // 通道号丝印 (固定玻璃, A1/A2 + 01..32, Octavia 步进 24)
-    let lbl_y = 145i32;
-    let c_off = 71.5f32;
-    let c_step = 24i32;
-    for c in -2..32 {
-        let label = if c < 0 {
-            format!("A{}", c + 3)
-        } else {
-            format!("{:02}", c + 1)
-        };
-        let cx = c_off + (c * c_step) as f32;
-        let w = label_width(&label);
-        thin_text(pixels, &label, (cx - w / 2.0).round() as i32, lbl_y);
-    }
-    // 底部参数标签: VOL/EXP/BRT/PAN/REV/CHO/VAR/KEY
+    // 通道号标签 (A1/A2 + 01..32) — 2026-08-12 改为屏幕层矢量绘制 (图案式LCD, 无点阵颗粒)
+    // 位图不再画通道标签 (已移到 lib.rs painter.text 叠加), 避免点阵+矢量重叠
+    // 底部参数标签: VOL/EXP/BRT/PAN/REV/CHO/VAR/KEY (印刷在外框, 本次不变, 保留位图绘制)
     let lab_y = 243i32;
     let labels: &[(&str, f32)] = &[
         ("VOL", 436.0), ("EXP", 484.0), ("BRT", 532.0),
@@ -424,6 +420,146 @@ fn thin_text(pixels: &mut [u8], s: &str, x: i32, y: i32) {
     }
 }
 
+// ================= 矢量小字 (ab_glyph 光栅化, 方案 B) =================
+// 从 epaint FontDefinitions 取内置 Ubuntu-Light 字节 → ab_glyph 光栅化
+// 只缓存 0-9 A B # P G(小字用到的字符), 不整库
+
+/// 全局字体 + 字符位图缓存 (线程安全, 懒加载)
+/// 方案 B (2026-08-13 用户敲定): lcd.rs 直接依赖 egui/epaint 生态
+/// (项目本就依赖 egui, 未来 LCD 外框/按钮也要它; 某模块更"纯"意义不大)
+static VEC_FONT: LazyLock<Option<FontArc>> = LazyLock::new(|| {
+    // 从 egui/epaint 内置字体偷字节 (零新字体文件)
+    let defs = epaint::text::FontDefinitions::default();
+    // proportional 族 → 第一个字体条目 (Ubuntu-Light), 取字节
+    let name = defs
+        .families
+        .get(&epaint::text::FontFamily::Proportional)
+        .and_then(|f| f.first())
+        .cloned()
+        .unwrap_or_else(|| "Ubuntu-Light".to_owned());
+    if let Some(data) = defs.font_data.get(&name) {
+        let bytes: &[u8] = data.font.as_ref();
+        FontArc::try_from_vec(bytes.to_vec()).ok()
+    } else {
+        // 兜底: 任何一条 font_data 能解析就用
+        defs.font_data
+            .values()
+            .find_map(|d| FontArc::try_from_vec(d.font.as_ref().to_vec()).ok())
+    }
+});
+
+/// 只缓存需要的小字字符 (0-9 A B # P G) 的光栅位图
+/// value: (w, h, 覆盖度 0..255 每像素)
+fn glyph_bitmap(ch: char) -> Option<(u32, u32, Vec<u8>)> {
+    static CACHE: LazyLock<Mutex<HashMap<char, (u32, u32, Vec<u8>)>>> = LazyLock::new(|| Mutex::new(HashMap::new()));
+    {
+        let cache = CACHE.lock().unwrap();
+        if let Some(v) = cache.get(&ch) { return Some(v.clone()); }
+    }
+    let font = VEC_FONT.as_ref()?;
+    let scale = PxScale::from(SMALL_FONT_PX);
+    let scaled = font.as_scaled(scale);
+    let gid = scaled.glyph_id(ch);
+    if gid.0 == 0x0000 { return None; }  // .notdef
+    let pos = ab_glyph::point(0.0, 0.0);
+    let glyph = Glyph { id: gid, scale, position: pos };
+    let out = scaled.outline_glyph(glyph)?;
+    let bounds = out.px_bounds();
+    let w = bounds.width() as u32;
+    let h = bounds.height() as u32;
+    if w == 0 || h == 0 || w > 64 || h > 64 { return None; }
+    let mut buf = vec![0u8; (w * h) as usize];
+    out.draw(|x, y, c| {
+        if (x as u32) < w && (y as u32) < h {
+            let idx = (y as usize * w as usize + x as usize);
+            buf[idx] = (c * 255.0).round().clamp(0.0, 255.0) as u8;
+        }
+    });
+    CACHE.lock().unwrap().insert(ch, (w, h, buf.clone()));
+    Some((w, h, buf))
+}
+
+/// 在 LCD 位图上画一行矢量小字 (左上角 = x,y top-left). col: ACT 或 INACTIVE 色
+fn draw_vec_text_line(pixels: &mut [u8], s: &str, x: f32, y: f32, on: bool) {
+    // 先算总宽(用于居中) — 近似: 各字符 advance
+    let font = match VEC_FONT.as_ref() { Some(f) => f, None => return };
+    let scale = PxScale::from(SMALL_FONT_PX);
+    let scaled = font.as_scaled(scale);
+    let mut total_w = 0.0f32;
+    for ch in s.chars() {
+        let adv = scaled.h_advance(scaled.glyph_id(ch));
+        total_w += adv;
+    }
+    let start_x = x - total_w / 2.0;  // 居中
+    let mut cx = start_x;
+    for ch in s.chars() {
+        let gid = scaled.glyph_id(ch);
+        if let Some(out) = scaled.outline_glyph(Glyph { id: gid, scale, position: ab_glyph::point(cx, y) }) {
+            let b = out.px_bounds();
+            if let Some((_, _, cov)) = glyph_bitmap(ch) {
+                // 但 glyph_bitmap 是单独 render 的, 位置偏移各不同 — 直接在这里 draw 最准
+                let _ = cov;
+                out.draw(|dx, dy, cov| {
+                    let gx = (b.min.x as i32) + dx as i32;
+                    let gy = (b.min.y as i32) + dy as i32;
+                    if cov > 0.05 {
+                        blend_px(pixels, gx, gy, cov as f32, on);
+                    }
+                });
+            }
+        }
+        cx += scaled.h_advance(gid);
+    }
+}
+
+/// 混合一个像素: 抗锯齿覆盖度 cov(0..1) × 目标色
+fn blend_px(pixels: &mut [u8], x: i32, y: i32, cov: f32, on: bool) {
+    if x < 0 || y < 0 || x >= LCD_W as i32 || y >= LCD_H as i32 { return; }
+    let i = (y as usize * LCD_W + x as usize) * 4;
+    let (r, g, b) = if on {
+        (ACT_R as f32, ACT_G as f32, ACT_B as f32)
+    } else {
+        (IN_R as f32, IN_G as f32, IN_B as f32)
+    };
+    // 与背景绿混合: 背景 bg 亮度高, 文字字色深; cov 越大越接近字色
+    let a = cov.clamp(0.0, 1.0);
+    let bg = (BG_R as f32, BG_G as f32, BG_B as f32);
+    pixels[i] = (r * a + bg.0 * (1.0 - a)) as u8;
+    pixels[i + 1] = (g * a + bg.1 * (1.0 - a)) as u8;
+    pixels[i + 2] = (b * a + bg.2 * (1.0 - a)) as u8;
+    pixels[i + 3] = 255;
+}
+
+/// 画通道标签 (A1/A2/1..32) + BANK/PGM# 成组亮暗 — 全部矢量小字
+/// part: 1..32 当前 part; lcd_32: 是否 32ch 模式
+pub fn draw_channel_labels(pixels: &mut [u8], part: u32, lcd_32: bool) {
+    // 通道标签: 常亮 (ACT), y=154 (145+9, 用户要求下移半字符), c_off=71.5, 步进 24
+    let lbl_y = 154.0f32;
+    let c_off = 71.5f32;
+    let c_step = 24.0f32;
+    for c in -2i32..32 {
+        let label = if c < 0 {
+            format!("A{}", c + 3)
+        } else {
+            format!("{}", c + 1)  // 1-9 不补 0
+        };
+        let cx = c_off + c as f32 * c_step;
+        draw_vec_text_line(pixels, &label, cx, lbl_y, true);
+    }
+    // BANK/PGM#: part<=16 且非 32ch → 右组亮 (19/27); else 左组亮 (3/11)
+    // y=167 (158+9, 下移半字符); x 右移: 左组 +1.5字符(12px), 右组 +5字符(40px) (字宽8.05px), 右组再+18px(用户微调)
+    let right_group = !(part > 16) && !lcd_32;
+    let tag_y = 167.0f32;
+    for (x, label, lit) in [
+        (131.5f32, "BANK", !right_group),
+        (323.5f32, "PGM#", !right_group),
+        (561.5f32, "BANK", right_group),
+        (753.5f32, "PGM#", right_group),
+    ] {
+        draw_vec_text_line(pixels, label, x, tag_y, lit);
+    }
+}
+
 fn put_px(pixels: &mut [u8], x: i32, y: i32, on: bool) {
     if x < 0 || y < 0 || x >= LCD_W as i32 || y >= LCD_H as i32 { return; }
     let i = (y as usize * LCD_W + x as usize) * 4;
@@ -450,6 +586,8 @@ pub fn render_lcd(pixels: &mut [u8], voice: &str, bank: u32, program: u32,
     let mm = render_to_matrix(voice, bank, program, levels, audio, part);
     let pm = render_part_matrix(part);
     blit(pixels, &mm, &pm, params);
+    // 通道标签 + BANK/PGM# (矢量小字, 位图内绘制 → 随 LCD 缩放)
+    draw_channel_labels(pixels, part, false);
     // 底部 icon 区 (右下, 180,260): 当前音色的 voice icon
     paint_voice_icon(pixels, voice);
 }
@@ -460,6 +598,8 @@ pub fn render_lcd_32(pixels: &mut [u8], voice: &str, bank: u32, program: u32,
     let mm = render_to_matrix_32(voice, bank, program, levels, audio, part);
     let pm = render_part_matrix(part);
     blit(pixels, &mm, &pm, params);
+    // 通道标签 + BANK/PGM# (lcd_32=true → 左组亮)
+    draw_channel_labels(pixels, part, true);
     paint_voice_icon(pixels, voice);
 }
 
@@ -775,5 +915,69 @@ mod tests {
         // 直接断言: 第一行应有 17 个字符位被占用 (非空), 且以音色名开头
         assert!(deco.starts_with("GrandPn"), "32ch 第一行应以音色名开头, got: '{deco}'");
         assert!(deco.len() >= 17, "32ch 第一行应占满 17 字符, got len {}", deco.len());
+    }
+
+    // ---- 矢量小字 (ab_glyph + epaint 字体) ----
+
+    /// 判断某区是否有"文字像素" (明显比背景 BG 深)
+    fn has_dark_in_area(pixels: &[u8], x0: i32, x1: i32, y0: i32, y1: i32, thresh: f32) -> bool {
+        let mut dark = 0; let mut total = 0;
+        for y in y0..y1 { for x in x0..x1 {
+            if x < 0 || y < 0 || x >= LCD_W as i32 || y >= LCD_H as i32 { continue; }
+            let i = (y as usize * LCD_W as usize + x as usize) * 4;
+            let lum = (pixels[i] as f32 + pixels[i+1] as f32 + pixels[i+2] as f32) / 3.0;
+            if lum < 120.0 { dark += 1; }
+            total += 1;
+        }}
+        total > 0 && (dark as f32 / total as f32) > thresh
+    }
+
+    #[test]
+    fn vec_labels_render_with_egui_font() {
+        // 确认 epaint 字体在无 UI 的测试环境下也能构造 (方案 B 成立)
+        let font = VEC_FONT.as_ref().expect("epaint 内置字体应能构造 FontArc");
+        assert!(font.glyph_id('1').0 != 0, "数字 1 应有字形");
+        assert!(font.glyph_id('A').0 != 0, "字母 A 应有字形");
+        // 渲染一帧, 通道标签区应有深色文字
+        let mut px = vec![0u8; (LCD_W * LCD_H * 4) as usize];
+        let empty_mm = render_to_matrix("", 0, 0, &[], &[], 1);
+        let empty_pm = render_part_matrix(1);
+        blit(&mut px, &empty_mm, &empty_pm, &[0.0; 8]);
+        draw_channel_labels(&mut px, 1, false);
+        // 通道标签行 y≈145: A1/A2 + 1..32 的 ACT 深绿文字
+        // 采样通道 1 中心位置 (c=0 → x=71.5)
+        assert!(has_dark_in_area(&px, 30, 110, 140, 160, 0.03),
+            "通道标签区应有深色文字 (ACT)");
+        // BANK/PGM#: part=1 → 右组亮 (x≈503/695), 左组 (x≈119/311) 应 inactive
+        assert!(has_dark_in_area(&px, 480, 720, 152, 175, 0.02),
+            "part1 时右侧 BANK/PGM# 应点亮 (ACT 深色)");
+    }
+
+    #[test]
+    fn vec_labels_bank_group_switches_with_part() {
+        // part=17 → 左组亮(ACT 深), 右组灭(IN 浅) — 用具体颜色判断, 避开通道标签干扰
+        let mut px = vec![0u8; (LCD_W * LCD_H * 4) as usize];
+        let empty_mm = render_to_matrix("", 0, 0, &[], &[], 1);
+        let empty_pm = render_part_matrix(1);
+        blit(&mut px, &empty_mm, &empty_pm, &[0.0; 8]);
+        draw_channel_labels(&mut px, 17, false);
+
+        // 在 BANK/PGM# 行区域扫描: 找该区域最接近文字中心的最暗像素, 用其亮度判断随部分组
+        // 左 BANK@119.5, 右 BANK@503.5; 区域 x 窄开 (避开通道标签)
+        fn min_lum(px_: &[u8], x0: i32, x1: i32, y0: i32, y1: i32) -> f32 {
+            let mut m = f32::MAX;
+            for y in y0..y1 { for x in x0..x1 {
+                let i = (y as usize * LCD_W as usize + x as usize) * 4;
+                let l = 0.3*px_[i] as f32 + 0.59*px_[i+1] as f32 + 0.11*px_[i+2] as f32;
+                if l < m { m = l; }
+            }}
+            m
+        }
+        // BANK@131.5(x=109..154 文字), 右 BANK@543.5(x=521..566) — y 166..188 (tag_y=167)
+        let lum_ll = min_lum(&px, 109, 154, 165, 189);   // 左组 BANK (part17 应亮 ACT)
+        let lum_lr = min_lum(&px, 521, 566, 165, 189);   // 右组 BANK (part17 应灭 IN)
+        // ACT #126f00 亮度≈77; IN #69e704 亮度≈168
+        assert!(lum_ll < 130.0, "part17 左侧 BANK 应 ACT(深), lum={lum_ll:.0}");
+        assert!(lum_lr > 130.0, "part17 右侧 BANK 应 IN(浅), lum={lum_lr:.0}");
     }
 }
