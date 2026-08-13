@@ -66,13 +66,18 @@ impl XgApp {
     pub(crate) fn render_piano_roll(&mut self, ui: &mut egui::Ui) {
         let ch = self.cur_pr_channel; // 1..16
         // 内容区铺 ruler 同色深底: available_rect 在标题行之下(标题行保持浅色/白),
-        // 但 min.x 展到窗口左缘 → 左侧 padding 也覆盖成深色 (用户 2026-08-12: 标题要白,
-        // padding 不要白)
-        let mut outer = ui.available_rect_before_wrap();
-        outer.min.x = 0.0;
-        // 注意: 不要用 ui.allocate_rect(outer) 抢占空间 — 会让后续 ScrollArea 视口塌缩为 0 (内容全不可见)
+        // ★ 2026-08-13 John 反馈: 琴键被左侧 Tracks 栏遮挡 — 同 channel 视图 bug.
+        //   之前 outer.min.x=0.0 强制内容画到屏幕绝对 x=0, 但左侧 Tracks 栏(收起22px/展开160-400px)
+        //   占住屏幕左缘, 中央面板 clip 到侧栏右侧 → 琴键(key_rect from outer.left()=0)被裁.
+        //   修复: 内容坐标用 available_rect 真实左缘(egui 自动避开侧栏, 动态跟随宽度);
+        //   深色底单独 flush 到面板左缘(clip_rect.left())覆盖 padding (保留 2026-08-12 白字/深pad 意图).
+        let outer = ui.available_rect_before_wrap();
+        let panel_left = ui.clip_rect().left(); // 中央面板真实左缘(侧栏之后)
         let panel_p = ui.painter();
-        panel_p.rect_filled(outer, 0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e));
+        panel_p.rect_filled(
+            egui::Rect::from_min_max(egui::pos2(panel_left, outer.top()), outer.max),
+            0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e),
+        );
 
         let t_end = if self.smf.is_some() {
             self.smf_end_tick.max(1)

@@ -490,10 +490,19 @@ impl XgApp {
                     }
                     self.smf_is_dirty = false;
                 }
-                // 内容区
-                let rect = ui.available_rect_before_wrap();
-                ui.allocate_rect(rect, egui::Sense::hover());
-                let p = ui.painter();
+                // 内容区: 铺深色底, 然后标尺(固定) + ScrollArea(内容滚动)
+                // ★ 2016-08-13 John 反馈: "Ch01" 被裁/贴边根因 = 之前 outer.min.x=0.0 强制中央内容
+                //   画到屏幕绝对 x=0, 但左侧 Tracks 栏(收起22px/展开160-400px)占住屏幕左缘,
+                //   中央面板把所有绘制 clip 到中央区(侧栏右侧) → "Ch" 被裁、"01"贴边、侧栏宽度一变位置就错.
+                //   修复: 用 available_rect 真实左缘(egui 自动避开侧栏) → 位置动态跟随侧栏宽度.
+                let outer = ui.available_rect_before_wrap();
+                let panel_left = ui.clip_rect().left(); // 中央面板真实左缘(侧栏之后)
+                let panel_p0 = ui.painter();
+                // 深色底 flush 到面板左缘(覆盖 padding), 但内容坐标用 outer(available_rect)
+                panel_p0.rect_filled(
+                    egui::Rect::from_min_max(egui::pos2(panel_left, outer.top()), outer.max),
+                    0.0, egui::Color32::from_rgb(0x0c, 0x14, 0x1e),
+                );
 
                 // ===== 时间映射 (zoom/scroll) 全视图共用一份 =====
                 let zoom = self.track_view_zoom.max(0.002);
@@ -503,31 +512,51 @@ impl XgApp {
                 let scroll = self.track_view_scroll_ticks;
 
                 // ===== 行头 gutter (channel 名 + 音色 + 绿电平) 固定宽 =====
-                // 音色/电平从左侧 track 栏移入(John: 根治对齐) — 与音符区在同一个 rect 内,
-                // 天然居中, 无跨栏 Y 错位可能.
                 let gutter_w = 158.0;
-                let notes_left = rect.left() + gutter_w;
-                let notes_right = rect.right();
+                let notes_left = outer.left() + gutter_w;
+                let notes_right = outer.right();
                 let notes_width = (notes_right - notes_left).max(1.0);
 
-                // ===== 顶部 bar/tick 标尺 (共用 draw_time_ruler, 与 Piano Roll 一致) =====
+                // ===== 顶部 bar/tick 标尺 (共用 draw_time_ruler) — 固定不滚动 =====
                 let ruler_h = 22.0;
-                let ruler_top = rect.top();
+                let ruler_top = outer.top();
                 let ruler_bot = ruler_top + ruler_h;
-                let ruler_rect = egui::Rect::from_min_max(egui::pos2(rect.left(), ruler_top), egui::pos2(rect.right(), ruler_bot));
-                crate::draw_time_ruler(p, ruler_rect, notes_left, notes_width, win_ticks, scroll, self.ppq.max(1), 4 * self.ppq.max(1));
-                // 行网格顶 = 标尺之下(自洽, 不再依赖左栏绝对 Y)
-                let grid_top = ruler_bot;
+                let ruler_rect = egui::Rect::from_min_max(egui::pos2(outer.left(), ruler_top), egui::pos2(outer.right(), ruler_bot));
+                // 画标尺后推进 cursor → ScrollArea 从标尺下方开始, 不再覆盖标尺 (John 2026-08-13: 标尺消失)
+                crate::draw_time_ruler(panel_p0, ruler_rect, notes_left, notes_width, win_ticks, scroll, self.ppq.max(1), 4 * self.ppq.max(1));
+                ui.allocate_rect(ruler_rect, egui::Sense::hover());
 
-                // 通道行背景 + 行头 + 音符
-                // SMF 加载后 16 行 (每行 = 1 MIDI channel); 否则默认 tracks rows
-                let ch_rows = if self.smf.is_some() { 16 } else { self.tracks.len() };
-                for i in 0..ch_rows {
-                    let y0 = grid_top + i as f32 * CHANNEL_ROW_H;
-                    let row_rect = egui::Rect::from_min_max(
-                        egui::pos2(rect.left(), y0),
-                        egui::pos2(rect.right(), (y0 + CHANNEL_ROW_H).min(rect.bottom())),
-                    );
+                // 内容总高 (滚动区): ch_rows * CHANNEL_ROW_H
+                let ch_rows = if self.smf.is_some() { 16 } else { self.tracks.len().max(1) };
+                let total_h = ch_rows as f32 * CHANNEL_ROW_H;
+
+                // ===== 内容区 ScrollArea (纵向滚动, 复用 piano_roll 成熟模式) =====
+                egui::ScrollArea::vertical()
+                    .auto_shrink([false, false])
+                    .scroll_bar_visibility(egui::scroll_area::ScrollBarVisibility::AlwaysVisible)
+                    .id_salt("channel_view_scroll")
+                    .show(ui, |ui| {
+                        // 内部坐标系: 视口顶 = min_rect().top()
+                        let c0 = ui.min_rect().top();
+                        // 预定内容高度 (可滚动)
+                        ui.allocate_space(egui::vec2(outer.width(), total_h));
+                        let p = ui.painter();
+
+                        // ★ 内容区边界: 统一用 outer(available_rect) 左缘做基准 — 这是屏幕坐标(避开侧栏),
+                        //   ScrollArea 内部 painter 用相同坐标绘制, 与 gutter/notes 严格对齐.
+                        //   (曾用 ui.min_rect().left() 导致与 notes_left(outer) 基准不一致 → 错位/贴边)
+                        let c_left = outer.left();
+                        let c_right = outer.right();
+                        let content_bottom = c0 + total_h;
+
+                        // 通道行背景 + 行头 + 音符
+                    // SMF: 16 行; 否则 tracks 行数
+                    for i in 0..ch_rows {
+                        let y0 = c0 + i as f32 * CHANNEL_ROW_H;
+                        let row_rect = egui::Rect::from_min_max(
+                            egui::pos2(c_left, y0),
+                            egui::pos2(c_right, (y0 + CHANNEL_ROW_H).min(content_bottom)),
+                        );
                     // 该行显示数据 (SMF: 16 ch, 音色/电平来自 live_*; 否则 tracks)
                     let (row_name, row_voice, row_level): (String, String, f32) = if self.smf.is_some() {
                         (
@@ -546,12 +575,12 @@ impl XgApp {
                     p.rect_filled(row_rect, 0.0, egui::Color32::from_rgb(base.0, base.1, base.2));
                     // 行分隔线
                     p.line_segment(
-                        [egui::pos2(rect.left(), y0), egui::pos2(rect.right(), y0)],
+                        [egui::pos2(c_left, y0), egui::pos2(c_right, y0)],
                         egui::Stroke::new(1.0, egui::Color32::from_gray(30)),
                     );
                     // 行头 gutter: ChNN + 音色名 + 绿电平 + %
                     {
-                        let gx = rect.left() + 6.0;
+                        let gx = c_left + 6.0;
                         let cy_row = row_rect.center().y;
                         // Ch 号 (1..16)
                         p.text(
@@ -572,7 +601,7 @@ impl XgApp {
                             egui::Color32::from_gray(150),
                         );
                         // 绿电平条 + %
-                        let lvx = rect.left() + 98.0;
+                        let lvx = c_left + 98.0;
                         let lvw = 28.0;
                         p.rect_filled(
                             egui::Rect::from_min_size(egui::pos2(lvx, cy_row - 4.0), egui::vec2(lvw, 8.0)),
@@ -586,14 +615,14 @@ impl XgApp {
                         // (电平条后不显示百分比数字 — John: 变动太快看不清)
                         // gutter 与音符区之间的分隔竖线
                         p.line_segment(
-                            [egui::pos2(rect.left() + gutter_w, y0), egui::pos2(rect.left() + gutter_w, (y0 + CHANNEL_ROW_H).min(rect.bottom()))],
+                            [egui::pos2(c_left + gutter_w, y0), egui::pos2(c_left + gutter_w, (y0 + CHANNEL_ROW_H).min(content_bottom))],
                             egui::Stroke::new(1.0, egui::Color32::from_gray(45)),
                         );
                     }
                     // 音符区 (gutter 右缘起, 同一时间映射)
                     let inner = egui::Rect::from_min_max(
                         egui::pos2(notes_left + 4.0, y0 + 4.0),
-                        egui::pos2(notes_right - 4.0, (y0 + CHANNEL_ROW_H).min(rect.bottom()) - 4.0),
+                        egui::pos2(notes_right - 4.0, (y0 + CHANNEL_ROW_H).min(content_bottom) - 4.0),
                     );
                     let ch = i + 1; // channel 1..16
                     // 低 zoom 音符过密(<2px)时合并成"密度带": 同一窗口内音符并成一段
@@ -646,16 +675,16 @@ impl XgApp {
                     // 行尾标注 channel 号
                     let _ = ch;
                 }
-                // playhead 竖线 (Channel 视图, 跟随 zoom+scroll)
+                // playhead 竖线 (Channel 视图, 跟随 zoom+scroll; 收敛到内容区高度)
                 let ph_x = if self.playhead_tick >= scroll && self.playhead_tick <= scroll + win_ticks {
                     notes_left + (self.playhead_tick - scroll) as f32 / win_ticks as f32 * notes_width
                 } else {
                     notes_left - 4.0 // 视口外
                 };
                 if ph_x > notes_left && ph_x < notes_right {
-                    p.vline(ph_x, egui::Rangef::new(grid_top, rect.bottom()), egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xd0, 0x40)));
+                    p.vline(ph_x, egui::Rangef::new(c0, content_bottom), egui::Stroke::new(2.0, egui::Color32::from_rgb(0xff, 0xd0, 0x40)));
                 }
-                // bar 起始竖线贯穿全部行(淡, 辅助对齐)
+                // bar 起始竖线贯穿全部行(淡, 辅助对齐; 止于内容区底, 不再溢出到白底)
                 let bar_ticks = 4 * self.ppq.max(1);
                 let last_tick = scroll + win_ticks;
                 if bar_ticks > 0 {
@@ -664,13 +693,13 @@ impl XgApp {
                         if bt0 >= scroll {
                             let bxg = notes_left + (bt0 - scroll) as f32 / win_ticks as f32 * notes_width;
                             p.line_segment(
-                                [egui::pos2(bxg, grid_top), egui::pos2(bxg, rect.bottom())],
+                                [egui::pos2(bxg, c0), egui::pos2(bxg, content_bottom)],
                                 egui::Stroke::new(1.0, egui::Color32::from_rgba_unmultiplied(0x50, 0x70, 0x80, 60)),
                             );
                         }
                         bt0 += bar_ticks;
                     }
                 }
-
-    }
+                    });  // end ScrollArea (channel_view_scroll)
+    }  // end render_channel_notes
 }
