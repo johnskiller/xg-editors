@@ -11,12 +11,27 @@ impl XgApp {
     /// 结构: [☰ Menu] | 标题版本 | Tempo 拍号 | 播放 count | Transport | 连接状态 .
     /// 调试/设置控件收进 ☰ 菜单 (File / MIDI Setup / Tools); 顶栏只留高频项.
     pub fn top_bar(&mut self, ui: &mut egui::Ui) {
-        // 顶栏独立底色 (对比中央区, 视觉分层; 浅色主题下的柔和深蓝灰)
-        let bar_bg = egui::Color32::from_rgb(0xf0, 0xf3, 0xf7);
-        ui.painter().rect_filled(ui.max_rect(), 0.0, bar_bg);
+        // 顶栏背景 = #1f2f45 (Frame 已填, 见 lib.rs TopBottomPanel.frame — John 拍板同 Channel View 奇数通道色)
+        // 底部一条深分隔线 (与中央区分界, 比底色略亮)
+        let r = ui.max_rect();
+        {
+            let p = ui.painter();
+            p.line_segment(
+                [egui::pos2(r.min.x, r.max.y - 0.5), egui::pos2(r.max.x, r.max.y - 0.5)],
+                egui::Stroke::new(1.0, egui::Color32::from_rgb(0x2b, 0x40, 0x5e)),
+            );
+        }
+        // 顶栏深底 → 正文用浅色
+        let mut style: egui::Style = (*ui.style()).as_ref().clone();
+        style.visuals.widgets.inactive.fg_stroke.color = egui::Color32::from_rgb(0xd5, 0xdc, 0xe6);
+        style.visuals.widgets.hovered.fg_stroke.color = egui::Color32::from_rgb(0xef, 0xf3, 0xf8);
+        style.visuals.widgets.active.fg_stroke.color = egui::Color32::from_rgb(0xff, 0xff, 0xff);
+        // DragValue 输入框: 深底配更深一档的输入框 + 浅色文字 (保持深色 bar 统一)
+        style.visuals.widgets.inactive.bg_fill = egui::Color32::from_rgb(0x16, 0x23, 0x35);
+        style.visuals.widgets.hovered.bg_fill = egui::Color32::from_rgb(0x20, 0x31, 0x48);
+        style.visuals.widgets.active.bg_fill = egui::Color32::from_rgb(0x24, 0x38, 0x52);
+        ui.set_style(style);
         ui.horizontal(|ui| {
-            // 内容上再加一层半透明白底网格感 — 用等宽边框分隔顶栏与内容
-            ui.spacing_mut().item_spacing.x = 8.0;
             ui.menu_button("\u{2630}", |ui| {
                 // ── File ──
                 ui.menu_button("File", |ui| {
@@ -66,7 +81,7 @@ impl XgApp {
                 egui::RichText::new(format!("{:>3}:{:02}.{:03}", bb.0, bb.1, bb.2))
                     .size(18.0)
                     .monospace()
-                    .color(egui::Color32::from_rgb(0xe6, 0x9d, 0x1f)), // 深金 (浅色主题可读)
+                    .color(egui::Color32::from_rgb(0xff, 0xc6, 0x4d)), // 亮金 (深底 #1f2f45 可读)
             );
             ui.separator();
 
@@ -112,15 +127,20 @@ impl XgApp {
 
             // ============ 连接状态 (精简色点 + 文本, 保留顶栏) ============
             // ■ (U+25A0)/○ (U+25CB) 在 emoji-icon-font 有覆盖 (● U+25CF 缺失会 tofu)
+            // 深底 #1f2f45 → 亮色文字
             if self.midi_connected {
-                ui.colored_label(egui::Color32::from_rgb(0x1e, 0x8a, 0x3e), "\u{25A0} Connected");
+                ui.colored_label(egui::Color32::from_rgb(0x4c, 0xd9, 0x64), "\u{25A0} Connected");
             } else {
-                ui.colored_label(egui::Color32::from_rgb(0x88, 0x88, 0x88), "\u{25CB} Not connected");
+                ui.colored_label(egui::Color32::from_rgb(0x9a, 0xa6, 0xb5), "\u{25CB} Not connected");
             }
             // 已加载 SMF 名 (若有, 尾部常驻显示)
             if !self.smf_name.is_empty() {
                 ui.separator();
-                ui.label(egui::RichText::new(&self.smf_name).size(13.0).weak());
+                ui.label(
+                    egui::RichText::new(&self.smf_name)
+                        .size(13.0)
+                        .color(egui::Color32::from_rgb(0x8f, 0x9c, 0xad)), // 深底弱化灰蓝
+                );
             }
         });
     }

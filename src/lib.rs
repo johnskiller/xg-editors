@@ -1987,8 +1987,16 @@ impl eframe::App for XgApp {
             self.last_play_frame_ms = 0.0;
         }
 
-        // 顶栏 (44px 高, TopBar 美化 v0.1.23)
+        // 顶栏 (44px 高 + 上下 padding, TopBar 美化 v0.1.23)
+        // frame 自带 inner_margin = 四周对称 padding (顶/底/左/右), 背景同色.
+        // 底色 = Channel View 奇数通道色 #1f2f45 (John 2026-08-13 拍板)
+        let topbar_bg = egui::Color32::from_rgb(0x1f, 0x2f, 0x45);
         egui::TopBottomPanel::top("top_bar")
+            .frame(
+                egui::Frame::none()
+                    .fill(topbar_bg)
+                    .inner_margin(egui::Margin::symmetric(12.0, 6.0)),
+            )
             .exact_height(44.0)
             .show(ctx, |ui| {
                 self.top_bar(ui);

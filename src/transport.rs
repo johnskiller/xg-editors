@@ -38,49 +38,51 @@ impl TransportButton {
         self
     }
 
-    /// 图标主色
+    /// 图标主色 (顶栏深底 #1f2f45 → 图标浅色)
     fn glyph_color(&self) -> Color32 {
         match self.kind {
             Transport::Play | Transport::Pause | Transport::Stop => {
                 if self.active {
-                    Color32::from_rgb(0x1e, 0x8a, 0x3e) // 播放中 → 深绿 (浅色主题可读)
+                    Color32::from_rgb(0x6f, 0xdd, 0x8b) // 播放中 → 亮绿 (深底可读)
                 } else {
-                    Color32::from_rgb(0x33, 0x33, 0x33) // 常态深灰黑
+                    Color32::from_rgb(0xd0, 0xd8, 0xe2) // 常态浅灰蓝 (深底可读)
                 }
             }
             Transport::Record => {
                 if self.active {
-                    Color32::from_rgb(0xcc, 0x22, 0x22) // armed → 深红
+                    Color32::from_rgb(0xff, 0x5f, 0x56) // armed → 亮红
                 } else {
-                    Color32::from_rgb(0x33, 0x33, 0x33) // 常态深灰黑
+                    Color32::from_rgb(0xd0, 0xd8, 0xe2) // 常态浅灰蓝
                 }
             }
         }
     }
 
-    /// 在 rect 内绘制几何图标 (所有类型同尺寸, 居中于 r).
-    /// 图标占 rect 的 ~60%, 保证四按钮视觉一致.
+    /// 在 rect 内绘制几何图标 (三按钮视觉均衡).
+    /// 外接框统一 ~9px (k=s*0.42): 三角高0.8k宽0.9k, 方块0.86k, 圆0.86k径.
     fn draw_icon(&self, painter: &eframe::egui::Painter, r: Rect, color: Color32) {
         let c = r.center();
         let s = self.size;
-        let stroke = Stroke::new((s / 10.0).max(1.5), color);
+        let stroke = Stroke::new((s / 16.0).max(1.2), color);
         let fill = color;
+        let k = s * 0.42;               // 统一图标盒 (24px 按钮 → 盒 ~10px)
         match self.kind {
             Transport::Play => {
-                // 实心三角: 顶点偏右
-                let sz = s * 0.30;
+                // 实心右向三角: 高 0.8k, 宽 0.9k (外接≈方块/圆)
+                let w = k * 0.90;
+                let h = k * 0.80;
                 let pts = vec![
-                    Pos2::new(c.x - sz * 0.5, c.y - sz),
-                    Pos2::new(c.x - sz * 0.5, c.y + sz),
-                    Pos2::new(c.x + sz, c.y),
+                    Pos2::new(c.x - w / 2.0, c.y - h / 2.0),
+                    Pos2::new(c.x - w / 2.0, c.y + h / 2.0),
+                    Pos2::new(c.x + w / 2.0, c.y),
                 ];
                 painter.add(Shape::convex_polygon(pts, fill, stroke));
             }
             Transport::Pause => {
-                // 两条竖杠
-                let w = s * 0.11;
-                let h = s * 0.42;
-                let gap = s * 0.13;
+                // 两条粗竖杠: 高 0.8k (与 Play 三角同高)
+                let w = k * 0.20;
+                let h = k * 0.80;
+                let gap = k * 0.14;
                 let left = Rect::from_center_size(
                     Pos2::new(c.x - gap / 2.0 - w / 2.0, c.y),
                     Vec2::new(w, h),
@@ -93,14 +95,14 @@ impl TransportButton {
                 painter.rect_filled(right, 1.0, fill);
             }
             Transport::Stop => {
-                // 实心方块
-                let sz = s * 0.36;
+                // 实心方块: 边长 0.86k
+                let sz = k * 0.86;
                 let rect = Rect::from_center_size(c, Vec2::splat(sz));
                 painter.rect_filled(rect, 2.0, fill);
             }
             Transport::Record => {
-                // 实心圆 (常态灰, armed 红, 与 Stop 方块同视觉重量)
-                let rad = s * 0.24;
+                // 实心圆: 直径 0.86k (与方块同尺寸)
+                let rad = k * 0.43;
                 painter.circle_filled(c, rad, fill);
             }
         }
@@ -113,18 +115,18 @@ impl Widget for TransportButton {
         if ui.is_rect_visible(rect) {
             let painter = ui.painter();
             let response = &resp;
-            // hover: 浅灰底
+            // hover: 深底上提亮一档 (深色顶栏 hover 更亮)
             if response.hovered() {
-                painter.rect_filled(rect, 5.0, Color32::from_rgb(0xd8, 0xd8, 0xd8));
+                painter.rect_filled(rect, 5.0, Color32::from_rgb(0x2a, 0x3d, 0x58));
             }
             // 图标几何绘制 (同尺寸)
             self.draw_icon(&painter, rect, self.glyph_color());
-            // Record armed: 额外细圆环强调
+            // Record armed: 额外细圆环强调 (亮红)
             if matches!(self.kind, Transport::Record) && self.active {
                 painter.circle_stroke(
                     rect.center(),
                     self.size * 0.30,
-                    Stroke::new(1.5, Color32::from_rgb(0xcc, 0x22, 0x22)),
+                    Stroke::new(1.5, Color32::from_rgb(0xff, 0x5f, 0x56)),
                 );
             }
         }
