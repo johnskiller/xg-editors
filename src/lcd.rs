@@ -8,9 +8,9 @@ use crate::xg_icons::{Icon, ICONS};
 // - 底色 = 均匀绿色背光 (偏黄)
 // - 每个逻辑点格位 = 比底色稍暗的绿 (未亮段)
 // - 点亮段 = 深黑 (挡住背光)
-pub const BG_R: u8 = 0x8d; pub const BG_G: u8 = 0xa9; pub const BG_B: u8 = 0x1b; // #8da91b
-pub const IN_R: u8 = 0x73; pub const IN_G: u8 = 0x94; pub const IN_B: u8 = 0x16; // #739416
-pub const ACT_R: u8 = 0x00; pub const ACT_G: u8 = 0x00; pub const ACT_B: u8 = 0x00; // #000000
+pub const BG_R: u8 = 0x7d; pub const BG_G: u8 = 0xf4; pub const BG_B: u8 = 0x06; // #7df406
+pub const IN_R: u8 = 0x69; pub const IN_G: u8 = 0xe7; pub const IN_B: u8 = 0x04; // #69e704
+pub const ACT_R: u8 = 0x12; pub const ACT_G: u8 = 0x6f; pub const ACT_B: u8 = 0x00; // #126f00
 
 pub const LCD_W: usize = 840;
 pub const LCD_H: usize = 256;
@@ -728,7 +728,7 @@ mod tests {
         for y in 180..244 {
             for x in 260..388 {
                 let i = (y * LCD_W + x) * 4;
-                if px[i] < 60 && px[i+1] < 60 { black += 1; }
+                if px[i] < 100 && px[i+1] < 200 { black += 1; }
             }
         }
         assert!(black > 500, "GrandPno icon should render substantial pixels, got {black}");

@@ -2796,7 +2796,7 @@ mod tests {
         let w = lcd::LCD_W as i32;
         let y = 234; // 条底部基线: 任何 >0 高都亮这一行
         let i = ((y * w + bx + 1) * 4) as usize;
-        px[i] < 60 && px[i + 1] < 60 && px[i + 2] < 60
+        px[i] < 100 && px[i + 1] < 200
     }
 
     #[test]
