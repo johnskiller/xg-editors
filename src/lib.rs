@@ -2455,7 +2455,10 @@ impl eframe::App for XgApp {
                 if self.smf_name.is_empty() {
                     ui.label(egui::RichText::new("no file").weak());
                 } else {
-                    ui.label(egui::RichText::new(&self.smf_name).strong());
+                    // ★ 2026-08-13 John: 加载 MIDI 后文件名看不清 — `.strong()` 用 strong_text_color
+                    //   (= widgets.active.text_color, 全局深色主题里是浅色), 绕过 override_text_color(dark_txt),
+                    //   在浅底(248)上浅色→看不清. 修复: 显式 .color(dark_txt) 深色.
+                    ui.label(egui::RichText::new(&self.smf_name).color(dark_txt));
                 }
                 ui.separator();
                 // 加载结果 / 提示
