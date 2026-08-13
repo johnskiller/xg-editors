@@ -3,6 +3,10 @@ target/
 **/target/
 *.ppm
 
+# 构建脚本生成的旧名副本 (build_wasm.sh cp 产物, 未被引用, 勿入库)
+www/pkg/xg_editor.js
+www/pkg/xg_editor_bg.wasm
+
 # Node modules
 node_modules/
 

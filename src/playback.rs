@@ -458,7 +458,11 @@ impl XgApp {
     }
 
     /// 通道 ch 的平滑目标电平 = raw_vel_peaks × CC7 × CC11 × master (FakeMu getStrengths 公式)
+    /// Mute/Solo 静音的通道 → 目标 0 (John 2026-08-13: mute 后电平表归零)
     pub(crate) fn smooth_meter_target(&self, ch: usize) -> f32 {
+        if self.channel_is_effectively_muted(ch) {
+            return 0.0;
+        }
         (self.raw_vel_peaks[ch] * self.live_volumes[ch]
             * self.live_expressions[ch] * self.live_master_vol)
             .clamp(0.0, 1.0)
@@ -534,6 +538,11 @@ impl XgApp {
             // 预收集每个事件的输出名单 (去重后共用的口)
             let mut plan: Vec<(String, Vec<PlayEvent>)> = Vec::new();
             for e in &evs {
+                // Channel View Mute/Solo 过滤 (播放输出层): 被静音的通道事件直接跳过, 不发到 MIDI
+                let ch = (e.channel as usize) % 16;
+                if self.channel_is_effectively_muted(ch) {
+                    continue;
+                }
                 let part = (e.channel as u8) % 32;
                 let target = self.midi_topology.route_for_part(part)
                     .map(|r| r.name.clone())
@@ -586,6 +595,41 @@ impl XgApp {
         }
         #[cfg(not(target_arch = "wasm32"))]
         {}
+    }
+
+    /// 对单个 MIDI 通道发 All Notes Off (CC123) + All Sound Off (CC120).
+    /// Channel View mute/solo 触发时清除该通道挂音 (DAW 行为: mute 后立即不响, 无残留).
+    pub fn sound_off_channel(&self, ch: u8) {
+        #[cfg(target_arch = "wasm32")]
+        {
+            if ch >= 16 { return; }
+            let outs = self.active_outputs();
+            if !outs.is_empty() {
+                let msgs: Vec<Vec<u8>> = vec![
+                    vec![0xB0 | ch, 120, 0], // All Sound Off
+                    vec![0xB0 | ch, 123, 0], // All Notes Off
+                ];
+                wasm_bindgen_futures::spawn_local(async move {
+                    for dev in &outs {
+                        for m in &msgs {
+                            let _ = midi_wasm::send_sync(dev, m).await;
+                        }
+                    }
+                });
+            }
+        }
+        #[cfg(not(target_arch = "wasm32"))]
+        {}
+    }
+
+    /// Mute/Solo 状态变更后, 对所有「现在被静音」的通道补发清音 (All Notes/Sound Off).
+    /// 否则已响的挂音不会因为 mute/solo 而停下 (DAW 行为必须: mute 后立即静).
+    pub fn sync_sound_off_for_muted_channels(&self) {
+        for ch in 0..16 {
+            if self.channel_is_effectively_muted(ch) {
+                self.sound_off_channel(ch as u8);
+            }
+        }
     }
 
     /// 停止/后台暂停时彻底清掉正在响的 note.
