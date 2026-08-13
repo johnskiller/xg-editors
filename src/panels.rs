@@ -523,8 +523,9 @@ impl XgApp {
                 let win_ticks = win_ticks.max(1);
                 let scroll = self.track_view_scroll_ticks;
 
-                // ===== 行头 gutter (channel 名 + 音色 + 绿电平) 固定宽 =====
-                let gutter_w = 158.0;
+                // ===== 行头 gutter (channel 名 + 音色 + Mute/Solo + 绿电平) 固定宽 =====
+                // 2026-08-13 mute/solo 加入: 158 → 192 (放得下 M/S 按钮)
+                let gutter_w = 192.0;
                 let notes_left = outer.left() + gutter_w;
                 let notes_right = outer.right();
                 let notes_width = (notes_right - notes_left).max(1.0);
@@ -591,7 +592,7 @@ impl XgApp {
                         [egui::pos2(c_left, y0), egui::pos2(c_right, y0)],
                         egui::Stroke::new(1.0, egui::Color32::from_gray(30)),
                     );
-                    // 行头 gutter: ChNN + 音色名 + 绿电平 + %
+                    // 行头 gutter: ChNN + 音色名 + Mute/Solo 按钮 + 绿电平
                     {
                         let gx = c_left + 6.0;
                         let cy_row = row_rect.center().y;
@@ -605,26 +606,59 @@ impl XgApp {
                         );
                         // 音色名(截断, 压缩到 gutter 内不溢出)
                         let mut voice = row_voice;
-                        if voice.chars().count() > 10 { voice.truncate(10); voice.push_str(".."); }
+                        if voice.chars().count() > 8 { voice.truncate(8); voice.push_str(".."); }
                         p.text(
-                            egui::pos2(gx + 30.0, cy_row),
+                            egui::pos2(gx + 34.0, cy_row),
                             egui::Align2::LEFT_CENTER,
                             &voice,
                             egui::FontId::monospace(10.0),
                             egui::Color32::from_gray(150),
                         );
-                        // 绿电平条 + %
-                        let lvx = c_left + 98.0;
-                        let lvw = 28.0;
+
+                        // ===== Mute / Solo 按钮 (ChNN 名 与 电平表 之间, John 2026-08-13 定案) =====
+                        let btn_sz = 18.0f32.min(row_h - 2.0); // 行高小时收缩
+                        let ms_x = c_left + 100.0;
+                        let m_rect = egui::Rect::from_center_size(
+                            egui::pos2(ms_x + btn_sz / 2.0, cy_row), egui::vec2(btn_sz, btn_sz));
+                        let s_rect = egui::Rect::from_center_size(
+                            egui::pos2(ms_x + btn_sz + 4.0 + btn_sz / 2.0, cy_row), egui::vec2(btn_sz, btn_sz));
+                        // 点击: 立即生效; mute/solo 触发时对本该静音的通道清音 (DAW 行为)
+                        let m_resp = ui.interact(m_rect, ui.id().with(("ch_mute", i)), egui::Sense::click());
+                        let s_resp = ui.interact(s_rect, ui.id().with(("ch_solo", i)), egui::Sense::click());
+                        // 状态色: mute active 红 / solo active 琥珀; 常态灰, hover 提亮
+                        let m_col = if self.channel_mutes[i] { (0xe0, 0x35, 0x35) }
+                                    else if m_resp.hovered() { (0x60, 0x30, 0x30) } else { (0x44, 0x44, 0x44) };
+                        let s_col = if self.channel_solos[i] { (0xff, 0xb0, 0x30) }
+                                    else if s_resp.hovered() { (0x50, 0x45, 0x28) } else { (0x44, 0x44, 0x44) };
+                        p.rect_filled(m_rect, 3.0, egui::Color32::from_rgb(m_col.0, m_col.1, m_col.2));
+                        p.rect_filled(s_rect, 3.0, egui::Color32::from_rgb(s_col.0, s_col.1, s_col.2));
+                        p.text(m_rect.center(), egui::Align2::CENTER_CENTER, "M",
+                            egui::FontId::monospace(11.0), egui::Color32::from_gray(240));
+                        p.text(s_rect.center(), egui::Align2::CENTER_CENTER, "S",
+                            egui::FontId::monospace(11.0), egui::Color32::from_gray(240));
+                        if m_resp.clicked() {
+                            self.channel_mutes[i] = !self.channel_mutes[i];
+                            self.sync_sound_off_for_muted_channels();
+                        }
+                        if s_resp.clicked() {
+                            self.channel_solos[i] = !self.channel_solos[i];
+                            self.sync_sound_off_for_muted_channels();
+                        }
+
+                        // 绿电平条 + % (mute 后 row_level=0 → 不画绿条, 视觉"这条是死的")
+                        let lvx = c_left + 158.0;
+                        let lvw = 26.0;
                         p.rect_filled(
                             egui::Rect::from_min_size(egui::pos2(lvx, cy_row - 4.0), egui::vec2(lvw, 8.0)),
                             2.0, egui::Color32::from_gray(60),
                         );
-                        let lw = (row_level * lvw).max(2.0);
-                        p.rect_filled(
-                            egui::Rect::from_min_size(egui::pos2(lvx, cy_row - 4.0), egui::vec2(lw, 8.0)),
-                            2.0, egui::Color32::from_rgb(0x2e, 0xcc, 0x40),
-                        );
+                        if row_level > 0.001 {
+                            let lw = (row_level * lvw).max(2.0);
+                            p.rect_filled(
+                                egui::Rect::from_min_size(egui::pos2(lvx, cy_row - 4.0), egui::vec2(lw, 8.0)),
+                                2.0, egui::Color32::from_rgb(0x2e, 0xcc, 0x40),
+                            );
+                        }
                         // (电平条后不显示百分比数字 — John: 变动太快看不清)
                         // gutter 与音符区之间的分隔竖线
                         p.line_segment(

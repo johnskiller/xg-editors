@@ -665,6 +665,10 @@ pub struct XgApp {
     pub live_vel_peaks: [f32; 16],
     /// master volume (0..1, 默认满; FakeMu: strength × master.volume)
     pub live_master_vol: f32,
+    /// Channel View per-channel Mute (1..16 → 下标 0..15; true=静音, 仅播放输出层过滤, 会话级不持久化)
+    pub channel_mutes: [bool; 16],
+    /// Channel View per-channel Solo (true=独奏; 任一 solo 激活时其他通道当 muted; Mute 优先)
+    pub channel_solos: [bool; 16],
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -1366,6 +1370,17 @@ impl XgApp {
         "GrandPno".to_string()
     }
 
+    /// 播放输出层: 该通道(ch 0..15, solos/mutes 下标)在播放时是否应静音.
+    /// Mute 优先于 Solo (DAW 惯例): 任一 solo 激活 → 非 solo 通道静音; 自身 mute 恒有效.
+    pub(crate) fn channel_is_effectively_muted(&self, ch: usize) -> bool {
+        let any_solo = self.channel_solos.iter().any(|&s| s);
+        if any_solo {
+            !self.channel_solos[ch] || self.channel_mutes[ch]
+        } else {
+            self.channel_mutes[ch]
+        }
+    }
+
     /// 滑块变化后: 用当前 part 的 params 重新渲染 LCD 参数条
     /// 从唯一数据源 parts[cur_part-1] 取音色/bank/pgm/8 条参数
     fn update_lcd_params(&mut self) {
@@ -1716,6 +1731,8 @@ impl Default for XgApp {
             pview_scroll: 0.0,
             live_vel_peaks: [0.0; 16],
             live_master_vol: 1.0,
+            channel_mutes: [false; 16],
+            channel_solos: [false; 16],
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -2891,6 +2908,24 @@ mod tests {
     }
 
     #[test]
+    fn meter_zero_when_muted() {
+        // John 2026-08-13: mute 后电平表归零 (visual "这条是死的")
+        let mut app = XgApp::default();
+        app.apply_fired_event_to_meter(&PlayEvent::note(3, 60, 100, 0, true));
+        assert!((app.smooth_meter_target(3) - 100.0 / 127.0).abs() < 1e-6, "未静音时正常电平");
+        // mute → 目标 0
+        app.channel_mutes[3] = true;
+        assert_eq!(app.smooth_meter_target(3), 0.0, "mute 后电平归零");
+        // unmute → 恢复
+        app.channel_mutes[3] = false;
+        assert!((app.smooth_meter_target(3) - 100.0 / 127.0).abs() < 1e-6, "unmute 恢复电平");
+        // solo 激活时非 solo 通道也归零
+        app.channel_solos[3] = true;
+        assert_eq!(app.smooth_meter_target(2), 0.0, "solo 后非 solo 通道电平归零");
+        assert!((app.smooth_meter_target(3) - 100.0 / 127.0).abs() < 1e-6, "solo 通道正常");
+    }
+
+    #[test]
     fn fake_mu_smoothing_attack_fast_decay_slow() {
         // FakeMu mimicStrength: 攻快落慢. 目标升高时逼近快, 目标降/归零时逼近慢.
         let mut app = XgApp::default();
@@ -3601,5 +3636,71 @@ mod tests {
         // 50px/bar > 44 → 每 bar 标; beat px = 50/4 = 12.5 >= 9 → 保留
         assert_eq!(step4, 1, "50px/bar 应每 bar 标号");
         assert!(beat4, "12.5px/beat 应画 beat");
+    }
+
+    // ---------- Channel View Mute/Solo (2026-08-13, d10) ----------
+
+    #[test]
+    fn mute_solo_default_all_off() {
+        let app = XgApp::default();
+        assert_eq!(app.channel_mutes, [false; 16]);
+        assert_eq!(app.channel_solos, [false; 16]);
+        for ch in 0..16 {
+            assert!(!app.channel_is_effectively_muted(ch), "默认无静音");
+        }
+    }
+
+    #[test]
+    fn mute_isolates_single_channel() {
+        let mut app = XgApp::default();
+        app.channel_mutes[3] = true;
+        assert!(app.channel_is_effectively_muted(3));
+        for ch in 0..16 {
+            if ch != 3 {
+                assert!(!app.channel_is_effectively_muted(ch), "只有 ch4(下标3) 静音");
+            }
+        }
+    }
+
+    #[test]
+    fn solo_isolates_soloed_channels_only() {
+        let mut app = XgApp::default();
+        app.channel_solos[2] = true; // solo ch3 (下标2)
+        // 非 solo 通道全部静音
+        for ch in 0..16 {
+            if ch != 2 {
+                assert!(app.channel_is_effectively_muted(ch), "solo 后 ch{} 应静音", ch + 1);
+            }
+        }
+        assert!(!app.channel_is_effectively_muted(2), "被 solo 的通道应发声");
+    }
+
+    #[test]
+    fn mute_priority_over_solo() {
+        let mut app = XgApp::default();
+        app.channel_solos[0] = true;
+        app.channel_mutes[0] = true; // ch1 同时 solo + mute → mute 优先 → 静音
+        assert!(app.channel_is_effectively_muted(0), "solo 且 mute → 应静音 (mute 优先)");
+        // 另一 solo 仅 solo → 发声
+        app.channel_solos[5] = true;
+        assert!(!app.channel_is_effectively_muted(5), "仅 solo → 发声");
+    }
+
+    #[test]
+    fn solo_off_restores_normal_mute() {
+        let mut app = XgApp::default();
+        app.channel_mutes[7] = true;
+        app.channel_solos[3] = true;
+        // solo 激活期间: 非 solo 全静音
+        assert!(app.channel_is_effectively_muted(7));
+        // 取消 solo
+        app.channel_solos[3] = false;
+        // 恢复: 只有 ch8(下标7) 自身 mute 静音
+        assert!(app.channel_is_effectively_muted(7), "取消 solo 后 ch8 自身 mute 仍静音");
+        for ch in 0..16 {
+            if ch != 7 {
+                assert!(!app.channel_is_effectively_muted(ch), "取消 solo 后 ch{} 恢复", ch + 1);
+            }
+        }
     }
 }
