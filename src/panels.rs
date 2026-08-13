@@ -112,11 +112,13 @@ impl XgApp {
                 //   中央面板把所有绘制 clip 到中央区(侧栏右侧) → "Ch" 被裁、"01"贴边、侧栏宽度一变位置就错.
                 //   修复: 用 available_rect 真实左缘(egui 自动避开侧栏) → 位置动态跟随侧栏宽度.
                 let outer = ui.available_rect_before_wrap();
-                // ★★ 2026-08-13 参考 piano roll 成熟模式: 全视图统一用 outer(available_rect_before_wrap),
-                //    不自己取 clip_rect — egui 自动避开左右侧栏 → 左右无黑 padding / 背景铺满无缝.
-                //    (此前混用 panel_left/panel_right 导致背景铺到内容区外 → 左右黑 padding, John 反馈)
-                let panel_left = outer.left();
-                let panel_right = outer.right();
+                let _clip = ui.clip_rect();
+                // ★★ 2026-08-13 照抄 piano roll: 背景铺满到 clip_rect 真实面板边缘(覆盖 CentralPanel
+                //    默认 8px inner-margin 露出的边距带 = 蓝灰 padding); 内容行/音符仍用 outer.
+                //    piano: outer==clip(inner_margin 0), channel: outer 每边比 clip 窄 8px
+                //    → 背景必须用 clip, 不能用 outer. (实测 outer.l=30 vs clip.l=22, outer.r=1315 vs clip.r=1323)
+                let panel_left = ui.clip_rect().left();
+                let panel_right = ui.clip_rect().right();
                 let panel_p0 = ui.painter();
                 // 深色底 flush 到 outer (available_rect) 全范围
                 let bg_rect = egui::Rect::from_min_max(
@@ -136,7 +138,7 @@ impl XgApp {
                 // 2026-08-13 mute/solo 加入: 158 → 192 (放得下 M/S 按钮)
                 let gutter_w = 192.0;
                 let notes_left = outer.left() + gutter_w;
-                // ★ 右缘 = 中央面板真右缘 (panel_right) — 音符/数字画到 params 面板前为止
+                // ★ 右缘 = 中央面板真右缘 (clip_rect right) — 音符/数字画到 params 面板前为止
                 let notes_right = panel_right;
                 let notes_width = (notes_right - notes_left).max(1.0);
 
@@ -175,7 +177,7 @@ impl XgApp {
                         //     否则 note 线段/bar 数字超出其深色背景 (John: "bar 9 数字超出 rule 背景").
                         //     行背景(c_right)铺满到面板真右缘 panel_right (John: "行背景不到 params 左缘"),
                         let c_left = outer.left();
-                        let c_right = panel_right; // 行背景铺到面板真右缘, 不留缝
+                        let c_right = panel_right; // 行背景铺到面板真右缘 (clip_rect), 不留蓝灰边距带
                         let content_bottom = c0 + total_h;
 
                         // 通道行背景 + 行头 + 音符
