@@ -554,7 +554,6 @@ impl XgApp {
                         let c0 = ui.min_rect().top();
                         // 预定内容高度 (可滚动)
                         ui.allocate_space(egui::vec2(outer.width(), total_h));
-                        let p = ui.painter();
 
                         // ★ 内容区边界: 统一用 outer(available_rect) 左缘做基准 — 这是屏幕坐标(避开侧栏),
                         //   ScrollArea 内部 painter 用相同坐标绘制, 与 gutter/notes 严格对齐.
@@ -586,56 +585,53 @@ impl XgApp {
                     };
                     // 行背景色: 明显交错的深浅蓝灰, 每个channel一条可辨(John 要求)
                     let base: (u8, u8, u8) = if i % 2 == 0 { (0x12, 0x1e, 0x2e) } else { (0x1f, 0x2f, 0x45) };
-                    p.rect_filled(row_rect, 0.0, egui::Color32::from_rgb(base.0, base.1, base.2));
-                    // 行分隔线
-                    p.line_segment(
-                        [egui::pos2(c_left, y0), egui::pos2(c_right, y0)],
-                        egui::Stroke::new(1.0, egui::Color32::from_gray(30)),
-                    );
-                    // 行头 gutter: ChNN + 音色名 + Mute/Solo 按钮 + 绿电平
+                    // 行背景 + 行头文字 (ChNN/音色名) 用独立 painter scope — p 借用需在 ui.put(custom widget) 前结束
                     {
-                        let gx = c_left + 6.0;
-                        let cy_row = row_rect.center().y;
-                        // Ch 号 (1..16)
-                        p.text(
-                            egui::pos2(gx, cy_row),
-                            egui::Align2::LEFT_CENTER,
-                            &row_name,
-                            egui::FontId::monospace(12.0),
-                            egui::Color32::from_gray(230),
+                        let p = ui.painter();
+                        p.rect_filled(row_rect, 0.0, egui::Color32::from_rgb(base.0, base.1, base.2));
+                        // 行分隔线
+                        p.line_segment(
+                            [egui::pos2(c_left, y0), egui::pos2(c_right, y0)],
+                            egui::Stroke::new(1.0, egui::Color32::from_gray(30)),
                         );
-                        // 音色名(截断, 压缩到 gutter 内不溢出)
-                        let mut voice = row_voice;
-                        if voice.chars().count() > 8 { voice.truncate(8); voice.push_str(".."); }
-                        p.text(
-                            egui::pos2(gx + 34.0, cy_row),
-                            egui::Align2::LEFT_CENTER,
-                            &voice,
-                            egui::FontId::monospace(10.0),
-                            egui::Color32::from_gray(150),
-                        );
+                        // 行头 gutter: ChNN + 音色名 + Mute/Solo 按钮 + 绿电平
+                        {
+                            let gx = c_left + 6.0;
+                            let cy_row = row_rect.center().y;
+                            // Ch 号 (1..16)
+                            p.text(
+                                egui::pos2(gx, cy_row),
+                                egui::Align2::LEFT_CENTER,
+                                &row_name,
+                                egui::FontId::monospace(12.0),
+                                egui::Color32::from_gray(230),
+                            );
+                            // 音色名(截断, 压缩到 gutter 内不溢出)
+                            let mut voice = row_voice;
+                            if voice.chars().count() > 8 { voice.truncate(8); voice.push_str(".."); }
+                            p.text(
+                                egui::pos2(gx + 34.0, cy_row),
+                                egui::Align2::LEFT_CENTER,
+                                &voice,
+                                egui::FontId::monospace(10.0),
+                                egui::Color32::from_gray(150),
+                            );
+                        }
+                    } // end row-bg/text painter scope (p borrow ends before ui.put)
 
-                        // ===== Mute / Solo 按钮 (ChNN 名 与 电平表 之间, John 2026-08-13 定案) =====
+                    // ===== Mute / Solo 自定义控件 (ChNN 名 与 电平表 之间, John 2026-08-13 定案)
+                    // 用 egui custom widget (ms_button.rs) — 非散装手绘 (John 建议 custom 控件)
+                    {
                         let btn_sz = 18.0f32.min(row_h - 2.0); // 行高小时收缩
                         let ms_x = c_left + 100.0;
+                        let cy_row = row_rect.center().y;
                         let m_rect = egui::Rect::from_center_size(
                             egui::pos2(ms_x + btn_sz / 2.0, cy_row), egui::vec2(btn_sz, btn_sz));
                         let s_rect = egui::Rect::from_center_size(
                             egui::pos2(ms_x + btn_sz + 4.0 + btn_sz / 2.0, cy_row), egui::vec2(btn_sz, btn_sz));
                         // 点击: 立即生效; mute/solo 触发时对本该静音的通道清音 (DAW 行为)
-                        let m_resp = ui.interact(m_rect, ui.id().with(("ch_mute", i)), egui::Sense::click());
-                        let s_resp = ui.interact(s_rect, ui.id().with(("ch_solo", i)), egui::Sense::click());
-                        // 状态色: mute active 红 / solo active 琥珀; 常态灰, hover 提亮
-                        let m_col = if self.channel_mutes[i] { (0xe0, 0x35, 0x35) }
-                                    else if m_resp.hovered() { (0x60, 0x30, 0x30) } else { (0x44, 0x44, 0x44) };
-                        let s_col = if self.channel_solos[i] { (0xff, 0xb0, 0x30) }
-                                    else if s_resp.hovered() { (0x50, 0x45, 0x28) } else { (0x44, 0x44, 0x44) };
-                        p.rect_filled(m_rect, 3.0, egui::Color32::from_rgb(m_col.0, m_col.1, m_col.2));
-                        p.rect_filled(s_rect, 3.0, egui::Color32::from_rgb(s_col.0, s_col.1, s_col.2));
-                        p.text(m_rect.center(), egui::Align2::CENTER_CENTER, "M",
-                            egui::FontId::monospace(11.0), egui::Color32::from_gray(240));
-                        p.text(s_rect.center(), egui::Align2::CENTER_CENTER, "S",
-                            egui::FontId::monospace(11.0), egui::Color32::from_gray(240));
+                        let m_resp = ui.put(m_rect, crate::ms_button::MSButton::new(crate::ms_button::MSKind::Mute, self.channel_mutes[i]).size(btn_sz));
+                        let s_resp = ui.put(s_rect, crate::ms_button::MSButton::new(crate::ms_button::MSKind::Solo, self.channel_solos[i]).size(btn_sz));
                         if m_resp.clicked() {
                             self.channel_mutes[i] = !self.channel_mutes[i];
                             self.sync_sound_off_for_muted_channels();
@@ -644,8 +640,12 @@ impl XgApp {
                             self.channel_solos[i] = !self.channel_solos[i];
                             self.sync_sound_off_for_muted_channels();
                         }
+                    }
 
-                        // 绿电平条 + % (mute 后 row_level=0 → 不画绿条, 视觉"这条是死的")
+                    // 绿电平条 + % (mute 后 row_level=0 → 不画绿条, 视觉"这条是死的")
+                    {
+                        let p = ui.painter();
+                        let cy_row = row_rect.center().y;
                         let lvx = c_left + 158.0;
                         let lvw = 26.0;
                         p.rect_filled(
@@ -682,6 +682,7 @@ impl XgApp {
                         // 高音在上: inner.bottom() - 相对位置*inner.height()
                         inner.bottom() - ((pitch as f32 - pitch_low as f32) / p_range * inner.height()).clamp(0.0, inner.height())
                     };
+                    let p = ui.painter();
                     if self.smf.is_none() {
                         let def_notes = &self.tracks[i].notes;
                         for n in def_notes {
@@ -715,6 +716,7 @@ impl XgApp {
                     let _ = ch;
                 }
                 // playhead 竖线 (Channel 视图, 跟随 zoom+scroll; 收敛到内容区高度)
+                let p = ui.painter(); // 独立 painter (行循环结束后, 画 playhead + bar 竖线)
                 let ph_x = if self.playhead_tick >= scroll && self.playhead_tick <= scroll + win_ticks {
                     notes_left + (self.playhead_tick - scroll) as f32 / win_ticks as f32 * notes_width
                 } else {

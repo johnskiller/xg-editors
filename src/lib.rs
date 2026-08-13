@@ -10,6 +10,7 @@ pub mod data;
 pub mod device;
 pub mod lcd;
 pub mod midi_topology;
+pub mod ms_button;
 pub mod part;
 pub mod persist;
 pub mod piano_roll;
