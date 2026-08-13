@@ -148,9 +148,10 @@ fn render_to_matrix_mode(voice: &str, bank: u32, program: u32, levels: &[f32], a
     let v: String = voice.chars().take(8).collect();
     let v_pad = format!("{:<8}", v);
     if is_32 {
-        // 32ch 模式第一行: 从最左边 col 0 开始, "GrandPno ▶001▶001" = 17 字符
+        // 32ch 模式第一行: 从最左边 col 0 开始, "▶001▶001GrandPno" = 17 字符
+        // 用户权威 (2026-08-13): 真机是 bank/pgm 在前, 音色名在后 (非 GrandPno▶000▶001)
         // 8(名) + 1(空格) + 1(▶) + 3(bank) + 1(▶) + 3(prog) = 17
-        let bp = format!("{} \u{0080}{:03}\u{0081}{:03}", v.trim_end(), bank, program);
+        let bp = format!("\u{0080}{:03}\u{0081}{:03} {}", bank, program, v.trim_end());
         mm.text5(&bp, 0, 0);
     } else if port_b {
         // Port B (part 17-32): 音色/bank/prog 显示在左侧 8 组点阵 (col 0..39), 真机一致
@@ -907,13 +908,9 @@ mod tests {
         }
         assert_eq!(cols_16, cols_32, "32ch 与 16ch 前18 bar 的列覆盖应一致 (row8..15)");
         // ④ 17 字符音色行从 col0 到 col84 (整行, 含 col45 之后的中后段) — 见下方⑤验证其长度
-        // ⑤ 验证第一行确实是 "GrandPno ▶bank ▶prog" 17 字符: 解码 row0 前 17 个字符
+        // ⑤ 验证第一行是 "▶000▶001 GrandPno" (bank/pgm 在前, 空格, 音色名在最后) — 用户权威 2026-08-13
         let deco = decode_run(&mm, 0, 0, 17);
-        // 期望含音色名 + ▶000 + ▶001
-        let mut has_voice = deco.starts_with("GrandPn");
-        let _ = has_voice;
-        // 直接断言: 第一行应有 17 个字符位被占用 (非空), 且以音色名开头
-        assert!(deco.starts_with("GrandPn"), "32ch 第一行应以音色名开头, got: '{deco}'");
+        assert_eq!(deco, "▶000▶001 GrandPno", "32ch 第一行格式应为 ▶bank▶prog 音色名, got: '{deco}'");
         assert!(deco.len() >= 17, "32ch 第一行应占满 17 字符, got len {}", deco.len());
     }
 
