@@ -24,6 +24,8 @@ pub use play_view::CentralView;
 
 pub mod starfield;
 pub mod panels;
+pub mod topbar;
+pub mod transport;
 
 /// 异步延时 (低精度, 用于 SysEx 请求间隔). wasm: 用定时器; native: 线程 sleep.
 /// 注意: wasm 下阻塞主线程的 busy-wait 会卡 UI, 这里用真正的 async 延时 (Promise timer)。
@@ -670,6 +672,8 @@ pub struct XgApp {
     pub channel_mutes: [bool; 16],
     /// Channel View per-channel Solo (true=独奏; 任一 solo 激活时其他通道当 muted; Mute 优先)
     pub channel_solos: [bool; 16],
+    /// TopBar Record armed (点击红点亮灭; 功能预留不接逻辑, 会话级不持久化)
+    pub rec_armed: bool,
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -1734,6 +1738,7 @@ impl Default for XgApp {
             live_master_vol: 1.0,
             channel_mutes: [false; 16],
             channel_solos: [false; 16],
+            rec_armed: false,
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -1791,6 +1796,19 @@ impl eframe::App for XgApp {
         if !self.ui_scroll_style_done {
             self.ui_scroll_style_done = true;
             let mut style = (*ctx.style()).clone();
+            // 全局深色主题 (John 2026-08-13: ☰ 菜单要深色和 transport 一致)
+            // 注意: 底部状态栏/钢琴盘有显式浅色 frame (已在下方面板里保持), 不受影响.
+            let mut v = egui::Visuals::dark();
+            // 菜单/弹窗背景 = 深蓝灰 (呼应 Channel View / 顶栏 #1f2f45)
+            v.panel_fill = egui::Color32::from_rgb(0x1f, 0x2f, 0x45);
+            v.window_fill = egui::Color32::from_rgb(0x1a, 0x29, 0x3d);
+            // 按钮文字/正文 = 浅色
+            v.widgets.inactive.fg_stroke.color = egui::Color32::from_rgb(0xd5, 0xdc, 0xe6);
+            v.widgets.hovered.fg_stroke.color = egui::Color32::from_rgb(0xff, 0xff, 0xff);
+            v.widgets.active.fg_stroke.color = egui::Color32::from_rgb(0xff, 0xff, 0xff);
+            // 不设 override_text_color: 它会覆盖所有显式 RichText color (标题白/count 亮金)
+            v.selection.bg_fill = egui::Color32::from_rgb(0x2b, 0x43, 0x63);
+            style.visuals = v;
             // floating 滚动条不占布局 → 标尺/琴键/网格同宽, bar 竖线上下对齐。
             // 用 floating.allocated_width + 高对比 + 半透明常显, 兼顾"可见可拖"。
             style.spacing.scroll.floating = true;
@@ -1982,8 +2000,18 @@ impl eframe::App for XgApp {
             self.last_play_frame_ms = 0.0;
         }
 
-        // 顶栏
-        egui::TopBottomPanel::top("top_bar").show(ctx, |ui| {
+        // 顶栏 (44px 高 + 上下 padding, TopBar 美化 v0.1.23)
+        // frame 自带 inner_margin = 四周对称 padding (顶/底/左/右), 背景同色.
+        // 底色 = Channel View 奇数通道色 #1f2f45 (John 2026-08-13 拍板)
+        let topbar_bg = egui::Color32::from_rgb(0x1f, 0x2f, 0x45);
+        egui::TopBottomPanel::top("top_bar")
+            .frame(
+                egui::Frame::none()
+                    .fill(topbar_bg)
+                    .inner_margin(egui::Margin::symmetric(12.0, 6.0)),
+            )
+            .exact_height(44.0)
+            .show(ctx, |ui| {
                 self.top_bar(ui);
             });
 
@@ -2410,13 +2438,27 @@ impl eframe::App for XgApp {
 
         // 底部 status 栏 (2026-08-09 John 要求): 文件名 / 加载结果 / 日志 —— 顶部塞太多, 状态挪底部.
         // egui 语义: 先声明的 bottom 面板放最外层/最底 (John 真机验证 v45 顺序正确) → 须在 LCD 之前声明.
-        egui::TopBottomPanel::bottom("bottom_status").show(ctx, |ui| {
-            ui.horizontal(|ui| {
+        // 全局已是深色 → 此栏保持浅色 frame + 深色文字 (John: 底部状态浅色可读)
+        egui::TopBottomPanel::bottom("bottom_status")
+            .frame(
+                egui::Frame::none()
+                    .fill(egui::Color32::from_gray(248))
+                    .inner_margin(egui::Margin::symmetric(8.0, 4.0)),
+            )
+            .show(ctx, |ui| {
+                // 浅底 → 文字强制深色
+                let dark_txt = egui::Color32::from_rgb(0x2c, 0x2c, 0x2c);
+                ui.visuals_mut().override_text_color = Some(dark_txt);
+                ui.visuals_mut().widgets.inactive.fg_stroke.color = dark_txt;
+                ui.horizontal(|ui| {
                 // 文件名 (如有)
                 if self.smf_name.is_empty() {
                     ui.label(egui::RichText::new("no file").weak());
                 } else {
-                    ui.label(egui::RichText::new(&self.smf_name).strong());
+                    // ★ 2026-08-13 John: 加载 MIDI 后文件名看不清 — `.strong()` 用 strong_text_color
+                    //   (= widgets.active.text_color, 全局深色主题里是浅色), 绕过 override_text_color(dark_txt),
+                    //   在浅底(248)上浅色→看不清. 修复: 显式 .color(dark_txt) 深色.
+                    ui.label(egui::RichText::new(&self.smf_name).color(dark_txt));
                 }
                 ui.separator();
                 // 加载结果 / 提示
@@ -2454,11 +2496,11 @@ impl eframe::App for XgApp {
             let mut panel = egui::TopBottomPanel::bottom(panel_id)
                 .resizable(open)
                 .default_height(self.piano_height)
-                // 标题行要浅色/白: frame 要显式填 panel 浅色(透明会露深层 → 标题变深)。
-                // 内容区(render_piano_roll)自己铺深色; 深色只作用内容, 标题/左侧 padding 白。
-                // (用户 2026-08-12: 标题底色不要深色, 保持白色)
+                // 标题行与全局深色统一 (2026-08-13 起全局 dark; Piano topbar 不再白)
+                // 注释: 早期 (2026-08-12) 用户要求"标题底色保持白色"; 全局深色化后连同深色.
+                // 内容区(render_piano_roll)自己铺深色; 标题行也深色 → 整体一致.
                 .frame(egui::Frame::default()
-                    .fill(egui::Color32::from_gray(248))
+                    .fill(egui::Color32::from_rgb(0x1f, 0x2f, 0x45))
                     .inner_margin(egui::Margin {
                         left: 0.0,
                         right: 0.0,
@@ -3425,18 +3467,18 @@ mod tests {
     fn bar_beat_tick_conversion() {
         let mut app = XgApp::default();
         app.ppq = 96;
-        // playhead 0 → bar 1, beat 0, tick 0
+        // playhead 0 → bar 1, beat 1, tick 0 (2026-08-13 起 beat 1-based)
         app.playhead_tick = 0;
         let (b, be, t) = app.playhead_bar_beat();
-        assert_eq!((b, be, t), (1, 0, 0));
+        assert_eq!((b, be, t), (1, 1, 0));
         // 第 2 小节第 1 拍: tick = 96*4 = 384
         app.playhead_tick = 96 * 4;
         let (b, be, t) = app.playhead_bar_beat();
-        assert_eq!((b, be, t), (2, 0, 0));
-        // 第 1 小节第 3 拍 (beat idx 2): tick = 96*2 = 192
+        assert_eq!((b, be, t), (2, 1, 0));
+        // 第 1 小节第 3 拍 (beat 3): tick = 96*2 = 192
         app.playhead_tick = 96 * 2;
         let (b, be, t) = app.playhead_bar_beat();
-        assert_eq!((b, be, t), (1, 2, 0));
+        assert_eq!((b, be, t), (1, 3, 0));
     }
 
     #[test]
@@ -3450,6 +3492,42 @@ mod tests {
                 assert!(n.channel == i as u8, "note channel 应等于轨号");
             }
         }
+    }
+
+    #[test]
+    fn pr_notes_no_ghost_after_smf_load() {
+        // John 2026-08-13: 加载 MIDI 后无音符的 channel 仍残留 demo(ghost) notes.
+        // 根因: pr_notes 用"该 view notes 非空"判断 → 空轨回退到默认 demo tracks.
+        // 修复: smf 已加载就只用 SMF 数据, 空轨返回空 (demo 仅限未加载时).
+        // 构造只有一个 channel 有音符的 SMF (ch1 一个音), 其余 15 通道无音符.
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x60]); // 1 track, ppq 96
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        // delta 0 初始 tempo
+        trk.extend_from_slice(&[0x00, 0xFF, 0x51, 0x03, 0x07, 0xA1, 0x20]);
+        // delta 0: NoteOn ch0 pitch 60
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // delta 96: NoteOff ch0
+        trk.extend_from_slice(&[0x81, 0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        assert!(app.load_smf_bytes("ghost.mid", &data).is_ok());
+        // ch1 (有音符) → 应有 1 个 note
+        let n1 = app.pr_notes(1);
+        assert_eq!(n1.len(), 1, "Ch1 应有 SMF 的 1 个音符, got {}", n1.len());
+        // ch2 (无音符) → 必须为空 (ghost 修复)
+        let n2 = app.pr_notes(2);
+        assert!(n2.is_empty(), "Ch2 无音符应返回空, 不得残留 demo: got {}", n2.len());
+        // ch16 也无音符 → 空
+        assert!(app.pr_notes(16).is_empty(), "Ch16 无音符应返回空");
+        // 未加载 SMF 时 (默认) → ch1 应有 demo 音符
+        let app2 = XgApp::default();
+        assert!(!app2.pr_notes(1).is_empty(), "未加载 SMF 时 Ch1 应有 demo 音符");
     }
 
     #[test]
@@ -3703,5 +3781,34 @@ mod tests {
                 assert!(!app.channel_is_effectively_muted(ch), "取消 solo 后 ch{} 恢复", ch + 1);
             }
         }
+    }
+
+    // ---------- TopBar Transport / Record armed (2026-08-13, d11) ----------
+
+    #[test]
+    fn transport_record_armed_toggle_is_pure_ui() {
+        // Record 按钮只切换 armed 视觉态, 不碰播放状态 (John 2026-08-13: 功能预留)
+        let mut app = XgApp::default();
+        assert!(!app.rec_armed, "初始未 armed");
+        assert!(!app.playing, "初始未播放");
+        // 点击 Record: 切换 armed, 但播放状态/playhead 不受影响
+        app.rec_armed = !app.rec_armed;
+        assert!(app.rec_armed, "Record 点击 → armed");
+        assert!(!app.playing, "Record 不改播放状态");
+        assert_eq!(app.playhead_tick, 0, "Record 不改 playhead");
+        // 再点取消
+        app.rec_armed = !app.rec_armed;
+        assert!(!app.rec_armed, "Record 再点 → disarmed");
+    }
+
+    #[test]
+    fn transport_button_kinds_are_distinct() {
+        // TransportButton 各类型存在且新建不 panic (皆可构造)
+        use crate::transport::{Transport, TransportButton};
+        let kinds = [Transport::Play, Transport::Pause, Transport::Stop, Transport::Record];
+        for kind in kinds {
+            let _b = TransportButton::new(kind).active(true).size(24.0);
+        }
+        // active(true) 合成不 panic; 行为由浏览器像素验证覆盖
     }
 }

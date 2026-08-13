@@ -255,10 +255,11 @@ impl XgApp {
     }
 
     /// playhead → (bar, beat, tick) 显示. ppq 四分音符, 4/4 → 每 4 拍 = 1 小节
+    /// ★ 2026-08-13 John: beat 从 1 开始 (1,2,3,4), 不显示 0.
     pub fn playhead_bar_beat(&self) -> (u64, u64, u64) {
         let beat = self.playhead_tick / self.ppq.max(1);
         let bar = beat / 4;
-        let beat_in_bar = beat % 4;
+        let beat_in_bar = (beat % 4) + 1; // 1-based: 1,2,3,4
         let tick_in_beat = self.playhead_tick % self.ppq.max(1);
         (bar + 1, beat_in_bar, tick_in_beat)
     }

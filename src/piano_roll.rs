@@ -39,19 +39,23 @@ fn midi_name(p: i32) -> String {
 
 impl XgApp {
     /// 当前 channel 的音符列表 (SMF 优先, 无则演示 tracks): (start_tick, dur_ticks, pitch, vel)
-    fn pr_notes(&self, ch: u8) -> Vec<(u64, u64, u8, u8)> {
+    /// ★ 2026-08-13 John: 加载 MIDI 后 demo(ghost) note 残留在无音符的 channel —
+    ///   根因 = 用"该 view notes 非空"判断是否用 SMF, 空轨回退 demo → ghost。
+    ///   改为: 只要 smf 已加载(!smf.is_none()) 就只用 SMF, 空轨返回空; demo 仅限未加载时.
+    pub(crate) fn pr_notes(&self, ch: u8) -> Vec<(u64, u64, u8, u8)> {
         let idx = (ch.saturating_sub(1)) as usize;
-        // smf_views 在 Default 时是 16 个空 view (notes 为空, 见 lib.rs 1614),
-        // 所以先检查 notes 非空才用它, 否则回退到默认 pattern tracks
-        if let Some(view) = self.smf_views.get(idx) {
-            if !view.notes.is_empty() {
+        // SMF 已加载 → 仅用 SMF 数据 (空轨就是空, 不回退 demo)
+        if self.smf.is_some() {
+            if let Some(view) = self.smf_views.get(idx) {
                 return view
                     .notes
                     .iter()
                     .map(|n| (n.start_tick, n.dur_ticks, n.pitch, n.vel))
                     .collect();
             }
+            return Vec::new();
         }
+        // 未加载 SMF → 演示 tracks
         if let Some(t) = self.tracks.get(idx) {
             return t
                 .notes
