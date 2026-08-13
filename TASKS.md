@@ -10,6 +10,14 @@
 
 (TopBar 美化 v0.1.23 完成待 John 实测验收 — branch feat/topbar-beautify)
 
+本轮累计修复 (John 2026-08-13 反馈, 均待实测):
+- 深色主题全局化: 顶栏 #1f2f45 / ☰菜单 / Params右栏 / Piano Roll 标题行全深色; 底部状态栏保持浅色
+- 标题 "XG Editor" 加粗亮白 (fake-bold 双绘; egui .strong() 只调色不加粗, 默认字体无 bold)
+- Tempo / 4/4 文字深底可读 (显式浅色 #d5dce6)
+- count 固定宽度 {:>3}:{:02}.{:03} 不抖; transport 手绘几何 24px 统一
+- bar ruler 背景铺到 params 面板左缘 (clip_rect.right(), 不露 3px 空隙)
+- piano roll ghost-note 修复: SMF 加载后空 channel 不再残留 demo (pr_notes 按 smf.is_some 分流, +100/100 回归测试锁死)
+
 ## 待办池 (Backlog)
 
 - [ ] **PolySyPd (bank000/pgm091) 缺 icon** —— 未定事项,等 John 回家真机 MU90 确认回显再定:
