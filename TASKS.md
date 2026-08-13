@@ -8,7 +8,7 @@
 
 ## 当前进行中
 
-(空 — 单源化重构已完成验收,当前在 feat/part-single-source 分支未合并/发布)
+(空 — Channel View mute/solo 已完成已发布, 下一大项待定)
 
 ## 待办池 (Backlog)
 
@@ -17,6 +17,7 @@
       方案待定: (a) FALLBACK 归到合成 pad 图标, (b) 专门画 16x16 图标。2026-08-12 John 拍板先记录、暂不动。
 - [ ] 右栏 params「Rev: Hall | Cho: Chorus1 | Var: off」效果器行 —— 系统级效果(Rev/Cho 全局, Var 偏系统), 待并入 SystemFx 数据源(单源化后续)
 - [ ] Cutoff/Reso(音色编辑参数)—— 已决定不进 part(留全局), 未来可考虑独立「音色编辑器」分区
+- [ ] PlayView 复用 mute/solo 状态(当前只在 Channel View 加按钮; 播放/PlayView 输出已受 dispatch 过滤影响)
 - [ ] 「小问题」清单第二轮(用户/自己再收集)
 - [ ] `docs/cloudflare-pages-deploy.md` —— 历史调研文档,确认要不要留(可删)
 - [ ] `STATUS_CHECK.md` —— 一次性状态核对文档,已过时,可删
@@ -24,6 +25,13 @@
 
 ## 已完成 (历史)
 
+- [x] **Channel View per-channel Mute/Solo (2026-08-13, feat/channel-mute-solo, merged main d863645 → Pages v0.1.22-d863645)**:
+  - 每行 gutter 加 M/S 按钮 (ChNN 名 与 电平表 之间, John 定案; M 红 / S 琥珀, custom widget `src/ms_button.rs`)
+  - 播放输出层过滤 `dispatch_play_events`: 静音通道事件不发 MIDI; mute/solo 触发明细清音 (All Sound/Notes Off)
+  - 语义: Mute 优先 Solo; 任一 solo → 非 solo 通道全静音; 不持久化; mute 后电平表归零 (demo+SMF 双路径)
+  - 测试 97/97 绿 (+6); 浏览器像素验证 (M 红/电平归零/S 琥珀/多 solo) via scripts/verify_channel_mute_solo.py + verify_solo_buttons.py
+  - 踩坑: egui `ui.put(custom widget)` 与长生命周期 painter 冲突 → painter 分段作用域获取
+  - ✅ John 实测通过 → merge + push → Pages 部署验证 (APP_VERSION hash 注入成功, wasm 200)
 - [x] **Part 状态单源化重构 (2026-08-12, feat/part-single-source, 待验收合并)**:
   - 新增 `src/part.rs`: PartState(32 part × voice/bank/prog/8混音参数) + SystemFx(Rev/Cho/Var 类型)
   - XgApp 增 `parts[32]`; LCD/PlayView/ChannelView/params 面板统一从 parts 读
