@@ -24,6 +24,7 @@ pub use play_view::CentralView;
 
 pub mod starfield;
 pub mod panels;
+pub mod topbar;
 pub mod transport;
 
 /// 异步延时 (低精度, 用于 SysEx 请求间隔). wasm: 用定时器; native: 线程 sleep.
