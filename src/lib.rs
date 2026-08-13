@@ -3467,18 +3467,18 @@ mod tests {
     fn bar_beat_tick_conversion() {
         let mut app = XgApp::default();
         app.ppq = 96;
-        // playhead 0 → bar 1, beat 0, tick 0
+        // playhead 0 → bar 1, beat 1, tick 0 (2026-08-13 起 beat 1-based)
         app.playhead_tick = 0;
         let (b, be, t) = app.playhead_bar_beat();
-        assert_eq!((b, be, t), (1, 0, 0));
+        assert_eq!((b, be, t), (1, 1, 0));
         // 第 2 小节第 1 拍: tick = 96*4 = 384
         app.playhead_tick = 96 * 4;
         let (b, be, t) = app.playhead_bar_beat();
-        assert_eq!((b, be, t), (2, 0, 0));
-        // 第 1 小节第 3 拍 (beat idx 2): tick = 96*2 = 192
+        assert_eq!((b, be, t), (2, 1, 0));
+        // 第 1 小节第 3 拍 (beat 3): tick = 96*2 = 192
         app.playhead_tick = 96 * 2;
         let (b, be, t) = app.playhead_bar_beat();
-        assert_eq!((b, be, t), (1, 2, 0));
+        assert_eq!((b, be, t), (1, 3, 0));
     }
 
     #[test]

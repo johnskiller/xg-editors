@@ -103,8 +103,9 @@ impl XgApp {
 
             // ============ 播放 count (bar:beat:tick) 组件化 + 字体放大 + 开发者选色 ============
             let bb = self.playhead_bar_beat();
+            // ★ 2026-08-13 John: beat 一位数 (不用 :02 两位); bar 保 {3} 右对齐, tick {:03} 三位
             ui.label(
-                egui::RichText::new(format!("{:>3}:{:02}.{:03}", bb.0, bb.1, bb.2))
+                egui::RichText::new(format!("{:>3}:{}.{:03}", bb.0, bb.1, bb.2))
                     .size(18.0)
                     .monospace()
                     .color(egui::Color32::from_rgb(0xff, 0xc6, 0x4d)), // 亮金 (深底 #1f2f45 可读)
