@@ -107,10 +107,11 @@ impl XgApp {
             ui.separator();
 
             // ============ 连接状态 (精简色点 + 文本, 保留顶栏) ============
+            // ■ (U+25A0)/○ (U+25CB) 在 emoji-icon-font 有覆盖 (● U+25CF 缺失会 tofu)
             if self.midi_connected {
-                ui.colored_label(egui::Color32::from_rgb(0x2e, 0xcc, 0x40), "\u{25CF} Connected");
+                ui.colored_label(egui::Color32::from_rgb(0x1e, 0x8a, 0x3e), "\u{25A0} Connected");
             } else {
-                ui.colored_label(egui::Color32::GRAY, "\u{25CB} Not connected");
+                ui.colored_label(egui::Color32::from_rgb(0x88, 0x88, 0x88), "\u{25CB} Not connected");
             }
             // 已加载 SMF 名 (若有, 尾部常驻显示)
             if !self.smf_name.is_empty() {

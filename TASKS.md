@@ -8,7 +8,7 @@
 
 ## 当前进行中
 
-(空 — Channel View mute/solo 已完成已发布, 下一大项待定)
+(TopBar 美化 v0.1.23 完成待 John 实测验收 — branch feat/topbar-beautify)
 
 ## 待办池 (Backlog)
 
