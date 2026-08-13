@@ -11,8 +11,12 @@ impl XgApp {
     /// 结构: [☰ Menu] | 标题版本 | Tempo 拍号 | 播放 count | Transport | 连接状态 .
     /// 调试/设置控件收进 ☰ 菜单 (File / MIDI Setup / Tools); 顶栏只留高频项.
     pub fn top_bar(&mut self, ui: &mut egui::Ui) {
+        // 顶栏独立底色 (对比中央区, 视觉分层; 浅色主题下的柔和深蓝灰)
+        let bar_bg = egui::Color32::from_rgb(0xf0, 0xf3, 0xf7);
+        ui.painter().rect_filled(ui.max_rect(), 0.0, bar_bg);
         ui.horizontal(|ui| {
-            // ============ [☰] Menu icon + 分层下拉 ============
+            // 内容上再加一层半透明白底网格感 — 用等宽边框分隔顶栏与内容
+            ui.spacing_mut().item_spacing.x = 8.0;
             ui.menu_button("\u{2630}", |ui| {
                 // ── File ──
                 ui.menu_button("File", |ui| {
@@ -59,7 +63,7 @@ impl XgApp {
             // ============ 播放 count (bar:beat:tick) 组件化 + 字体放大 + 开发者选色 ============
             let bb = self.playhead_bar_beat();
             ui.label(
-                egui::RichText::new(format!("{:>3}:{:02}.{:02}", bb.0, bb.1, bb.2))
+                egui::RichText::new(format!("{:>3}:{:02}.{:03}", bb.0, bb.1, bb.2))
                     .size(18.0)
                     .monospace()
                     .color(egui::Color32::from_rgb(0xe6, 0x9d, 0x1f)), // 深金 (浅色主题可读)
