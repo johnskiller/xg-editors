@@ -571,16 +571,25 @@ impl XgApp {
                             egui::pos2(c_right, (y0 + row_h).min(content_bottom)),
                         );
                     // 该行显示数据 (SMF: 16 ch, 音色/电平来自 live_*; 否则 tracks)
-                    let (row_name, row_voice, row_level): (String, String, f32) = if self.smf.is_some() {
+                    // Mute/Solo 静音的通道电平强制 0 (John 2026-08-13: mute 后电平表归零)
+                    let row_level_raw = if self.smf.is_some() {
+                        self.live_levels.get(i).copied().unwrap_or(0.0)
+                    } else {
+                        match self.tracks.get(i) {
+                            Some(t) => t.level,
+                            None => 0.0,
+                        }
+                    };
+                    let row_level: f32 = if self.channel_is_effectively_muted(i) { 0.0 } else { row_level_raw };
+                    let (row_name, row_voice): (String, String) = if self.smf.is_some() {
                         (
                             format!("Ch{:02}", i + 1),
                             self.voice_name_for_channel(i),  // 单源化: 从 parts 派生
-                            self.live_levels.get(i).copied().unwrap_or(0.0),
                         )
                     } else {
                         match self.tracks.get(i) {
-                            Some(t) => (t.name.clone(), t.voice.clone(), t.level),
-                            None => (format!("Track {}", i + 1), String::new(), 0.0),
+                            Some(t) => (t.name.clone(), t.voice.clone()),
+                            None => (format!("Track {}", i + 1), String::new()),
                         }
                     };
                     // 行背景色: 明显交错的深浅蓝灰, 每个channel一条可辨(John 要求)
