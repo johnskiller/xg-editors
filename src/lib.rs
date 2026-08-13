@@ -24,6 +24,7 @@ pub use play_view::CentralView;
 
 pub mod starfield;
 pub mod panels;
+pub mod transport;
 
 /// 异步延时 (低精度, 用于 SysEx 请求间隔). wasm: 用定时器; native: 线程 sleep.
 /// 注意: wasm 下阻塞主线程的 busy-wait 会卡 UI, 这里用真正的 async 延时 (Promise timer)。
@@ -670,6 +671,8 @@ pub struct XgApp {
     pub channel_mutes: [bool; 16],
     /// Channel View per-channel Solo (true=独奏; 任一 solo 激活时其他通道当 muted; Mute 优先)
     pub channel_solos: [bool; 16],
+    /// TopBar Record armed (点击红点亮灭; 功能预留不接逻辑, 会话级不持久化)
+    pub rec_armed: bool,
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -1734,6 +1737,7 @@ impl Default for XgApp {
             live_master_vol: 1.0,
             channel_mutes: [false; 16],
             channel_solos: [false; 16],
+            rec_armed: false,
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -1982,8 +1986,10 @@ impl eframe::App for XgApp {
             self.last_play_frame_ms = 0.0;
         }
 
-        // 顶栏
-        egui::TopBottomPanel::top("top_bar").show(ctx, |ui| {
+        // 顶栏 (44px 高, TopBar 美化 v0.1.23)
+        egui::TopBottomPanel::top("top_bar")
+            .exact_height(44.0)
+            .show(ctx, |ui| {
                 self.top_bar(ui);
             });
 
@@ -3702,6 +3708,37 @@ mod tests {
             if ch != 7 {
                 assert!(!app.channel_is_effectively_muted(ch), "取消 solo 后 ch{} 恢复", ch + 1);
             }
+        }
+    }
+
+    // ---------- TopBar Transport / Record armed (2026-08-13, d11) ----------
+
+    #[test]
+    fn transport_record_armed_toggle_is_pure_ui() {
+        // Record 按钮只切换 armed 视觉态, 不碰播放状态 (John 2026-08-13: 功能预留)
+        let mut app = XgApp::default();
+        assert!(!app.rec_armed, "初始未 armed");
+        assert!(!app.playing, "初始未播放");
+        // 点击 Record: 切换 armed, 但播放状态/playhead 不受影响
+        app.rec_armed = !app.rec_armed;
+        assert!(app.rec_armed, "Record 点击 → armed");
+        assert!(!app.playing, "Record 不改播放状态");
+        assert_eq!(app.playhead_tick, 0, "Record 不改 playhead");
+        // 再点取消
+        app.rec_armed = !app.rec_armed;
+        assert!(!app.rec_armed, "Record 再点 → disarmed");
+    }
+
+    #[test]
+    fn transport_button_glyphs_are_distinct() {
+        // TransportButton 各类型映射到不同字形 (不重复)
+        use crate::transport::{Transport, TransportButton};
+        let mut seen = std::collections::HashSet::new();
+        for kind in [Transport::Play, Transport::Pause, Transport::Stop, Transport::Record] {
+            let b = TransportButton::new(kind);
+            let g = b.glyph();
+            assert!(!g.is_empty(), "{} 不能是空字形", kind as u8);
+            assert!(seen.insert(g.to_string()), "Transport 字形不应重复: {g}");
         }
     }
 }
