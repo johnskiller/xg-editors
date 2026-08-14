@@ -967,6 +967,42 @@ fn sysex_kind(data: &[u8]) -> &'static str {
     }
 }
 
+/// 常见 CC 控制器短名 (详情行用; 未知 → 空串)
+fn cc_short_name(num: u8) -> &'static str {
+    match num {
+        0 => "bank MSB", 1 => "mod", 2 => "breath", 4 => "foot", 5 => "porta",
+        7 => "vol", 10 => "pan", 11 => "expr", 64 => "sustain", 65 => "porta-on",
+        66 => "sostenuto", 67 => "soft", 71 => "reson", 72 => "rel", 73 => "atk",
+        74 => "cutoff", 91 => "reverb", 93 => "chorus", 98 => "NRPN-L", 99 => "NRPN-H",
+        100 => "RPN-L", 101 => "RPN-H", 120 => "all-sound", 121 => "reset-ctrl",
+        123 => "all-notes", 126 => "mono", 127 => "poly",
+        _ => "",
+    }
+}
+
+/// 生成 event list 详情行文本 (2026-08-14: 点击 event 在下方展开详细内容, 同 SYSEX hex 展开)
+/// ch 为 1..16 UI 通道语义; tick 为绝对 tick (从 EventRow.tick).
+fn event_detail_text(ch: u8, kind: &crate::smf::EventKind, tick: u64) -> String {
+    match kind {
+        crate::smf::EventKind::NoteOn { pitch, vel } =>
+            format!("ch{}  tick={}  {} ({})  vel={}", ch, tick,
+                crate::piano_roll::midi_name(*pitch as i32), pitch, vel),
+        crate::smf::EventKind::NoteOff { pitch } =>
+            format!("ch{}  tick={}  {} ({})", ch, tick,
+                crate::piano_roll::midi_name(*pitch as i32), pitch),
+        crate::smf::EventKind::Cc { num, val } => {
+            let name = cc_short_name(*num);
+            if name.is_empty() {
+                format!("ch{}  tick={}  CC{}  val={}", ch, tick, num, val)
+            } else {
+                format!("ch{}  tick={}  CC{} {}  val={}", ch, tick, num, name, val)
+            }
+        }
+        crate::smf::EventKind::Program { program } =>
+            format!("ch{}  tick={}  program={} ({:02X})", ch, tick, program + 1, program),
+    }
+}
+
 impl XgApp {
     /// 每帧收 MIDI input: drain inbox → 喂 part_voice_reader 收集器 → 解析出 (part,msb,lsb,pc) → 查音色名。
     /// 双向通信核心 (John: 读每个 part 的音色; 多输入端口各带来源名, 当前统一喂收集器)。
@@ -2568,8 +2604,22 @@ impl eframe::App for XgApp {
                                             data_txt, font, fg,
                                         );
                                         if resp.clicked() {
-                                            self.event_list_sel = Some(i);
+                                            // 2026-08-14: 点击 toggle (同 SYSEX): 再点已选中的行取消选中
+                                            self.event_list_sel = if self.event_list_sel == Some(i) { None } else { Some(i) };
                                             click_tick = Some(row.tick);
+                                        }
+                                        // 2026-08-14: 选中行 → 下方内联展开详情行 (同 SYSEX hex 展开风格)
+                                        if self.event_list_sel == Some(i) {
+                                            let det_w = ui.max_rect().width();
+                                            let (det_rect, _) = ui.allocate_exact_size(egui::vec2(det_w, row_h), egui::Sense::hover());
+                                            ui.painter().rect_filled(det_rect, 0.0, egui::Color32::from_rgb(0x10, 0x1a, 0x28));
+                                            ui.painter().text(
+                                                egui::pos2(px0 + POS_W + TYPE_W, det_rect.center().y),
+                                                egui::Align2::LEFT_CENTER,
+                                                event_detail_text(ch, &row.kind, row.tick),
+                                                egui::FontId::monospace(9.0),
+                                                egui::Color32::from_rgb(0x8f, 0xb0, 0xd0),
+                                            );
                                         }
                                     }
                                     // 选中行 → 联动 piano roll 滚动到该 tick (让对应音符移入视野)
@@ -3617,6 +3667,24 @@ mod tests {
             "MFG");
         // 不足长度 → SX
         assert_eq!(sysex_kind(&[0xF0]), "SX");
+    }
+
+    #[test]
+    fn event_detail_text_formats_all_kinds() {
+        // 2026-08-14: event list 点击展开详情行的文本格式
+        use crate::smf::EventKind;
+        assert_eq!(event_detail_text(1, &EventKind::NoteOn { pitch: 60, vel: 100 }, 480),
+            "ch1  tick=480  C4 (60)  vel=100");
+        assert_eq!(event_detail_text(10, &EventKind::NoteOff { pitch: 45 }, 960),
+            "ch10  tick=960  A2 (45)");
+        // CC 有名字 → 带名; 无名字 → 不带
+        assert_eq!(event_detail_text(1, &EventKind::Cc { num: 7, val: 100 }, 480),
+            "ch1  tick=480  CC7 vol  val=100");
+        assert_eq!(event_detail_text(2, &EventKind::Cc { num: 17, val: 64 }, 100),
+            "ch2  tick=100  CC17  val=64");
+        // Program: 01 对应 UI 显示 1-based, 十六进制原值
+        assert_eq!(event_detail_text(1, &EventKind::Program { program: 0 }, 0),
+            "ch1  tick=0  program=1 (00)");
     }
 
     #[test]
