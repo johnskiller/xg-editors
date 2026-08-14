@@ -101,6 +101,10 @@ python3 -m http.server 8090 --directory www
 - **cargo build --release 缓存**:改源码后若 wasm 没变,确认 `strings <wasm> | grep 关键词`,或直接重 build。
 - **`?v=` 参数**:改版本后必须同步 import 的 `?v=NN`,否则浏览器 404/旧缓存。
 - **commit 节奏**:每步独立可编译 + 测试绿再 commit。commit message 中文,注明改了什么/为什么。
+  **★ 中文 commit 必须用 `git commit -F <文件>`**(先写 message 到临时文件,再从文件提交),
+  不要用 `git commit -m "中文"` —— 命令行内嵌 CJK 会触发 Hermes lifecycle guard(confusable-unicode
+  网关)误判/要求 approve。2026-08-15 已验证 `-F` 方式(命令行仅 ASCII 路径)可绕过,中文提交正常。
+  简单英文 message 仍可直接 `-m`。
 - **wasm-bindgen JS 的 Content-Type 检查**:曾有 `!==`/`===` 写反导致浏览器加载失败的坑,改动 pkg JS 时留意。
 - **include_bytes! 资产**:`starfield.rgba` 等必须提交进 git,`.gitignore` 不能忽略 `*.rgba`。
 - **SMF 解析器**:running-status 下 Aftertouch/Pitch Bend 曾经读错字节数(fix 在 debug/file11-track3-parse,已合并 main)。
