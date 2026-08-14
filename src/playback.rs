@@ -61,6 +61,16 @@ impl PlayEvent {
         }
     }
 
+    /// Program Change 带显式 tick (mid-file program change: 曲中换音色), 按原曲时间发送
+    pub(crate) fn prog_tick(channel: u8, program: u8, tick: u64) -> Self {
+        Self {
+            tick,
+            bytes: vec![0xC0 | (channel & 0x0f), program & 0x7f],
+            off: false,
+            channel: channel & 0x0f,
+        }
+    }
+
     /// System Exclusive 透传 (2026-08-14): 与通道无关的全局消息.
     /// channel 用 0xFF 哨兵 → dispatch 时绕过 mute/part 路由直接全接口广播.
     pub(crate) fn sysex(data: Vec<u8>, tick: u64) -> Self {
@@ -369,8 +379,16 @@ impl XgApp {
                     }
                 }
             }
-            // 文件 SysEx 透传 (2026-08-14): 与通道无关 → 按原 tick 入队, dispatch 时全接口广播.
-            // 不取模 (SysEx 是 setup, 一旦 tick 到达就发; 循环回绕不该重复触发).
+            // mid-file Program Change: 按原曲 tick 发送 (曲中换音色)
+            // 2026-08-15 修复: 之前只做 tick0 注入, 曲中 PG 全部丢 → SC-55 收不到换音色
+            for track in smf_ref.tracks.iter() {
+                for ev in &track.events {
+                    if let smf::SmfEvent::Program { tick, channel, program } = ev {
+                        let t = (*tick).min(endt); // 不取模, 同 CC
+                        evs.push(PlayEvent::prog_tick(*channel & 0x0f, *program, t));
+                    }
+                }
+            }
             for track in smf_ref.tracks.iter() {
                 for ev in &track.events {
                     if let smf::SmfEvent::SysEx { tick, data } = ev {
@@ -523,6 +541,12 @@ impl XgApp {
             0xC0 => {
                 if let Some(&prog) = ev.bytes.get(1) {
                     self.parts[ch].prog = prog;
+                    self.live_program[ch] = prog;
+                    // 播放中 PC → 同步更新音色名 (LCD/Piano roll 实时显示; 2026-08-15 修复:
+                    // 之前只更新 prog 数字, voice 字符串停在加载时 scan 的值 → LCD 不随曲中换音色)
+                    let name = self.voice_name_for_channel(ch);
+                    self.parts[ch].voice.clone_from(&name);
+                    self.live_voice_names[ch] = name;
                 }
             }
             0x90 => {

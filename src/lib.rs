@@ -3649,6 +3649,45 @@ mod tests {
     }
 
     #[test]
+    fn smf_program_events_flow_into_play_events_with_ticks() {
+        // John 2026-08-15: Africa_55.mid ch1 有 26 条曲中 Program change, SC-55 却始终显示 Piano.
+        // 根因: build_play_events 只做 tick0 注入 (取整个文件最后一条 PC), 曲中 Program 全部丢弃.
+        // 本测试锁定: SMF 的 mid-file Program change 按原曲 tick 进入播放事件表.
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x78]); // 1 track, ppq 120
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        // delta 0: Program ch1 → 0 (Piano), NoteOn ch1 (必须, 否则 smf_end_tick=0)
+        trk.extend_from_slice(&[0x00, 0xC0, 0]);
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // delta 120: Program ch1 → 81 (Sitar) — 曲中换音色
+        trk.extend_from_slice(&[0x78, 0xC0, 81]);
+        // delta 0: NoteOff
+        trk.extend_from_slice(&[0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        let err = app.load_smf_bytes("prog.mid", &data);
+        assert!(err.is_ok(), "SMF 解析失败: {err:?}");
+        app.build_play_events();
+        // 收集 ch1 (index 0) 的 Program 事件
+        let pgs: Vec<(u64, u8)> = app.play_events.iter()
+            .filter(|e| e.bytes.len() == 2 && e.bytes[0] & 0xF0 == 0xC0 && e.channel == 0)
+            .map(|e| (e.tick, e.bytes[1]))
+            .collect();
+        // 期望: 文件 tick0 PG=0, tick120 PG=81 → 均进入播放流
+        assert!(pgs.contains(&(0, 0)), "tick0 PG=0 应存在, got {pgs:?}");
+        assert!(pgs.contains(&(120, 81)), "tick120 PG=81 应存在 (曲中 program change), got {pgs:?}");
+        // 触发顺序: tick120 的 PG 在 tick0 之后 (排序保证)
+        let idx0 = pgs.iter().position(|&(t, _)| t == 0).unwrap();
+        let idx120 = pgs.iter().position(|&(t, _)| t == 120).unwrap();
+        assert!(idx120 > idx0, "曲中 PG 必须排在 tick0 之后, got {pgs:?}");
+    }
+
+    #[test]
     fn sysex_kind_recognizes_roland_gs_xg_universal() {
         // 2026-08-14: sysex_kind 类型识别 — Roland GS / Yamaha XG / Universal / 未知
         // (支撑 SYSEX 折叠区的类型标注; John 有 SC-55 VST 收 Roland GS)
@@ -3790,6 +3829,52 @@ mod tests {
         assert_eq!(app.live_voice_names[9], "StandKit");
         // 电平表初始归零
         assert!(app.live_levels.iter().all(|&l| l == 0.0));
+    }
+
+    #[test]
+    fn playing_program_change_updates_lcd_voice_name() {
+        // John 2026-08-15: 曲中 Program change 已进入播放流 (prog_tick), 播放引擎消费后
+        // LCD 音色名必须跟着换 (parts[ch].voice + live_voice_names). 之前只更新 prog 数字,
+        // voice 字符串停在加载时 scan 的值 → LCD 播放中不变.
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x60]); // 1 track ppq 96
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        trk.extend_from_slice(&[0x00, 0xFF, 0x51, 0x03, 0x0F, 0x42, 0x40]); // tempo
+        // tick0: Program ch1 → 0 (Piano)
+        trk.extend_from_slice(&[0x00, 0xC0, 0]);
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // tick480: Program ch1 → 40 (Violin?) — 曲中换音色
+        trk.extend_from_slice(&[0x83, 0x60, 0xC0, 40]);
+        trk.extend_from_slice(&[0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        let err = app.load_smf_bytes("pgmplay.mid", &data);
+        assert!(err.is_ok(), "SMF 解析失败: {err:?}");
+        // 加载后: parts[0].prog = 文件最后一次 PC (tick480 的 40) → GM program 40=Violin
+        // (smf_views 收集到文件最后一条 program; 与 live_program 同步)
+        // 初始 voice 名 = 40 对应的音色 (应非空且非 GrandPno 若 40 有名字)
+        let v0 = app.parts[0].voice.clone();
+        assert!(!v0.is_empty(), "加载后 parts[0].voice 非空");
+        // 播放消费 tick0 PC=0 → voice 应改为 Piano 区名字 (program 0 → GrandPno)
+        // 构造 PlayEvent 直接喂给 apply_fired_event_to_meter (播放引擎消费路径)
+        let pc0 = crate::playback::PlayEvent::prog(0, 0);
+        app.apply_fired_event_to_meter(&pc0);
+        assert_eq!(app.parts[0].prog, 0, "PC=0 → parts[0].prog=0");
+        assert_eq!(app.live_program[0], 0, "live_program[0]=0");
+        assert_eq!(app.parts[0].voice, "GrandPno", "PC=0 → parts[0].voice=GrandPno");
+        assert_eq!(app.live_voice_names[0], "GrandPno", "live_voice_names[0]=GrandPno");
+        // 播放消费 tick480 PC=40 → voice 应改为 40 对应音色 (且 != GrandPno)
+        let pc40 = crate::playback::PlayEvent::prog(0, 40);
+        app.apply_fired_event_to_meter(&pc40);
+        assert_eq!(app.parts[0].prog, 40);
+        assert_eq!(app.live_program[0], 40);
+        assert_ne!(app.parts[0].voice, "GrandPno", "PC=40 → voice 非 GrandPno");
+        assert_eq!(app.parts[0].voice, app.live_voice_names[0], "voice 与 live_voice_names 一致");
     }
 
     #[test]
