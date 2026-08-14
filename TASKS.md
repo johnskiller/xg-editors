@@ -8,22 +8,13 @@
 
 ## 当前进行中
 
-**分支 `feat/playable-piano-eventlist` (John 2026-08-13 下达, 两大新功能, 未 merge 等实测):**
-- [x] **Playable Piano Roll** (已完成, 等 John 实机验证听感):
-  - 点击黑白琴键 → NoteOn; 再点 → NoteOff (t0=-1 按住不自动 off)
-  - 点击音符 → 采样式短音 (NoteOn, 300ms 自动 off)
-  - `preview_note(ch, pitch, vel, on, t0)` 走 MIDI 输出路由 + Mute/Solo 过滤; native 静默降级
-  - 痛点: 挂音跟踪 `preview_notes[16]`; `expire_preview_notes` 每帧 30ms 清理过期短音
-  - 设计: `reference/playable-piano-eventlist-design.md`
-- [x] **Event List** (已完成, 等 John 实测):
-  - params 面板下部原 PARTS 位置 → 「EVENTS (ch N)」当前 channel 全部 MIDI 事件列表
-  - NoteOn/NoteOff/CC/PG, tick 升序保序 (`smf::event_list_for_channel`), 行样式 monospace
-  - 选中行 → piano roll 滚动到该 tick + 对应音符金色高亮 (联动)
-  - 原 PARTS dump 表移入 CollapsingHeader (收起)
-- 测试: **103/103 绿** (+3: preview 挂音/过期/mute+solo、event_list 过滤排序); wasm 已重建在 :8090
-- 待真机: Web MIDI 连 MU90 点击琴键听发声 (headless 无设备, 状态检测已过)
+**main 已本地 merge (afcae82, 2026-08-15, 11 commits 未 push, 等 SC-55 VST 实测后走发版):**
+- `feat/sysex-passthrough` (9 commits): SMF SysEx 透传(按 tick 全接口广播, channel=0xFF 哨兵) + Roland GS 识别 + SYSEX 区滚动/表头对齐/hex 详情/scrollbar
+- `fix/program-change-playback` (2 commits): 曲中 Program Change 按 tick 发送(SC-55/LCD 跟随换音色, 根因之前只 tick0 注入) + LCD 刷新改浮窗可见性驱动(不再绑 Params 右栏)
+- 测试 **111/111 绿**; 待 SC-55 VST 实测(sysEx 透传 + GS reset → Piano1 + 换音色链条已程序验证)
+- 发版流程: bump APP_VERSION + sync ?v= → push main → CI 自动 build wasm + Pages
 
-**上一波 (TopBar 美化 + 渲染修复, 已 merged main f4b129b → Pages 0.1.24):** 已验收 ✅ 见「已完成」
+**上一波已 merged (v0.1.25):** Playable Piano Roll + Event List 已发布 Pages, 见「已完成」
 
 ## 待办池 (Backlog)
 
@@ -33,6 +24,8 @@
 - [ ] 右栏 params「Rev: Hall | Cho: Chorus1 | Var: off」效果器行 —— 系统级效果(Rev/Cho 全局, Var 偏系统), 待并入 SystemFx 数据源(单源化后续)
 - [ ] Cutoff/Reso(音色编辑参数)—— 已决定不进 part(留全局), 未来可考虑独立「音色编辑器」分区
 - [ ] PlayView 复用 mute/solo 状态(当前只在 Channel View 加按钮; 播放/PlayView 输出已受 dispatch 过滤影响)
+- [ ] (暂缓, John 2026-08-15 拍板) **SysEx 列表点击/按钮发送** —— 不加: 目前仅显示 RAW hex, 用户无法判断内容;
+      等做了 SysEx 编辑 或 把 raw hex 解码成 event list 式可读信息 再做。播放时已全量透传, 手动发送需求弱。
 - [ ] Event List 增强 (后续): PG/CC 行点击也可选听; playhead 播放行高亮; 行内容编辑(为编辑功能铺路)
 - [ ] 「小问题」清单第二轮(用户/自己再收集)
 - [ ] `docs/cloudflare-pages-deploy.md` —— 历史调研文档,确认要不要留(可删)
