@@ -679,6 +679,8 @@ pub struct XgApp {
     pub preview_notes: Vec<std::collections::BTreeMap<u8, (u8, f64)>>,
     /// Event List: 选中行索引 (指向过滤+排序后的当前 channel 事件 vec); None=未选中
     pub event_list_sel: Option<usize>,
+    /// SysEx 折叠区 (2026-08-14): 展开查看 hex 的条目索引 (未展开=该行为 None 或折叠)
+    pub sysex_expanded: Option<usize>,
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -930,6 +932,75 @@ fn rail_triangle_ui(ui: &mut egui::Ui, rect: egui::Rect, id: &str, glyph: &str) 
 /// 十六进制显示 SysEx 消息 (UI 用, 无硬件也可见)
 fn format_hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{:02X} ", b)).collect::<String>().trim().to_string()
+}
+
+/// 识别 SysEx 常见类型 (事件列表/折叠区显示用; 未知 → "SX")
+/// data 含起始 F0/F7. 规则参考 sysex.rs (XG: F0 43 [device] [addr3..] ...)
+fn sysex_kind(data: &[u8]) -> &'static str {
+    // data[0]==F0, data[1]==0x43 → Yamaha XG 系统专属
+    if data.len() >= 3 && data[0] == 0xF0 && data[1] == 0x43 {
+        match data[2] & 0xF0 {
+            0x00 => "XG bulk",   // 0n bulk dump
+            0x10 => "XG param",  // 1n parameter change
+            0x20 => "XG dump-req",
+            0x30 => "XG param-req",
+            _ => "XG",
+        }
+    } else if data.len() >= 5 && data[0] == 0xF0 && data[1] == 0x41 {
+        // Roland GS: F0 41 <device> 42 <cmd>... — data[2]=device, data[3]=42(GS 标志), data[4]=cmd.
+        // cmd: 12=DT1 参数变更, 11=RQ1 请求, 42=GS system reset
+        match data[4] {
+            0x12 => "Roland GS param",   // DT1
+            0x11 => "Roland GS req",     // RQ1
+            0x42 => "Roland GS reset",   // GS system reset
+            _ => "Roland",
+        }
+    } else if data.len() >= 3 && data[0] == 0xF0 {
+        // 通用厂商: F0 7E = 通用系统实时(universal), F0 7F = 通用非实时
+        match data[1] {
+            0x7E => "GM/Universal",
+            0x7F => "Universal",
+            _ => "MFG",
+        }
+    } else {
+        "SX"
+    }
+}
+
+/// 常见 CC 控制器短名 (详情行用; 未知 → 空串)
+fn cc_short_name(num: u8) -> &'static str {
+    match num {
+        0 => "bank MSB", 1 => "mod", 2 => "breath", 4 => "foot", 5 => "porta",
+        7 => "vol", 10 => "pan", 11 => "expr", 64 => "sustain", 65 => "porta-on",
+        66 => "sostenuto", 67 => "soft", 71 => "reson", 72 => "rel", 73 => "atk",
+        74 => "cutoff", 91 => "reverb", 93 => "chorus", 98 => "NRPN-L", 99 => "NRPN-H",
+        100 => "RPN-L", 101 => "RPN-H", 120 => "all-sound", 121 => "reset-ctrl",
+        123 => "all-notes", 126 => "mono", 127 => "poly",
+        _ => "",
+    }
+}
+
+/// 生成 event list 详情行文本 (2026-08-14: 点击 event 在下方展开详细内容, 同 SYSEX hex 展开)
+/// ch 为 1..16 UI 通道语义; tick 为绝对 tick (从 EventRow.tick).
+fn event_detail_text(ch: u8, kind: &crate::smf::EventKind, tick: u64) -> String {
+    match kind {
+        crate::smf::EventKind::NoteOn { pitch, vel } =>
+            format!("ch{}  tick={}  {} ({})  vel={}", ch, tick,
+                crate::piano_roll::midi_name(*pitch as i32), pitch, vel),
+        crate::smf::EventKind::NoteOff { pitch } =>
+            format!("ch{}  tick={}  {} ({})", ch, tick,
+                crate::piano_roll::midi_name(*pitch as i32), pitch),
+        crate::smf::EventKind::Cc { num, val } => {
+            let name = cc_short_name(*num);
+            if name.is_empty() {
+                format!("ch{}  tick={}  CC{}  val={}", ch, tick, num, val)
+            } else {
+                format!("ch{}  tick={}  CC{} {}  val={}", ch, tick, num, name, val)
+            }
+        }
+        crate::smf::EventKind::Program { program } =>
+            format!("ch{}  tick={}  program={} ({:02X})", ch, tick, program + 1, program),
+    }
 }
 
 impl XgApp {
@@ -1746,6 +1817,7 @@ impl Default for XgApp {
             rec_armed: false,
             preview_notes: (0..16).map(|_| std::collections::BTreeMap::new()).collect(),
             event_list_sel: None,
+            sysex_expanded: None,
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -2155,8 +2227,6 @@ impl eframe::App for XgApp {
                                         ui.selectable_value(&mut self.cur_part, p, format!("{p:02}{sec}{ch:02} Part {p}"));
                                     }
                                 });
-                            // 与原 LCD 下拉一致: show_ui 后无条件重绘 LCD (lcd_dirty guard 控制纹理上传)
-                            self.update_lcd_params();
                             ui.label(format!("·  {}  ▶{:03}▶{:03}", part_voice, part_bank, part_prog));
                         });
                         ui.separator();
@@ -2437,7 +2507,7 @@ impl eframe::App for XgApp {
                                 let bar = beat / 4 + 1;
                                 let beat_in_bar = (beat % 4) + 1;
                                 let tick_in_beat = tick % ppq;
-                                format!("{:>3}:{}:{:03}", bar, beat_in_bar, tick_in_beat)
+                                format!("{}:{}:{:03}", bar, beat_in_bar, tick_in_beat)
                             };
                             ui.horizontal(|ui| {
                                 ui.monospace(egui::RichText::new(format!("EVENTS (ch {ch})")).strong().size(11.0));
@@ -2532,8 +2602,22 @@ impl eframe::App for XgApp {
                                             data_txt, font, fg,
                                         );
                                         if resp.clicked() {
-                                            self.event_list_sel = Some(i);
+                                            // 2026-08-14: 点击 toggle (同 SYSEX): 再点已选中的行取消选中
+                                            self.event_list_sel = if self.event_list_sel == Some(i) { None } else { Some(i) };
                                             click_tick = Some(row.tick);
+                                        }
+                                        // 2026-08-14: 选中行 → 下方内联展开详情行 (同 SYSEX hex 展开风格; 从 pos 列最左 px0 起, 占满全行)
+                                        if self.event_list_sel == Some(i) {
+                                            let det_w = ui.max_rect().width();
+                                            let (det_rect, _) = ui.allocate_exact_size(egui::vec2(det_w, row_h), egui::Sense::hover());
+                                            ui.painter().rect_filled(det_rect, 0.0, egui::Color32::from_rgb(0x10, 0x1a, 0x28));
+                                            ui.painter().text(
+                                                egui::pos2(px0, det_rect.center().y),
+                                                egui::Align2::LEFT_CENTER,
+                                                event_detail_text(ch, &row.kind, row.tick),
+                                                egui::FontId::monospace(9.0),
+                                                egui::Color32::from_rgb(0x8f, 0xb0, 0xd0),
+                                            );
                                         }
                                     }
                                     // 选中行 → 联动 piano roll 滚动到该 tick (让对应音符移入视野)
@@ -2563,6 +2647,85 @@ impl eframe::App for XgApp {
                                             }
                                         }
                                     });
+                                }
+                            });
+                        // ===== SysEx 折叠区 (2026-08-14 方案2: 与通道无关 → 独立全局视角) =====
+                        // 文件里的 SysEx 全部列出 (不分 ch), 供查看/核对播放透传
+                        // 2026-08-14 三改: pos 不再右对齐补空格 (bar {:>3} 会产生 1-2 个前导空格,
+                        // 视觉上 bar/beat/tick 比表头 "pos" 空两格 → 用户反馈"没对齐, 前面空了两格").
+                        // 与 event list 表头/数据左对齐一致.
+                        ui.separator();
+                        let sx_rows = self.smf.as_ref().map(crate::smf::sysex_list).unwrap_or_default();
+                        let sx_pos_text = |tick: u64| -> String {
+                            let ppq = self.ppq.max(1) as u64;
+                            let beat = tick / ppq;
+                            let bar = beat / 4 + 1;
+                            let beat_in_bar = (beat % 4) + 1;
+                            let tick_in_beat = tick % ppq;
+                            format!("{}:{}:{:03}", bar, beat_in_bar, tick_in_beat)
+                        };
+                        egui::CollapsingHeader::new(format!("SYSEX ({})", sx_rows.len()))
+                            .id_salt("sysex_collapse")
+                            .default_open(true)
+                            .show(ui, |ui| {
+                                if sx_rows.is_empty() {
+                                    ui.monospace(egui::RichText::new("(no SysEx in this file)").weak().size(10.0));
+                                } else {
+                                    // 列宽 (pos 同宽; len 窄, type 吃满) — 完全照 event list 结构
+                                    const POS_W2: f32 = 86.0;
+                                    const LEN_W2: f32 = 44.0;
+                                    let row_h = 16.0;
+                                    // 表头 (ScrollArea 外, 与数据同 x 基准: max_rect().left()+4)
+                                    let hdr_y = ui.cursor().top();
+                                    let hdr_p = ui.painter();
+                                    let hdr_x = ui.max_rect().left() + 4.0;
+                                    let hdr_col = egui::Color32::from_rgb(0xc9, 0xb9, 0x8a);
+                                    hdr_p.text(egui::pos2(hdr_x, hdr_y), egui::Align2::LEFT_TOP, "pos", egui::FontId::monospace(10.0), hdr_col);
+                                    hdr_p.text(egui::pos2(hdr_x + POS_W2, hdr_y), egui::Align2::LEFT_TOP, "len", egui::FontId::monospace(10.0), hdr_col);
+                                    hdr_p.text(egui::pos2(hdr_x + POS_W2 + LEN_W2, hdr_y), egui::Align2::LEFT_TOP, "type", egui::FontId::monospace(10.0), hdr_col);
+                                    ui.allocate_space(egui::vec2(4.0, 14.0));
+                                    egui::ScrollArea::vertical()
+                                        .id_salt("sysex_list")
+                                        .max_height(240.0)
+                                        .show(ui, |ui| {
+                                            let px0 = ui.max_rect().left() + 4.0;
+                                            let mut clicked: Option<usize> = None;
+                                            for (i, sx) in sx_rows.iter().enumerate() {
+                                                let full_w = ui.max_rect().width();
+                                                let (rect, resp) = ui.allocate_exact_size(egui::vec2(full_w, row_h), egui::Sense::click());
+                                                let sel = self.sysex_expanded == Some(i);
+                                                let bg = if sel {
+                                                    egui::Color32::from_rgb(0x2a, 0x3d, 0x58)
+                                                } else if i % 2 == 0 {
+                                                    egui::Color32::from_rgb(0x14, 0x22, 0x32)
+                                                } else {
+                                                    egui::Color32::from_rgb(0x1c, 0x2e, 0x42)
+                                                };
+                                                ui.painter().rect_filled(rect, 0.0, bg);
+                                                if resp.clicked() { clicked = Some(i); }
+                                                let fg = if sel {
+                                                    egui::Color32::from_rgb(0xff, 0xc6, 0x4d)
+                                                } else {
+                                                    egui::Color32::from_rgb(0xcf, 0xd8, 0xe4)
+                                                };
+                                                let font = egui::FontId::monospace(10.0);
+                                                let yc = rect.center().y;
+                                                ui.painter().text(egui::pos2(px0, yc), egui::Align2::LEFT_CENTER, sx_pos_text(sx.tick), font.clone(), fg);
+                                                let len_txt = format!("{}B", sx.data.len());
+                                                ui.painter().text(egui::pos2(px0 + POS_W2 + LEN_W2 - 3.0, yc), egui::Align2::RIGHT_CENTER, len_txt, font.clone(), fg);
+                                                ui.painter().text(egui::pos2(px0 + POS_W2 + LEN_W2, yc), egui::Align2::LEFT_CENTER, sysex_kind(&sx.data), font.clone(), fg);
+                                                // hex 详情行 (展开时 allocate 额外行 → 随内容撑开+滚动)
+                                                if self.sysex_expanded == Some(i) {
+                                                    let (hex_rect, _) = ui.allocate_exact_size(egui::vec2(full_w, row_h), egui::Sense::hover());
+                                                    ui.painter().rect_filled(hex_rect, 0.0, egui::Color32::from_rgb(0x10, 0x1a, 0x28));
+                                                    let hex = sx.data.iter().map(|b| format!("{b:02X}")).collect::<Vec<_>>().join(" ");
+                                                    ui.painter().text(egui::pos2(px0, hex_rect.center().y), egui::Align2::LEFT_CENTER, hex, egui::FontId::monospace(9.0), egui::Color32::from_rgb(0x8f, 0xb0, 0xd0));
+                                                }
+                                            }
+                                            if let Some(i) = clicked {
+                                                self.sysex_expanded = if self.sysex_expanded == Some(i) { None } else { Some(i) };
+                                            }
+                                        });
                                 }
                             });
                     } else {
@@ -2723,6 +2886,10 @@ impl eframe::App for XgApp {
             .resizable(true)
             .collapsible(true)
             .show(ctx, |ui| {
+                // LCD 浮窗打开时每帧刷新像素数据 (数据源 parts[cur_part-1] 随播放/参数实时变).
+                // 2026-08-15 重构: 原来绑在 Params 右栏 2231 每帧顺带重绘 → LCD 是否刷新由
+                // 右栏开关 show_right 错误决定; 现改为由 LCD 浮窗自身可见性驱动 (show_bottom).
+                self.update_lcd_params();
                 ui.horizontal(|ui| {
                     // 16ch / 32ch 显示模式切换
                     let label32 = if self.lcd_32 { "32ch[on]" } else { "32ch[off]" };
@@ -3442,6 +3609,129 @@ mod tests {
     }
 
     #[test]
+    fn smf_sysex_flows_into_play_events_and_broadcasts() {
+        // 2026-08-14: SysEx 透传 — SMF 的 SysEx 进入播放事件表 (channel=0xFF 哨兵),
+        // 原始字节原样保留, dispatch 时绕过 mute/part 路由 (全接口广播).
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x78]); // 1 track, ppq 120
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        // delta 0: XG parameter change SysEx F0 43 10 4C 00 00 00 7F F7
+        trk.extend_from_slice(&[0x00, 0xF0, 8, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x00, 0x7F, 0xF7]);
+        // delta 0: NoteOn ch1 (必须有音符, 否则 smf_end_tick=0 → tick 取模错乱)
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // delta 120: 第二个 SysEx (tick 120)
+        trk.extend_from_slice(&[0x78, 0xF7, 2, 0x41, 0x42]); // F7 continuation
+        // delta 0: NoteOff
+        trk.extend_from_slice(&[0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        let err = app.load_smf_bytes("sx.mid", &data);
+        assert!(err.is_ok(), "SMF 解析失败: {err:?}");
+        app.build_play_events();
+        // 事件表含 2 个 SysEx 事件, channel=0xFF, 原始字节保留
+        let sx: Vec<(u64, u8, Vec<u8>)> = app.play_events.iter()
+            .filter(|e| e.channel == 0xFF)
+            .map(|e| (e.tick, e.bytes[0], e.bytes.clone()))
+            .collect();
+        assert_eq!(sx.len(), 2, "应保留 2 个 SysEx, got {sx:?}");
+        assert_eq!(sx[0].0, 0, "第一个 SysEx tick 0, got {sx:?}");
+        assert_eq!(sx[0].1, 0xF0, "第一个 SysEx 以 F0 起始, got {sx:?}");
+        assert_eq!(sx[0].2, vec![0xF0, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x00, 0x7F, 0xF7], "字节完整保留");
+        assert_eq!(sx[1].0, 120, "第二个 SysEx tick 120 (F7 continuation), got {sx:?}");
+        assert_eq!(sx[1].1, 0xF7, "F7 continuation 以 F7 起始, got {sx:?}");
+        // channel==0xFF 哨兵: dispatch 的 SysEx 分支先于 mute 检查 → 无条件广播
+        // (构造器直接验证 channel 值)
+        let ev = crate::playback::PlayEvent::sysex(vec![0xF0, 0x43, 0x10], 0);
+        assert_eq!(ev.channel, 0xFF);
+    }
+
+    #[test]
+    fn smf_program_events_flow_into_play_events_with_ticks() {
+        // John 2026-08-15: Africa_55.mid ch1 有 26 条曲中 Program change, SC-55 却始终显示 Piano.
+        // 根因: build_play_events 只做 tick0 注入 (取整个文件最后一条 PC), 曲中 Program 全部丢弃.
+        // 本测试锁定: SMF 的 mid-file Program change 按原曲 tick 进入播放事件表.
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x78]); // 1 track, ppq 120
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        // delta 0: Program ch1 → 0 (Piano), NoteOn ch1 (必须, 否则 smf_end_tick=0)
+        trk.extend_from_slice(&[0x00, 0xC0, 0]);
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // delta 120: Program ch1 → 81 (Sitar) — 曲中换音色
+        trk.extend_from_slice(&[0x78, 0xC0, 81]);
+        // delta 0: NoteOff
+        trk.extend_from_slice(&[0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        let err = app.load_smf_bytes("prog.mid", &data);
+        assert!(err.is_ok(), "SMF 解析失败: {err:?}");
+        app.build_play_events();
+        // 收集 ch1 (index 0) 的 Program 事件
+        let pgs: Vec<(u64, u8)> = app.play_events.iter()
+            .filter(|e| e.bytes.len() == 2 && e.bytes[0] & 0xF0 == 0xC0 && e.channel == 0)
+            .map(|e| (e.tick, e.bytes[1]))
+            .collect();
+        // 期望: 文件 tick0 PG=0, tick120 PG=81 → 均进入播放流
+        assert!(pgs.contains(&(0, 0)), "tick0 PG=0 应存在, got {pgs:?}");
+        assert!(pgs.contains(&(120, 81)), "tick120 PG=81 应存在 (曲中 program change), got {pgs:?}");
+        // 触发顺序: tick120 的 PG 在 tick0 之后 (排序保证)
+        let idx0 = pgs.iter().position(|&(t, _)| t == 0).unwrap();
+        let idx120 = pgs.iter().position(|&(t, _)| t == 120).unwrap();
+        assert!(idx120 > idx0, "曲中 PG 必须排在 tick0 之后, got {pgs:?}");
+    }
+
+    #[test]
+    fn sysex_kind_recognizes_roland_gs_xg_universal() {
+        // 2026-08-14: sysex_kind 类型识别 — Roland GS / Yamaha XG / Universal / 未知
+        // (支撑 SYSEX 折叠区的类型标注; John 有 SC-55 VST 收 Roland GS)
+        // Roland GS DT1 参数: F0 41 <dev> 42 12 <addr3> <data3> <cksum> F7
+        assert_eq!(sysex_kind(&[0xF0, 0x41, 0x10, 0x42, 0x12, 0x01, 0x24, 0x3A, 0x60, 0xF7]),
+            "Roland GS param");
+        // Roland GS System Reset: F0 41 10 42 12 40 00 7F 00 41 F7
+        //   (DT1 写地址 40 00 7F 触发 GS reset; cmd 仍是 12)
+        assert_eq!(sysex_kind(&[0xF0, 0x41, 0x10, 0x42, 0x12, 0x40, 0x00, 0x7F, 0x00, 0x41, 0xF7]),
+            "Roland GS param");
+        // Yamaha XG param: F0 43 10 4C ... (Master Volume)
+        assert_eq!(sysex_kind(&[0xF0, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x7E, 0x00, 0xF7]),
+            "XG param");
+        // Universal GM System On: F0 7E 7F 09 01 F7
+        assert_eq!(sysex_kind(&[0xF0, 0x7E, 0x7F, 0x09, 0x01, 0xF7]),
+            "GM/Universal");
+        // 未知厂商 → MFG
+        assert_eq!(sysex_kind(&[0xF0, 0x15, 0x01, 0x02, 0xF7]),
+            "MFG");
+        // 不足长度 → SX
+        assert_eq!(sysex_kind(&[0xF0]), "SX");
+    }
+
+    #[test]
+    fn event_detail_text_formats_all_kinds() {
+        // 2026-08-14: event list 点击展开详情行的文本格式
+        use crate::smf::EventKind;
+        assert_eq!(event_detail_text(1, &EventKind::NoteOn { pitch: 60, vel: 100 }, 480),
+            "ch1  tick=480  C4 (60)  vel=100");
+        assert_eq!(event_detail_text(10, &EventKind::NoteOff { pitch: 45 }, 960),
+            "ch10  tick=960  A2 (45)");
+        // CC 有名字 → 带名; 无名字 → 不带
+        assert_eq!(event_detail_text(1, &EventKind::Cc { num: 7, val: 100 }, 480),
+            "ch1  tick=480  CC7 vol  val=100");
+        assert_eq!(event_detail_text(2, &EventKind::Cc { num: 17, val: 64 }, 100),
+            "ch2  tick=100  CC17  val=64");
+        // Program: 01 对应 UI 显示 1-based, 十六进制原值
+        assert_eq!(event_detail_text(1, &EventKind::Program { program: 0 }, 0),
+            "ch1  tick=0  program=1 (00)");
+    }
+
+    #[test]
     fn notes_active_at_detects_currently_sounding() {
         // kill_current_notes 的核心算法: 给定 playhead, 找出此刻还在响的 (ch,pitch)
         // 注意: 需按 tick 升序传入 (build_play_events 已排序, 这里手动排)
@@ -3541,6 +3831,52 @@ mod tests {
         assert_eq!(app.live_voice_names[9], "StandKit");
         // 电平表初始归零
         assert!(app.live_levels.iter().all(|&l| l == 0.0));
+    }
+
+    #[test]
+    fn playing_program_change_updates_lcd_voice_name() {
+        // John 2026-08-15: 曲中 Program change 已进入播放流 (prog_tick), 播放引擎消费后
+        // LCD 音色名必须跟着换 (parts[ch].voice + live_voice_names). 之前只更新 prog 数字,
+        // voice 字符串停在加载时 scan 的值 → LCD 播放中不变.
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x60]); // 1 track ppq 96
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        trk.extend_from_slice(&[0x00, 0xFF, 0x51, 0x03, 0x0F, 0x42, 0x40]); // tempo
+        // tick0: Program ch1 → 0 (Piano)
+        trk.extend_from_slice(&[0x00, 0xC0, 0]);
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // tick480: Program ch1 → 40 (Violin?) — 曲中换音色
+        trk.extend_from_slice(&[0x83, 0x60, 0xC0, 40]);
+        trk.extend_from_slice(&[0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        let err = app.load_smf_bytes("pgmplay.mid", &data);
+        assert!(err.is_ok(), "SMF 解析失败: {err:?}");
+        // 加载后: parts[0].prog = 文件最后一次 PC (tick480 的 40) → GM program 40=Violin
+        // (smf_views 收集到文件最后一条 program; 与 live_program 同步)
+        // 初始 voice 名 = 40 对应的音色 (应非空且非 GrandPno 若 40 有名字)
+        let v0 = app.parts[0].voice.clone();
+        assert!(!v0.is_empty(), "加载后 parts[0].voice 非空");
+        // 播放消费 tick0 PC=0 → voice 应改为 Piano 区名字 (program 0 → GrandPno)
+        // 构造 PlayEvent 直接喂给 apply_fired_event_to_meter (播放引擎消费路径)
+        let pc0 = crate::playback::PlayEvent::prog(0, 0);
+        app.apply_fired_event_to_meter(&pc0);
+        assert_eq!(app.parts[0].prog, 0, "PC=0 → parts[0].prog=0");
+        assert_eq!(app.live_program[0], 0, "live_program[0]=0");
+        assert_eq!(app.parts[0].voice, "GrandPno", "PC=0 → parts[0].voice=GrandPno");
+        assert_eq!(app.live_voice_names[0], "GrandPno", "live_voice_names[0]=GrandPno");
+        // 播放消费 tick480 PC=40 → voice 应改为 40 对应音色 (且 != GrandPno)
+        let pc40 = crate::playback::PlayEvent::prog(0, 40);
+        app.apply_fired_event_to_meter(&pc40);
+        assert_eq!(app.parts[0].prog, 40);
+        assert_eq!(app.live_program[0], 40);
+        assert_ne!(app.parts[0].voice, "GrandPno", "PC=40 → voice 非 GrandPno");
+        assert_eq!(app.parts[0].voice, app.live_voice_names[0], "voice 与 live_voice_names 一致");
     }
 
     #[test]
