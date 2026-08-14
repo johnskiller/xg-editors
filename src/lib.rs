@@ -2603,8 +2603,17 @@ impl eframe::App for XgApp {
                             });
                         // ===== SysEx 折叠区 (2026-08-14 方案2: 与通道无关 → 独立全局视角) =====
                         // 文件里的 SysEx 全部列出 (不分 ch), 供查看/核对播放透传
+                        // 2026-08-14 二改: 显示风格与上方 event list 一致 (painter 绝对定位三列 + 斑马纹 + 金色选中 + hex 展开进 data 列)
                         ui.separator();
                         let sx_rows = self.smf.as_ref().map(crate::smf::sysex_list).unwrap_or_default();
+                        let sx_pos_text = |tick: u64| -> String {
+                            let ppq = self.ppq.max(1) as u64;
+                            let beat = tick / ppq;
+                            let bar = beat / 4 + 1;
+                            let beat_in_bar = (beat % 4) + 1;
+                            let tick_in_beat = tick % ppq;
+                            format!("{:>3}:{}:{:03}", bar, beat_in_bar, tick_in_beat)
+                        };
                         egui::CollapsingHeader::new(format!("SYSEX ({})", sx_rows.len()))
                             .id_salt("sysex_collapse")
                             .default_open(true)
@@ -2612,30 +2621,59 @@ impl eframe::App for XgApp {
                                 if sx_rows.is_empty() {
                                     ui.monospace(egui::RichText::new("(no SysEx in this file)").weak().size(10.0));
                                 } else {
-                                    let ppq = self.ppq.max(1) as u64;
-                                    // 2026-08-14: SysEx 常很多(GC 重排/初始化), 加滚动防止看不全
+                                    // 列宽与 event list 对齐 (pos 同宽; 长度列窄, 类型列吃满剩余)
+                                    const POS_W2: f32 = 86.0;
+                                    const LEN_W: f32 = 36.0;
+                                    let hdr_y = ui.cursor().top();
+                                    let hdr_p = ui.painter();
+                                    let hdr_x = ui.max_rect().left() + 4.0;
+                                    let hdr_col = egui::Color32::from_rgb(0xc9, 0xb9, 0x8a); // 金色
+                                    hdr_p.text(egui::pos2(hdr_x, hdr_y), egui::Align2::LEFT_TOP, "pos", egui::FontId::monospace(10.0), hdr_col);
+                                    hdr_p.text(egui::pos2(hdr_x + POS_W2, hdr_y), egui::Align2::LEFT_TOP, "len", egui::FontId::monospace(10.0), hdr_col);
+                                    hdr_p.text(egui::pos2(hdr_x + POS_W2 + LEN_W, hdr_y), egui::Align2::LEFT_TOP, "type", egui::FontId::monospace(10.0), hdr_col);
+                                    ui.allocate_space(egui::vec2(4.0, 14.0));
                                     egui::ScrollArea::vertical().id_salt("sysex_list").max_height(240.0).show(ui, |ui| {
-                                    for (i, sx) in sx_rows.iter().enumerate() {
-                                        let beat = sx.tick / ppq;
-                                        let bar = beat / 4 + 1;
-                                        let beat_in_bar = (beat % 4) + 1;
-                                        let tick_in_beat = sx.tick % ppq;
-                                        let pos = format!("{:>3}:{}:{:03}", bar, beat_in_bar, tick_in_beat);
-                                        let hdr = format!("{}  {:>3}B  {}", pos, sx.data.len(),
-                                            sysex_kind(&sx.data));
-                                        let resp = ui.selectable_label(self.sysex_expanded == Some(i), egui::RichText::new(hdr).monospace().size(10.0));
-                                        if resp.clicked() {
-                                            self.sysex_expanded = if self.sysex_expanded == Some(i) { None } else { Some(i) };
-                                        }
-                                        if self.sysex_expanded == Some(i) {
-                                            // hex 展示, 每行 16 字节换行, 等宽小字
-                                            let hex = sx.data.iter().map(|b| format!("{b:02X}")).collect::<Vec<_>>().join(" ");
-                                            for line in hex.as_bytes().chunks(48) {
-                                                let s: String = String::from_utf8_lossy(line).into_owned();
-                                                ui.monospace(egui::RichText::new(s).weak().size(9.0));
+                                        let row_h = 16.0;
+                                        let px0 = ui.max_rect().left() + 4.0;
+                                        for (i, sx) in sx_rows.iter().enumerate() {
+                                            let full_w = ui.max_rect().width();
+                                            let (rect, resp) = ui.allocate_exact_size(egui::vec2(full_w, row_h), egui::Sense::click());
+                                            let sel = self.sysex_expanded == Some(i);
+                                            let bg = if sel {
+                                                egui::Color32::from_rgb(0x2a, 0x3d, 0x58)
+                                            } else if i % 2 == 0 {
+                                                egui::Color32::from_rgb(0x14, 0x22, 0x32)
+                                            } else {
+                                                egui::Color32::from_rgb(0x1c, 0x2e, 0x42)
+                                            };
+                                            ui.painter().rect_filled(rect, 0.0, bg);
+                                            let fg = if sel {
+                                                egui::Color32::from_rgb(0xff, 0xc6, 0x4d)
+                                            } else {
+                                                egui::Color32::from_rgb(0xcf, 0xd8, 0xe4)
+                                            };
+                                            let font = egui::FontId::monospace(10.0);
+                                            let yc = rect.center().y;
+                                            let kind = sysex_kind(&sx.data);
+                                            // pos 列
+                                            ui.painter().text(egui::pos2(px0, yc), egui::Align2::LEFT_CENTER, sx_pos_text(sx.tick), font.clone(), fg);
+                                            // len 列 (右对齐到列内)
+                                            let len_txt = format!("{}B", sx.data.len());
+                                            ui.painter().text(egui::pos2(px0 + POS_W2 + LEN_W - 4.0, yc), egui::Align2::RIGHT_CENTER, len_txt, font.clone(), fg);
+                                            // type 列
+                                            ui.painter().text(egui::pos2(px0 + POS_W2 + LEN_W, yc), egui::Align2::LEFT_CENTER, kind, font.clone(), fg);
+                                            if resp.clicked() {
+                                                self.sysex_expanded = if self.sysex_expanded == Some(i) { None } else { Some(i) };
+                                            }
+                                            if self.sysex_expanded == Some(i) {
+                                                // hex 展开 (data 列缩进 2 字符, 弱色小字; 与 event list data 列同 x 起点对齐)
+                                                let hex_w = ui.max_rect().width();
+                                                let (hex_rect, _) = ui.allocate_exact_size(egui::vec2(hex_w, row_h), egui::Sense::hover());
+                                                ui.painter().rect_filled(hex_rect, 0.0, egui::Color32::from_rgb(0x10, 0x1a, 0x28));
+                                                let hex = sx.data.iter().map(|b| format!("{b:02X}")).collect::<Vec<_>>().join(" ");
+                                                ui.painter().text(egui::pos2(px0 + POS_W2 + LEN_W, hex_rect.center().y), egui::Align2::LEFT_CENTER, hex, egui::FontId::monospace(9.0), egui::Color32::from_rgb(0x8f, 0xb0, 0xd0));
                                             }
                                         }
-                                    }
                                     });
                                 }
                             });
