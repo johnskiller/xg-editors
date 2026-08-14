@@ -674,6 +674,11 @@ pub struct XgApp {
     pub channel_solos: [bool; 16],
     /// TopBar Record armed (点击红点亮灭; 功能预留不接逻辑, 会话级不持久化)
     pub rec_armed: bool,
+    /// Div 2026-08-13 playable piano roll: 点按发声挂音 (通道 → pitch → (vel, 起声 egui time)).
+    /// 点琴键按住 = NoteOn; 松开/移出 = NoteOff; note 点击 = 采样短音 (起声后 ~300ms 自动 off)。
+    pub preview_notes: Vec<std::collections::BTreeMap<u8, (u8, f64)>>,
+    /// Event List: 选中行索引 (指向过滤+排序后的当前 channel 事件 vec); None=未选中
+    pub event_list_sel: Option<usize>,
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -1739,6 +1744,8 @@ impl Default for XgApp {
             channel_mutes: [false; 16],
             channel_solos: [false; 16],
             rec_armed: false,
+            preview_notes: (0..16).map(|_| std::collections::BTreeMap::new()).collect(),
+            event_list_sel: None,
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -1999,6 +2006,9 @@ impl eframe::App for XgApp {
         } else {
             self.last_play_frame_ms = 0.0;
         }
+        // 采样式预览短音自动 off (30ms 帧循环, ctx.input().time 秒)
+        let now = ctx.input(|i| i.time);
+        self.expire_preview_notes(now);
 
         // 顶栏 (44px 高 + 上下 padding, TopBar 美化 v0.1.23)
         // frame 自带 inner_margin = 四周对称 padding (顶/底/左/右), 背景同色.
@@ -2407,26 +2417,154 @@ impl eframe::App for XgApp {
                             ui.label(egui::RichText::new("SysEx: (drag params to generate)").weak().size(10.0));
                         }
                         ui.label("Rev: Hall | Cho: Chorus1 | Var: off");
-                        // 32-part dump 表 (John 指定位置: 右栏 Rev: Hall 行后, 2026-08-09)
-                        let parsed_n = self.read_parts.iter().filter(|x| x.is_some()).count();
+                        // ===== Event List (2026-08-13 John 指定: 占 params 面板下部原 PARTS 位置) =====
                         ui.separator();
-                        ui.monospace(egui::RichText::new(format!("PARTS  ({parsed_n}/32)")).strong().size(11.0));
-                        if parsed_n == 0 {
-                            ui.monospace(egui::RichText::new("(no data — do panel dump + Capture ON, then Analyze dump)").weak().size(10.0));
+                        // Event List 依赖 SMF 已加载; 无 SMF 时提示
+                        if self.smf.is_none() {
+                            ui.monospace(egui::RichText::new("EVENTS (ch N) — load a .mid").weak().size(11.0));
+                            ui.monospace(egui::RichText::new("(no SMF — event list unavailable)").weak().size(10.0));
                         } else {
-                            ui.monospace("  n  MSB LSB  PC  Name");
-                            egui::ScrollArea::vertical().id_salt("right_parts").max_height(240.0).show(ui, |ui| {
-                                for (i, r) in self.read_parts.iter().enumerate() {
-                                    if let Some((msb, lsb, pc)) = r {
-                                        let name = self.voice_bank.as_ref()
-                                            .and_then(|b| b.find(*msb, *pc, *lsb))
-                                            .map(|v| v.name.clone())
-                                            .unwrap_or_default();
-                                        ui.monospace(format!("{:>2}   {:>3} {:>3} {:>3}  {}", i + 1, msb, lsb, pc, name));
+                            let rows = crate::smf::event_list_for_channel(
+                                self.smf.as_ref().unwrap(), self.cur_pr_channel.saturating_sub(1));
+                            let ch = self.cur_pr_channel;
+                            // 列 x 常量 (与表头 painter 共用; 绝对定位保证列对齐)
+                            const POS_W: f32 = 86.0;   // pos 列宽 (bar:beat:tick 3:1:3 ≈ 78px + 空)
+                            const TYPE_W: f32 = 44.0;  // type 列宽 (ON/OFF/CCnn/PG)
+                            // pos 换算 (与 topbar count 一致: ppq 四分音符, 4/4, 1-based bar:beat:tick)
+                            let ppq = self.ppq.max(1) as u64;
+                            let pos_text = |tick: u64| -> String {
+                                let beat = tick / ppq;
+                                let bar = beat / 4 + 1;
+                                let beat_in_bar = (beat % 4) + 1;
+                                let tick_in_beat = tick % ppq;
+                                format!("{:>3}:{}:{:03}", bar, beat_in_bar, tick_in_beat)
+                            };
+                            ui.horizontal(|ui| {
+                                ui.monospace(egui::RichText::new(format!("EVENTS (ch {ch})")).strong().size(11.0));
+                                ui.monospace(egui::RichText::new(format!("{} rows", rows.len())).weak().size(10.0));
+                            });
+                            // 列头 (金色弱字; painter 定列 x 与行内一致 → 精确对齐)
+                            let hdr_y = ui.cursor().top();
+                            let hdr_p = ui.painter();
+                            let hdr_x = ui.max_rect().left() + 4.0;
+                            let hdr_col = egui::Color32::from_rgb(0xc9, 0xb9, 0x8a); // 金色
+                            hdr_p.text(
+                                egui::pos2(hdr_x, hdr_y),
+                                egui::Align2::LEFT_TOP,
+                                "pos",
+                                egui::FontId::monospace(10.0),
+                                hdr_col,
+                            );
+                            hdr_p.text(
+                                egui::pos2(hdr_x + POS_W, hdr_y),
+                                egui::Align2::LEFT_TOP,
+                                "type",
+                                egui::FontId::monospace(10.0),
+                                hdr_col,
+                            );
+                            hdr_p.text(
+                                egui::pos2(hdr_x + POS_W + TYPE_W, hdr_y),
+                                egui::Align2::LEFT_TOP,
+                                "data",
+                                egui::FontId::monospace(10.0),
+                                hdr_col,
+                            );
+                            ui.allocate_space(egui::vec2(4.0, 14.0));
+                            egui::ScrollArea::vertical()
+                                .id_salt("event_list")
+                                .max_height(260.0)
+                                .show(ui, |ui| {
+                                    // 整行铺满 + painter 定列绝对对齐 (无视字体宽度差)
+                                    let row_h = 16.0;
+                                    let px0 = ui.max_rect().left() + 4.0;
+                                    let mut click_tick: Option<u64> = None;
+                                    for (i, row) in rows.iter().enumerate() {
+                                        let full_w = ui.max_rect().width();
+                                        let (rect, resp) = ui.allocate_exact_size(
+                                            egui::vec2(full_w, row_h), egui::Sense::click());
+                                        let selected = self.event_list_sel == Some(i);
+                                        // 背景: 选中=高亮条 (铺满), 否则偶/奇行条纹微差
+                                        let bg = if selected {
+                                            egui::Color32::from_rgb(0x2a, 0x3d, 0x58)
+                                        } else if i % 2 == 0 {
+                                            egui::Color32::from_rgb(0x14, 0x22, 0x32)
+                                        } else {
+                                            egui::Color32::from_rgb(0x1c, 0x2e, 0x42)
+                                        };
+                                        ui.painter().rect_filled(rect, 0.0, bg);
+                                        // 文本色: 选中=金色, 否则浅灰
+                                        let fg = if selected {
+                                            egui::Color32::from_rgb(0xff, 0xc6, 0x4d)
+                                        } else {
+                                            egui::Color32::from_rgb(0xcf, 0xd8, 0xe4)
+                                        };
+                                        let font = egui::FontId::monospace(10.0);
+                                        let yc = rect.center().y;
+                                        // pos 列
+                                        ui.painter().text(
+                                            egui::pos2(px0, yc), egui::Align2::LEFT_CENTER,
+                                            pos_text(row.tick), font.clone(), fg,
+                                        );
+                                        // type 列
+                                        let type_txt: String = match &row.kind {
+                                            crate::smf::EventKind::NoteOn { .. } => "ON".into(),
+                                            crate::smf::EventKind::NoteOff { .. } => "OFF".into(),
+                                            crate::smf::EventKind::Cc { num, .. } => format!("CC{num}"),
+                                            crate::smf::EventKind::Program { .. } => "PG".into(),
+                                        };
+                                        ui.painter().text(
+                                            egui::pos2(px0 + POS_W, yc), egui::Align2::LEFT_CENTER,
+                                            type_txt, font.clone(), fg,
+                                        );
+                                        // data 列
+                                        let data_txt = match &row.kind {
+                                            crate::smf::EventKind::NoteOn { pitch, vel } =>
+                                                format!("{}  v{}", crate::piano_roll::midi_name(*pitch as i32), vel),
+                                            crate::smf::EventKind::NoteOff { pitch } =>
+                                                crate::piano_roll::midi_name(*pitch as i32),
+                                            crate::smf::EventKind::Cc { val, .. } =>
+                                                val.to_string(),
+                                            crate::smf::EventKind::Program { program } =>
+                                                (program + 1).to_string(),
+                                        };
+                                        ui.painter().text(
+                                            egui::pos2(px0 + POS_W + TYPE_W, yc), egui::Align2::LEFT_CENTER,
+                                            data_txt, font, fg,
+                                        );
+                                        if resp.clicked() {
+                                            self.event_list_sel = Some(i);
+                                            click_tick = Some(row.tick);
+                                        }
                                     }
+                                    // 选中行 → 联动 piano roll 滚动到该 tick (让对应音符移入视野)
+                                    if let Some(t) = click_tick {
+                                        self.pr_scroll_ticks = t.saturating_sub(8);
+                                    }
+                                });
+                        }
+                        // 32-part dump 表折叠 (2026-08-09 原位置; 2026-08-13 移入 CollapsingHeader)
+                        let parsed_n = self.read_parts.iter().filter(|x| x.is_some()).count();
+                        egui::CollapsingHeader::new(format!("PARTS dump ({parsed_n}/32)"))
+                            .id_salt("parts_dump_collapse")
+                            .default_open(false)
+                            .show(ui, |ui| {
+                                if parsed_n == 0 {
+                                    ui.monospace(egui::RichText::new("(no data — panel dump + Analyze)").weak().size(10.0));
+                                } else {
+                                    ui.monospace("  n  MSB LSB  PC  Name");
+                                    egui::ScrollArea::vertical().id_salt("right_parts").max_height(200.0).show(ui, |ui| {
+                                        for (i, r) in self.read_parts.iter().enumerate() {
+                                            if let Some((msb, lsb, pc)) = r {
+                                                let name = self.voice_bank.as_ref()
+                                                    .and_then(|b| b.find(*msb, *pc, *lsb))
+                                                    .map(|v| v.name.clone())
+                                                    .unwrap_or_default();
+                                                ui.monospace(format!("{:>2}   {:>3} {:>3} {:>3}  {}", i + 1, msb, lsb, pc, name));
+                                            }
+                                        }
+                                    });
                                 }
                             });
-                        }
                     } else {
                         let rect = ui.max_rect();
                         if rail_triangle_ui(ui, rect, "right_rail", "<").clicked() {
@@ -3810,5 +3948,102 @@ mod tests {
             let _b = TransportButton::new(kind).active(true).size(24.0);
         }
         // active(true) 合成不 panic; 行为由浏览器像素验证覆盖
+    }
+
+    #[test]
+    fn preview_note_manages_hanging_and_expiry() {
+        // Playable Piano Roll: preview_note(0-based ch) on/off + expire 300ms 短音自动 off
+        let mut app = XgApp::default();
+        // 未 muted → preview on 登记挂音 (ch 0-based → 数组下标同)
+        app.preview_note(0, 60, 100, true, -1.0); // ch0(MIDI ch1) t0=-1: 按住未放
+        assert_eq!(app.preview_notes[0].get(&60), Some(&(100, -1.0)), "ch1 C4 挂音");
+        app.preview_note(0, 60, 100, false, -1.0); // 松开
+        assert!(!app.preview_notes[0].contains_key(&60), "松开后移除");
+
+        // mute 通道不发声 (preview_note 走 channel_is_effectively_muted 过滤)
+        app.channel_mutes[1] = true;
+        app.preview_note(1, 62, 80, true, -1.0);
+        assert!(!app.preview_notes[1].contains_key(&62), "muted 通道不登记挂音");
+        app.channel_mutes[1] = false;
+
+        // 采样式短音: t0=now, 300ms 后 expire 自动 off
+        app.preview_note(3, 64, 90, true, 0.0); // t0=0
+        assert!(app.preview_notes[3].contains_key(&64));
+        // now=0.2 (<0.30) 不过期
+        app.expire_preview_notes(0.2);
+        assert!(app.preview_notes[3].contains_key(&64), "0.2s 未过期");
+        // now=0.5 (>0.30) 过期
+        app.expire_preview_notes(0.5);
+        assert!(!app.preview_notes[3].contains_key(&64), "0.5s 后自动 off");
+
+        // 按住未放 (t0<0) 永不过期
+        app.preview_note(4, 65, 100, true, -1.0);
+        app.expire_preview_notes(999.0);
+        assert!(app.preview_notes[4].contains_key(&65), "t0<0 按住不受 expire 影响");
+    }
+
+    #[test]
+    fn preview_note_respects_solo() {
+        // Solo ch1(0-based) → 其他通道 preview 静默 (与播放一致)
+        let mut app = XgApp::default();
+        app.channel_solos[1] = true; // solo 数组下标1 (MIDI ch2)
+        app.preview_note(0, 60, 100, true, -1.0); // ch0 非 solo → 静默
+        assert!(!app.preview_notes[0].contains_key(&60), "solo ch2 时 ch1 preview 静默");
+        app.preview_note(1, 62, 80, true, -1.0); // ch1 (solo) → 发声
+        assert!(app.preview_notes[1].contains_key(&62), "solo 通道可 preview");
+    }
+
+    #[test]
+    fn preview_note_ui_channel_offsets() {
+        // ★ 回归: UI 选 ch5(1-based) → preview_note 必须发 0-based 4 (0x94), 不能发 5 (0x95 那会串到 MIDI ch6)
+        //   用户 2026-08-14 实测: 选 ch5 渲染正确但点击琴键音色错(串到 ch6) — 根因 preview_note 收了 1-based 没转.
+        //   约定钉死: 调用方(piano_roll)传 0-based; preview_note 直接 PlayEvent::note(ch,..) → 0x90|ch.
+        let app = XgApp::default();
+        // PlayEvent::note 0x90 | ch → ch4→0x94(MIDI ch5), ch5→0x95(MIDI ch6)
+        let ev4 = crate::playback::PlayEvent::note(4, 60, 100, 0, true);
+        let ev5 = crate::playback::PlayEvent::note(5, 60, 100, 0, true);
+        assert_eq!(ev4.bytes[0], 0x94, "UI ch5 → 0x94 (MIDI ch5, 正确)");
+        assert_eq!(ev5.bytes[0], 0x95, "UI ch5 若误传 ch5 → 0x95 (MIDI ch6, 错)");
+        // preview_note 存 preview_notes[idx=ch] — ch0 存在 preview_notes[0]
+        let mut app2 = XgApp::default();
+        app2.preview_note(4, 60, 100, true, -1.0);
+        assert!(app2.preview_notes[4].contains_key(&60), "preview_note(4) 存 preview_notes[4] (0-based)");
+        assert!(!app2.preview_notes[5].contains_key(&60), "绝不该存 index 5 (那是 MIDI ch6)");
+    }
+
+    #[test]
+    fn event_list_filters_and_sorts_by_channel() {
+        // Event List: 只列当前 channel 事件, tick 升序, 同 tick 保序
+        use crate::smf::{Smf, TrackEvents, SmfEvent};
+        let mut trk = Vec::new();
+        // ★ SMF 事件 channel 是 0-based (解析 st&0x0f). 调用方要查真实 MIDI ch5 → 传 4.
+        trk.push(SmfEvent::NoteOn { tick: 0, channel: 4, pitch: 60, vel: 100 });
+        trk.push(SmfEvent::NoteOff { tick: 96, channel: 4, pitch: 60 });
+        trk.push(SmfEvent::NoteOn { tick: 192, channel: 5, pitch: 62, vel: 80 }); // 其他通道(不入)
+        trk.push(SmfEvent::Cc { tick: 48, channel: 4, num: 7, val: 100 });
+        trk.push(SmfEvent::Program { tick: 48, channel: 4, program: 5 });
+        trk.push(SmfEvent::Tempo { tick: 0, us_per_qn: 500_000 }); // 全局(不入)
+        let smf = Smf { format: 1, ntracks: 1, ppq: 96, tracks: vec![TrackEvents { events: trk }], meta_tempo_count: 1, meta_timesig_count: 0 };
+
+        // 查真实 MIDI ch5 → 传 0-based 4
+        let rows = crate::smf::event_list_for_channel(&smf, 4);
+        use crate::smf::EventKind;
+        assert_eq!(rows.len(), 4, "ch5 应 4 事件, got {}", rows.len());
+        assert_eq!(rows[0].tick, 0);
+        assert!(matches!(rows[0].kind, EventKind::NoteOn { pitch: 60, vel: 100 }));
+        assert_eq!(rows[1].tick, 48);
+        assert!(matches!(rows[1].kind, EventKind::Cc { num: 7, val: 100 }));
+        assert_eq!(rows[2].tick, 48);
+        assert!(matches!(rows[2].kind, EventKind::Program { program: 5 }));
+        assert_eq!(rows[3].tick, 96);
+        assert!(matches!(rows[3].kind, EventKind::NoteOff { pitch: 60 }));
+
+        // ch6 (0-based 5) → 1 事件
+        let rows2 = crate::smf::event_list_for_channel(&smf, 5);
+        assert_eq!(rows2.len(), 1, "ch6 应 1 事件");
+        assert!(matches!(rows2[0].kind, EventKind::NoteOn { pitch: 62, vel: 80 }));
+        // 传 1-based 4 (错误用法) 不该命中 ch5 → 0 事件 (钉死 0-based 约定)
+        let rows3 = crate::smf::event_list_for_channel(&smf, 3);
+        assert!(rows3.is_empty(), "传 3(1-based ch4) 不应命中 MIDI ch5");
     }
 }
