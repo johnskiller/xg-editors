@@ -181,6 +181,8 @@ impl XgApp {
                 }
 
                 // ===== 左侧黑白琴键 (0-127, 固定宽) =====
+                // 本帧按下状态收集 (press/release 沿检测在循环后统一做)
+                let mut key_down: Vec<(u8, bool)> = Vec::new();
                 let key_rect = egui::Rect::from_min_max(
                     egui::pos2(c_left, c0),
                     egui::pos2(c_left + KEY_W, c0 + total_h),
@@ -198,21 +200,13 @@ impl XgApp {
                         p.rect_filled(row, 1.0, egui::Color32::from_rgb(0x1a, 0x1a, 0x20));
                     }
                     p.rect_stroke(row, 1.0, egui::Stroke::new(1.0, egui::Color32::from_gray(90)));
-                    // ★★ 2026-08-13 playable: 琴键点击 = 切换发声 (on→off/off→on).
-                    //   简单可预期: 点一下响(短音, t0=now 自动 300ms off), 再点一下静音.
+                    // ★★ 2026-08-13 playable: 琴键交互 = press/release 真实钢琴语义
+                    //   按下 → NoteOn(t0=-1 按住标记, 不自动 off); 松开/滑出 → NoteOff.
+                    //   Sense::click_and_drag 让按下后即使指针移出琴键仍保持 held, 直到松开.
                     let key_id = ui.make_persistent_id(("pr_key_sound", p_));
-                    let kr = ui.interact(row, key_id, egui::Sense::click());
-                    let pitch = p_ as u8;
-                    if kr.clicked() {
-                        let ch0 = (ch % 16) as usize;
-                        let held = self.preview_notes[ch0].contains_key(&pitch);
-                        if held {
-                            self.preview_note(ch, pitch, 100, false, -1.0);
-                        } else {
-                            let now = ui.input(|i| i.time);
-                            self.preview_note(ch, pitch, 100, true, now);
-                        }
-                    }
+                    let kr = ui.interact(row, key_id, egui::Sense::click_and_drag());
+                    // 收集当前帧每个 pitch 的按下状态; 循环结束后统一做沿检测 (避免 borrow/clobber)
+                    key_down.push((p_ as u8, kr.is_pointer_button_down_on()));
                     // C 标注 (画在琴键接近右端, 用户 2026-08-12: 左缘会被窗口/内边距截断, 改右端确保可见)
                     if p_.rem_euclid(12) == 0 {
                         let col = if is_white {
@@ -227,6 +221,27 @@ impl XgApp {
                             egui::FontId::proportional(9.0),
                             col,
                         );
+                    }
+                }
+
+                // press/release 沿检测: 上一帧 held(存在於 preview_notes) vs 本帧 key_down
+                {
+                    let ch0 = (ch % 16) as usize;
+                    // 本帧按下集合
+                    let now_pressed: Vec<u8> = key_down.iter()
+                        .filter(|(_, d)| *d).map(|(p, _)| *p).collect();
+                    // 释放: 上一帧 held 但本帧未按下 (含滑出琴键) → NoteOff
+                    let held_pitches: Vec<u8> = self.preview_notes[ch0].keys().copied().collect();
+                    for p in held_pitches {
+                        if !now_pressed.contains(&p) {
+                            self.preview_note(ch, p, 100, false, -1.0);
+                        }
+                    }
+                    // 按下: 本帧按下但未 held → NoteOn (t0=-1 按住, 不自动 off)
+                    for p in now_pressed {
+                        if !self.preview_notes[ch0].contains_key(&p) {
+                            self.preview_note(ch, p, 100, true, -1.0);
+                        }
                     }
                 }
 
