@@ -2427,34 +2427,110 @@ impl eframe::App for XgApp {
                             let rows = crate::smf::event_list_for_channel(
                                 self.smf.as_ref().unwrap(), self.cur_pr_channel.saturating_sub(1));
                             let ch = self.cur_pr_channel;
+                            // 列 x 常量 (与表头 painter 共用; 绝对定位保证列对齐)
+                            const POS_W: f32 = 86.0;   // pos 列宽 (bar:beat:tick 3:1:3 ≈ 78px + 空)
+                            const TYPE_W: f32 = 44.0;  // type 列宽 (ON/OFF/CCnn/PG)
+                            // pos 换算 (与 topbar count 一致: ppq 四分音符, 4/4, 1-based bar:beat:tick)
+                            let ppq = self.ppq.max(1) as u64;
+                            let pos_text = |tick: u64| -> String {
+                                let beat = tick / ppq;
+                                let bar = beat / 4 + 1;
+                                let beat_in_bar = (beat % 4) + 1;
+                                let tick_in_beat = tick % ppq;
+                                format!("{:>3}:{}:{:03}", bar, beat_in_bar, tick_in_beat)
+                            };
                             ui.horizontal(|ui| {
                                 ui.monospace(egui::RichText::new(format!("EVENTS (ch {ch})")).strong().size(11.0));
                                 ui.monospace(egui::RichText::new(format!("{} rows", rows.len())).weak().size(10.0));
                             });
-                            // 表头
-                            ui.monospace(egui::RichText::new("  tick   type  data").weak().size(10.0));
+                            // 列头 (金色弱字; painter 定列 x 与行内一致 → 精确对齐)
+                            let hdr_y = ui.cursor().top();
+                            let hdr_p = ui.painter();
+                            let hdr_x = ui.max_rect().left() + 4.0;
+                            let hdr_col = egui::Color32::from_rgb(0xc9, 0xb9, 0x8a); // 金色
+                            hdr_p.text(
+                                egui::pos2(hdr_x, hdr_y),
+                                egui::Align2::LEFT_TOP,
+                                "pos",
+                                egui::FontId::monospace(10.0),
+                                hdr_col,
+                            );
+                            hdr_p.text(
+                                egui::pos2(hdr_x + POS_W, hdr_y),
+                                egui::Align2::LEFT_TOP,
+                                "type",
+                                egui::FontId::monospace(10.0),
+                                hdr_col,
+                            );
+                            hdr_p.text(
+                                egui::pos2(hdr_x + POS_W + TYPE_W, hdr_y),
+                                egui::Align2::LEFT_TOP,
+                                "data",
+                                egui::FontId::monospace(10.0),
+                                hdr_col,
+                            );
+                            ui.allocate_space(egui::vec2(4.0, 14.0));
                             egui::ScrollArea::vertical()
                                 .id_salt("event_list")
                                 .max_height(260.0)
                                 .show(ui, |ui| {
+                                    // 整行铺满 + painter 定列绝对对齐 (无视字体宽度差)
+                                    let row_h = 16.0;
+                                    let px0 = ui.max_rect().left() + 4.0;
                                     let mut click_tick: Option<u64> = None;
                                     for (i, row) in rows.iter().enumerate() {
-                                        let text = match &row.kind {
-                                            crate::smf::EventKind::NoteOn { pitch, vel } =>
-                                                format!("{:>6}  ON    {}  v{}", row.tick, crate::piano_roll::midi_name(*pitch as i32), vel),
-                                            crate::smf::EventKind::NoteOff { pitch } =>
-                                                format!("{:>6}  OFF   {}", row.tick, crate::piano_roll::midi_name(*pitch as i32)),
-                                            crate::smf::EventKind::Cc { num, val } =>
-                                                format!("{:>6}  CC{}  {}", row.tick, num, val),
-                                            crate::smf::EventKind::Program { program } =>
-                                                format!("{:>6}  PG  {}", row.tick, program + 1),
-                                        };
+                                        let full_w = ui.max_rect().width();
+                                        let (rect, resp) = ui.allocate_exact_size(
+                                            egui::vec2(full_w, row_h), egui::Sense::click());
                                         let selected = self.event_list_sel == Some(i);
-                                        let resp = if selected {
-                                            ui.selectable_label(true, egui::RichText::new(text).monospace().size(10.0))
+                                        // 背景: 选中=高亮条 (铺满), 否则偶/奇行条纹微差
+                                        let bg = if selected {
+                                            egui::Color32::from_rgb(0x2a, 0x3d, 0x58)
+                                        } else if i % 2 == 0 {
+                                            egui::Color32::from_rgb(0x14, 0x22, 0x32)
                                         } else {
-                                            ui.selectable_label(false, egui::RichText::new(text).monospace().size(10.0))
+                                            egui::Color32::from_rgb(0x1c, 0x2e, 0x42)
                                         };
+                                        ui.painter().rect_filled(rect, 0.0, bg);
+                                        // 文本色: 选中=金色, 否则浅灰
+                                        let fg = if selected {
+                                            egui::Color32::from_rgb(0xff, 0xc6, 0x4d)
+                                        } else {
+                                            egui::Color32::from_rgb(0xcf, 0xd8, 0xe4)
+                                        };
+                                        let font = egui::FontId::monospace(10.0);
+                                        let yc = rect.center().y;
+                                        // pos 列
+                                        ui.painter().text(
+                                            egui::pos2(px0, yc), egui::Align2::LEFT_CENTER,
+                                            pos_text(row.tick), font.clone(), fg,
+                                        );
+                                        // type 列
+                                        let type_txt: String = match &row.kind {
+                                            crate::smf::EventKind::NoteOn { .. } => "ON".into(),
+                                            crate::smf::EventKind::NoteOff { .. } => "OFF".into(),
+                                            crate::smf::EventKind::Cc { num, .. } => format!("CC{num}"),
+                                            crate::smf::EventKind::Program { .. } => "PG".into(),
+                                        };
+                                        ui.painter().text(
+                                            egui::pos2(px0 + POS_W, yc), egui::Align2::LEFT_CENTER,
+                                            type_txt, font.clone(), fg,
+                                        );
+                                        // data 列
+                                        let data_txt = match &row.kind {
+                                            crate::smf::EventKind::NoteOn { pitch, vel } =>
+                                                format!("{}  v{}", crate::piano_roll::midi_name(*pitch as i32), vel),
+                                            crate::smf::EventKind::NoteOff { pitch } =>
+                                                crate::piano_roll::midi_name(*pitch as i32),
+                                            crate::smf::EventKind::Cc { val, .. } =>
+                                                val.to_string(),
+                                            crate::smf::EventKind::Program { program } =>
+                                                (program + 1).to_string(),
+                                        };
+                                        ui.painter().text(
+                                            egui::pos2(px0 + POS_W + TYPE_W, yc), egui::Align2::LEFT_CENTER,
+                                            data_txt, font, fg,
+                                        );
                                         if resp.clicked() {
                                             self.event_list_sel = Some(i);
                                             click_tick = Some(row.tick);
