@@ -681,7 +681,6 @@ pub struct XgApp {
     pub event_list_sel: Option<usize>,
     /// SysEx 折叠区 (2026-08-14): 展开查看 hex 的条目索引 (未展开=该行为 None 或折叠)
     pub sysex_expanded: Option<usize>,
-    pub sysex_scroll: f32,
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -1819,7 +1818,6 @@ impl Default for XgApp {
             preview_notes: (0..16).map(|_| std::collections::BTreeMap::new()).collect(),
             event_list_sel: None,
             sysex_expanded: None,
-            sysex_scroll: 0.0,
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -2675,83 +2673,61 @@ impl eframe::App for XgApp {
                                 if sx_rows.is_empty() {
                                     ui.monospace(egui::RichText::new("(no SysEx in this file)").weak().size(10.0));
                                 } else {
-                                    // 列宽 (pos 同宽; len 窄, type 吃满)
+                                    // 列宽 (pos 同宽; len 窄, type 吃满) — 完全照 event list 结构
                                     const POS_W2: f32 = 86.0;
                                     const LEN_W2: f32 = 44.0;
                                     let row_h = 16.0;
-                                    let hdr_h = 14.0;
-                                    let view_h = 240.0_f32.min(hdr_h + sx_rows.len() as f32 * row_h);
-                                    // 手动 ClipRect 表格 (不用 ScrollArea): 整个表格一个 allocate rect +
-                                    // 一个 painter → 表头/数据同基准, 必然同列对齐. 滚轮自滚动.
-                                    let (view, _) = ui.allocate_exact_size(egui::vec2(ui.max_rect().width(), view_h), egui::Sense::hover());
-                                    let total_h = hdr_h + sx_rows.len() as f32 * row_h
-                                        + if self.sysex_expanded.is_some() { row_h } else { 0.0 };
-                                    let max_scroll = (total_h - view_h).max(0.0);
-                                    // 滚轮滚动 (指针悬浮域内)
-                                    let scr_in = ui.input(|i| {
-                                        let hp = i.pointer.hover_pos();
-                                        hp.map_or(false, |p| view.contains(p)) && i.raw_scroll_delta.y.abs() > 1.0
-                                    });
-                                    if scr_in {
-                                        let dy = ui.input(|i| i.raw_scroll_delta.y);
-                                        self.sysex_scroll = (self.sysex_scroll - dy).clamp(0.0, max_scroll);
-                                    }
-                                    let scr = self.sysex_scroll;
-                                    // 裁剪 painter (内容只在本区域可见)
-                                    let painter = ui.painter().with_clip_rect(view);
-                                    let bx = view.left() + 4.0;   // 全表唯一 x 基准 (表头+数据同源)
-                                    let top = view.top() - scr;
+                                    // 表头 (ScrollArea 外, 与数据同 x 基准: max_rect().left()+4)
+                                    let hdr_y = ui.cursor().top();
+                                    let hdr_p = ui.painter();
+                                    let hdr_x = ui.max_rect().left() + 4.0;
                                     let hdr_col = egui::Color32::from_rgb(0xc9, 0xb9, 0x8a);
-                                    let mut clicked: Option<usize> = None;
-                                    // 表头 (固定)
-                                    painter.text(egui::pos2(bx, top + 2.0), egui::Align2::LEFT_TOP, "pos", egui::FontId::monospace(10.0), hdr_col);
-                                    painter.text(egui::pos2(bx + POS_W2 + LEN_W2 - 3.0, top + 2.0), egui::Align2::RIGHT_TOP, "len", egui::FontId::monospace(10.0), hdr_col);
-                                    painter.text(egui::pos2(bx + POS_W2 + LEN_W2, top + 2.0), egui::Align2::LEFT_TOP, "type", egui::FontId::monospace(10.0), hdr_col);
-                                    let mut yy = top + hdr_h;
-                                    for (i, sx) in sx_rows.iter().enumerate() {
-                                        let row_top = yy;
-                                        let row_rect = egui::Rect::from_min_max(
-                                            egui::pos2(view.left(), row_top),
-                                            egui::pos2(view.right(), row_top + row_h),
-                                        );
-                                        let sel = self.sysex_expanded == Some(i);
-                                        let bg = if sel {
-                                            egui::Color32::from_rgb(0x2a, 0x3d, 0x58)
-                                        } else if i % 2 == 0 {
-                                            egui::Color32::from_rgb(0x14, 0x22, 0x32)
-                                        } else {
-                                            egui::Color32::from_rgb(0x1c, 0x2e, 0x42)
-                                        };
-                                        painter.rect_filled(row_rect, 0.0, bg);
-                                        let resp = ui.interact(row_rect, ui.id().with(("sxr", i)), egui::Sense::click());
-                                        if resp.clicked() { clicked = Some(i); }
-                                        let fg = if sel {
-                                            egui::Color32::from_rgb(0xff, 0xc6, 0x4d)
-                                        } else {
-                                            egui::Color32::from_rgb(0xcf, 0xd8, 0xe4)
-                                        };
-                                        let font = egui::FontId::monospace(10.0);
-                                        let yc = row_rect.center().y;
-                                        painter.text(egui::pos2(bx, yc), egui::Align2::LEFT_CENTER, sx_pos_text(sx.tick), font.clone(), fg);
-                                        let len_txt = format!("{}B", sx.data.len());
-                                        painter.text(egui::pos2(bx + POS_W2 + LEN_W2 - 3.0, yc), egui::Align2::RIGHT_CENTER, len_txt, font.clone(), fg);
-                                        painter.text(egui::pos2(bx + POS_W2 + LEN_W2, yc), egui::Align2::LEFT_CENTER, sysex_kind(&sx.data), font.clone(), fg);
-                                        yy += row_h;
-                                        if self.sysex_expanded == Some(i) {
-                                            let hex_top = yy;
-                                            let hex_rect = egui::Rect::from_min_max(
-                                                egui::pos2(view.left(), hex_top),
-                                                egui::pos2(view.right(), hex_top + row_h),
-                                            );
-                                            painter.rect_filled(hex_rect, 0.0, egui::Color32::from_rgb(0x10, 0x1a, 0x28));
-                                            let hex = sx.data.iter().map(|b| format!("{b:02X}")).collect::<Vec<_>>().join(" ");
-                                            painter.text(egui::pos2(bx, hex_rect.center().y), egui::Align2::LEFT_CENTER, hex, egui::FontId::monospace(9.0), egui::Color32::from_rgb(0x8f, 0xb0, 0xd0));
-                                            yy += row_h;
-                                        }
-                                    }
-                                    if let Some(i) = clicked {
-                                        self.sysex_expanded = if self.sysex_expanded == Some(i) { None } else { Some(i) };
-                                    }
+                                    hdr_p.text(egui::pos2(hdr_x, hdr_y), egui::Align2::LEFT_TOP, "pos", egui::FontId::monospace(10.0), hdr_col);
+                                    hdr_p.text(egui::pos2(hdr_x + POS_W2, hdr_y), egui::Align2::LEFT_TOP, "len", egui::FontId::monospace(10.0), hdr_col);
+                                    hdr_p.text(egui::pos2(hdr_x + POS_W2 + LEN_W2, hdr_y), egui::Align2::LEFT_TOP, "type", egui::FontId::monospace(10.0), hdr_col);
+                                    ui.allocate_space(egui::vec2(4.0, 14.0));
+                                    egui::ScrollArea::vertical()
+                                        .id_salt("sysex_list")
+                                        .max_height(240.0)
+                                        .show(ui, |ui| {
+                                            let px0 = ui.max_rect().left() + 4.0;
+                                            let mut clicked: Option<usize> = None;
+                                            for (i, sx) in sx_rows.iter().enumerate() {
+                                                let full_w = ui.max_rect().width();
+                                                let (rect, resp) = ui.allocate_exact_size(egui::vec2(full_w, row_h), egui::Sense::click());
+                                                let sel = self.sysex_expanded == Some(i);
+                                                let bg = if sel {
+                                                    egui::Color32::from_rgb(0x2a, 0x3d, 0x58)
+                                                } else if i % 2 == 0 {
+                                                    egui::Color32::from_rgb(0x14, 0x22, 0x32)
+                                                } else {
+                                                    egui::Color32::from_rgb(0x1c, 0x2e, 0x42)
+                                                };
+                                                ui.painter().rect_filled(rect, 0.0, bg);
+                                                if resp.clicked() { clicked = Some(i); }
+                                                let fg = if sel {
+                                                    egui::Color32::from_rgb(0xff, 0xc6, 0x4d)
+                                                } else {
+                                                    egui::Color32::from_rgb(0xcf, 0xd8, 0xe4)
+                                                };
+                                                let font = egui::FontId::monospace(10.0);
+                                                let yc = rect.center().y;
+                                                ui.painter().text(egui::pos2(px0, yc), egui::Align2::LEFT_CENTER, sx_pos_text(sx.tick), font.clone(), fg);
+                                                let len_txt = format!("{}B", sx.data.len());
+                                                ui.painter().text(egui::pos2(px0 + POS_W2 + LEN_W2 - 3.0, yc), egui::Align2::RIGHT_CENTER, len_txt, font.clone(), fg);
+                                                ui.painter().text(egui::pos2(px0 + POS_W2 + LEN_W2, yc), egui::Align2::LEFT_CENTER, sysex_kind(&sx.data), font.clone(), fg);
+                                                // hex 详情行 (展开时 allocate 额外行 → 随内容撑开+滚动)
+                                                if self.sysex_expanded == Some(i) {
+                                                    let (hex_rect, _) = ui.allocate_exact_size(egui::vec2(full_w, row_h), egui::Sense::hover());
+                                                    ui.painter().rect_filled(hex_rect, 0.0, egui::Color32::from_rgb(0x10, 0x1a, 0x28));
+                                                    let hex = sx.data.iter().map(|b| format!("{b:02X}")).collect::<Vec<_>>().join(" ");
+                                                    ui.painter().text(egui::pos2(px0, hex_rect.center().y), egui::Align2::LEFT_CENTER, hex, egui::FontId::monospace(9.0), egui::Color32::from_rgb(0x8f, 0xb0, 0xd0));
+                                                }
+                                            }
+                                            if let Some(i) = clicked {
+                                                self.sysex_expanded = if self.sysex_expanded == Some(i) { None } else { Some(i) };
+                                            }
+                                        });
                                 }
                             });
                     } else {
