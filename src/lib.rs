@@ -2227,8 +2227,6 @@ impl eframe::App for XgApp {
                                         ui.selectable_value(&mut self.cur_part, p, format!("{p:02}{sec}{ch:02} Part {p}"));
                                     }
                                 });
-                            // 与原 LCD 下拉一致: show_ui 后无条件重绘 LCD (lcd_dirty guard 控制纹理上传)
-                            self.update_lcd_params();
                             ui.label(format!("·  {}  ▶{:03}▶{:03}", part_voice, part_bank, part_prog));
                         });
                         ui.separator();
@@ -2888,6 +2886,10 @@ impl eframe::App for XgApp {
             .resizable(true)
             .collapsible(true)
             .show(ctx, |ui| {
+                // LCD 浮窗打开时每帧刷新像素数据 (数据源 parts[cur_part-1] 随播放/参数实时变).
+                // 2026-08-15 重构: 原来绑在 Params 右栏 2231 每帧顺带重绘 → LCD 是否刷新由
+                // 右栏开关 show_right 错误决定; 现改为由 LCD 浮窗自身可见性驱动 (show_bottom).
+                self.update_lcd_params();
                 ui.horizontal(|ui| {
                     // 16ch / 32ch 显示模式切换
                     let label32 = if self.lcd_32 { "32ch[on]" } else { "32ch[off]" };
