@@ -946,6 +946,15 @@ fn sysex_kind(data: &[u8]) -> &'static str {
             0x30 => "XG param-req",
             _ => "XG",
         }
+    } else if data.len() >= 5 && data[0] == 0xF0 && data[1] == 0x41 {
+        // Roland GS: F0 41 <device> 42 <cmd>... — data[2]=device, data[3]=42(GS 标志), data[4]=cmd.
+        // cmd: 12=DT1 参数变更, 11=RQ1 请求, 42=GS system reset
+        match data[4] {
+            0x12 => "Roland GS param",   // DT1
+            0x11 => "Roland GS req",     // RQ1
+            0x42 => "Roland GS reset",   // GS system reset
+            _ => "Roland",
+        }
     } else if data.len() >= 3 && data[0] == 0xF0 {
         // 通用厂商: F0 7E = 通用系统实时(universal), F0 7F = 通用非实时
         match data[1] {
@@ -3546,6 +3555,30 @@ mod tests {
         // (构造器直接验证 channel 值)
         let ev = crate::playback::PlayEvent::sysex(vec![0xF0, 0x43, 0x10], 0);
         assert_eq!(ev.channel, 0xFF);
+    }
+
+    #[test]
+    fn sysex_kind_recognizes_roland_gs_xg_universal() {
+        // 2026-08-14: sysex_kind 类型识别 — Roland GS / Yamaha XG / Universal / 未知
+        // (支撑 SYSEX 折叠区的类型标注; John 有 SC-55 VST 收 Roland GS)
+        // Roland GS DT1 参数: F0 41 <dev> 42 12 <addr3> <data3> <cksum> F7
+        assert_eq!(sysex_kind(&[0xF0, 0x41, 0x10, 0x42, 0x12, 0x01, 0x24, 0x3A, 0x60, 0xF7]),
+            "Roland GS param");
+        // Roland GS System Reset: F0 41 10 42 12 40 00 7F 00 41 F7
+        //   (DT1 写地址 40 00 7F 触发 GS reset; cmd 仍是 12)
+        assert_eq!(sysex_kind(&[0xF0, 0x41, 0x10, 0x42, 0x12, 0x40, 0x00, 0x7F, 0x00, 0x41, 0xF7]),
+            "Roland GS param");
+        // Yamaha XG param: F0 43 10 4C ... (Master Volume)
+        assert_eq!(sysex_kind(&[0xF0, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x7E, 0x00, 0xF7]),
+            "XG param");
+        // Universal GM System On: F0 7E 7F 09 01 F7
+        assert_eq!(sysex_kind(&[0xF0, 0x7E, 0x7F, 0x09, 0x01, 0xF7]),
+            "GM/Universal");
+        // 未知厂商 → MFG
+        assert_eq!(sysex_kind(&[0xF0, 0x15, 0x01, 0x02, 0xF7]),
+            "MFG");
+        // 不足长度 → SX
+        assert_eq!(sysex_kind(&[0xF0]), "SX");
     }
 
     #[test]
