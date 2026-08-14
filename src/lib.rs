@@ -2604,6 +2604,8 @@ impl eframe::App for XgApp {
                                     ui.monospace(egui::RichText::new("(no SysEx in this file)").weak().size(10.0));
                                 } else {
                                     let ppq = self.ppq.max(1) as u64;
+                                    // 2026-08-14: SysEx 常很多(GC 重排/初始化), 加滚动防止看不全
+                                    egui::ScrollArea::vertical().id_salt("sysex_list").max_height(240.0).show(ui, |ui| {
                                     for (i, sx) in sx_rows.iter().enumerate() {
                                         let beat = sx.tick / ppq;
                                         let bar = beat / 4 + 1;
@@ -2625,6 +2627,7 @@ impl eframe::App for XgApp {
                                             }
                                         }
                                     }
+                                    });
                                 }
                             });
                     } else {
