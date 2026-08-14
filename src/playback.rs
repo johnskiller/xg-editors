@@ -60,6 +60,17 @@ impl PlayEvent {
             channel: channel & 0x0f,
         }
     }
+
+    /// System Exclusive 透传 (2026-08-14): 与通道无关的全局消息.
+    /// channel 用 0xFF 哨兵 → dispatch 时绕过 mute/part 路由直接全接口广播.
+    pub(crate) fn sysex(data: Vec<u8>, tick: u64) -> Self {
+        Self {
+            tick,
+            bytes: data,
+            off: false,
+            channel: 0xFF,
+        }
+    }
 }
 
 /// 计算时刻 playhead_tick 正在响的 (channel, pitch) 集合 (用于清音).
@@ -358,6 +369,19 @@ impl XgApp {
                     }
                 }
             }
+            // 文件 SysEx 透传 (2026-08-14): 与通道无关 → 按原 tick 入队, dispatch 时全接口广播.
+            // 不取模 (SysEx 是 setup, 一旦 tick 到达就发; 循环回绕不该重复触发).
+            for track in smf_ref.tracks.iter() {
+                for ev in &track.events {
+                    if let smf::SmfEvent::SysEx { tick, data } = ev {
+                        if data.is_empty() {
+                            continue;
+                        }
+                        let t = (*tick).min(endt);
+                        evs.push(PlayEvent::sysex(data.clone(), t));
+                    }
+                }
+            }
         }
         evs.sort_by_key(|e| e.tick);
         self.play_events = evs;
@@ -539,6 +563,17 @@ impl XgApp {
             // 预收集每个事件的输出名单 (去重后共用的口)
             let mut plan: Vec<(String, Vec<PlayEvent>)> = Vec::new();
             for e in &evs {
+                // SysEx (channel=0xFF 哨兵): 与通道无关的全局消息 → 绕过 mute/part 路由, 全输出接口广播
+                if e.channel == 0xFF {
+                    for out in self.active_outputs() {
+                        if let Some(slot) = plan.iter_mut().find(|(n, _)| *n == out) {
+                            slot.1.push(e.clone());
+                        } else {
+                            plan.push((out.clone(), vec![e.clone()]));
+                        }
+                    }
+                    continue;
+                }
                 // Channel View Mute/Solo 过滤 (播放输出层): 被静音的通道事件直接跳过, 不发到 MIDI
                 let ch = (e.channel as usize) % 16;
                 if self.channel_is_effectively_muted(ch) {

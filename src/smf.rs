@@ -22,6 +22,9 @@ pub enum SmfEvent {
     // 任意通道事件 (16 轨视图用, 记录轨号)
     Cc { tick: u64, channel: u8, num: u8, val: u8 },
     Program { tick: u64, channel: u8, program: u8 },
+    // 系统专属消息 SysEx (F0 len <payload> / F7 len <payload>), 与通道无关
+    // 保留原始字节(含 F0/F7 起始) 供播放透传 + event list 显示
+    SysEx { tick: u64, data: Vec<u8> },
 }
 
 #[derive(Debug, Clone, PartialEq, Eq)]
@@ -231,8 +234,13 @@ fn parse_track_chunk(
             0xd0..=0xdf => { let _ = p.byte()?; }
             0xe0..=0xef => { let _ = (p.byte()?, p.byte()?); }
             0xf0..=0xf7 => {
-                // SysEx: F0 len <bytes> 或 F7 len; 跳过
-                let _ = p.skip_sysex()?;
+                // SysEx: F0 len <payload> 或 F7 len <payload>; 保留原始字节(含起始 status) 供播放透传
+                let len = p.vlq()?;
+                let payload = p.take(len as usize)?;
+                let mut data = Vec::with_capacity(payload.len() + 1);
+                data.push(st);          // F0 或 F7
+                data.extend_from_slice(payload);
+                te.events.push(SmfEvent::SysEx { tick, data });
                 // SysEx 终止 running status
                 running_status = None;
             }
@@ -318,12 +326,6 @@ impl<'a> Cursor<'a> {
         self.pos += n;
         Ok(s)
     }
-    /// 跳过 SysEx 数据 (len 前缀变长量 + payload)
-    fn skip_sysex(&mut self) -> Result<(), SmfError> {
-        let len = self.vlq()?;
-        self.take(len as usize)?;
-        Ok(())
-    }
 }
 
 // ---------- 音符配对 + 逐轨视图 ----------
@@ -368,7 +370,8 @@ pub fn build_track_views(smf: &Smf) -> Vec<SmfTrackView> {
         match e {
             SmfEvent::NoteOn { tick, .. } | SmfEvent::NoteOff { tick, .. }
             | SmfEvent::Tempo { tick, .. } | SmfEvent::TimeSig { tick, .. }
-            | SmfEvent::Cc { tick, .. } | SmfEvent::Program { tick, .. } => *tick,
+            | SmfEvent::Cc { tick, .. } | SmfEvent::Program { tick, .. }
+            | SmfEvent::SysEx { tick, .. } => *tick,
         }
     }
     all.sort_by_key(|e| evt_tick(e));
@@ -480,6 +483,30 @@ pub fn event_list_for_channel(smf: &Smf, channel: u8) -> Vec<EventRow> {
         }
     }
     // 按 (tick, 轨内序) 稳定升序
+    rows.sort_by(|a, b| a.1.cmp(&b.1));
+    rows.sort_by(|a, b| a.0.cmp(&b.0));
+    rows.into_iter().map(|(_, _, r)| r).collect()
+}
+
+/// 全文件 SysEx 列表 (2026-08-14): 与通道无关, tick 升序稳定排序.
+/// 供 params 面板独立 SysEx 折叠区显示 + 播放透传核对.
+/// 返回 (tick, data 原始字节含 F0/F7 起始).
+#[derive(Debug, Clone, PartialEq)]
+pub struct SysExRow {
+    pub tick: u64,
+    pub data: Vec<u8>,
+}
+
+pub fn sysex_list(smf: &Smf) -> Vec<SysExRow> {
+    let mut rows: Vec<(u64, usize, SysExRow)> = Vec::new();
+    for (ti, t) in smf.tracks.iter().enumerate() {
+        for (i, e) in t.events.iter().enumerate() {
+            if let SmfEvent::SysEx { tick, data } = e {
+                rows.push((*tick, ti * 10000 + i, SysExRow { tick: *tick, data: data.clone() }));
+            }
+        }
+    }
+    // 按 (tick, 轨内序) 稳定升序 (与 event_list_for_channel 一致)
     rows.sort_by(|a, b| a.1.cmp(&b.1));
     rows.sort_by(|a, b| a.0.cmp(&b.0));
     rows.into_iter().map(|(_, _, r)| r).collect()
@@ -633,6 +660,49 @@ mod tests {
                 assert_eq!((*tick, *channel, *pitch), (96, 0, 60));
             }
             _ => panic!("expected NoteOff"),
+        }
+    }
+
+    #[test]
+    fn parse_sysex_preserved() {
+        // SysEx F0 len <payload>: 应保留为 SmfEvent::SysEx, 且 running status 被终止
+        let mut ev = Vec::new();
+        ev.extend_from_slice(&vlq(0));
+        ev.extend_from_slice(&[0xF0, 6, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x00]); // F0 len=6
+        ev.extend_from_slice(&vlq(5));
+        ev.extend_from_slice(&[0x90, 60, 100]); // 相对 delta5 NoteOn (running 已在 F0 后清除 → 显式 status)
+        ev.extend_from_slice(&vlq(0));
+        ev.extend_from_slice(&[0xff, 0x2f, 0]);
+        let data: Vec<u8> = mthd(1, 1, 96).into_iter().chain(mtrk(&ev)).collect();
+        let smf = parse_smf(&data).expect("parse");
+        let es = &smf.tracks[0].events;
+        assert_eq!(es.len(), 2);
+        match &es[0] {
+            SmfEvent::SysEx { tick, data: d } => {
+                assert_eq!(*tick, 0);
+                assert_eq!(*d, vec![0xF0, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x00]);
+            }
+            other => panic!("expected SysEx, got {other:?}"),
+        }
+        // running status 被 SysEx 终止: 下一个是显式 status 的 NoteOn
+        assert!(matches!(es[1], SmfEvent::NoteOn { tick: 5, pitch: 60, .. }));
+    }
+
+    #[test]
+    fn parse_sysex_f7_continuation() {
+        // F7 continuation (不带 F0 前缀): 也应保留为完整消息 (data 以 F7 起)
+        let mut ev = Vec::new();
+        ev.extend_from_slice(&vlq(0));
+        ev.extend_from_slice(&[0xF7, 2, 0x41, 0x7F]); // F7 len=2
+        ev.extend_from_slice(&vlq(0));
+        ev.extend_from_slice(&[0xff, 0x2f, 0]);
+        let data: Vec<u8> = mthd(1, 1, 96).into_iter().chain(mtrk(&ev)).collect();
+        let smf = parse_smf(&data).expect("parse");
+        let es = &smf.tracks[0].events;
+        assert_eq!(es.len(), 1);
+        match &es[0] {
+            SmfEvent::SysEx { data: d, .. } => assert_eq!(*d, vec![0xF7, 0x41, 0x7F]),
+            other => panic!("expected SysEx, got {other:?}"),
         }
     }
 

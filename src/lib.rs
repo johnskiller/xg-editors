@@ -679,6 +679,8 @@ pub struct XgApp {
     pub preview_notes: Vec<std::collections::BTreeMap<u8, (u8, f64)>>,
     /// Event List: 选中行索引 (指向过滤+排序后的当前 channel 事件 vec); None=未选中
     pub event_list_sel: Option<usize>,
+    /// SysEx 折叠区 (2026-08-14): 展开查看 hex 的条目索引 (未展开=该行为 None 或折叠)
+    pub sysex_expanded: Option<usize>,
     /// tempo map (tick↔秒)
     pub tempo_map: Option<smf::TempoMap>,
     /// 文件总时长 (秒)
@@ -930,6 +932,30 @@ fn rail_triangle_ui(ui: &mut egui::Ui, rect: egui::Rect, id: &str, glyph: &str) 
 /// 十六进制显示 SysEx 消息 (UI 用, 无硬件也可见)
 fn format_hex(bytes: &[u8]) -> String {
     bytes.iter().map(|b| format!("{:02X} ", b)).collect::<String>().trim().to_string()
+}
+
+/// 识别 SysEx 常见类型 (事件列表/折叠区显示用; 未知 → "SX")
+/// data 含起始 F0/F7. 规则参考 sysex.rs (XG: F0 43 [device] [addr3..] ...)
+fn sysex_kind(data: &[u8]) -> &'static str {
+    // data[0]==F0, data[1]==0x43 → Yamaha XG 系统专属
+    if data.len() >= 3 && data[0] == 0xF0 && data[1] == 0x43 {
+        match data[2] & 0xF0 {
+            0x00 => "XG bulk",   // 0n bulk dump
+            0x10 => "XG param",  // 1n parameter change
+            0x20 => "XG dump-req",
+            0x30 => "XG param-req",
+            _ => "XG",
+        }
+    } else if data.len() >= 3 && data[0] == 0xF0 {
+        // 通用厂商: F0 7E = 通用系统实时(universal), F0 7F = 通用非实时
+        match data[1] {
+            0x7E => "GM/Universal",
+            0x7F => "Universal",
+            _ => "MFG",
+        }
+    } else {
+        "SX"
+    }
 }
 
 impl XgApp {
@@ -1746,6 +1772,7 @@ impl Default for XgApp {
             rec_armed: false,
             preview_notes: (0..16).map(|_| std::collections::BTreeMap::new()).collect(),
             event_list_sel: None,
+            sysex_expanded: None,
             tempo_map: None,
             smf_total_sec: 0.0,
             smf_end_tick: 0,
@@ -2563,6 +2590,41 @@ impl eframe::App for XgApp {
                                             }
                                         }
                                     });
+                                }
+                            });
+                        // ===== SysEx 折叠区 (2026-08-14 方案2: 与通道无关 → 独立全局视角) =====
+                        // 文件里的 SysEx 全部列出 (不分 ch), 供查看/核对播放透传
+                        ui.separator();
+                        let sx_rows = self.smf.as_ref().map(crate::smf::sysex_list).unwrap_or_default();
+                        egui::CollapsingHeader::new(format!("SYSEX ({})", sx_rows.len()))
+                            .id_salt("sysex_collapse")
+                            .default_open(true)
+                            .show(ui, |ui| {
+                                if sx_rows.is_empty() {
+                                    ui.monospace(egui::RichText::new("(no SysEx in this file)").weak().size(10.0));
+                                } else {
+                                    let ppq = self.ppq.max(1) as u64;
+                                    for (i, sx) in sx_rows.iter().enumerate() {
+                                        let beat = sx.tick / ppq;
+                                        let bar = beat / 4 + 1;
+                                        let beat_in_bar = (beat % 4) + 1;
+                                        let tick_in_beat = sx.tick % ppq;
+                                        let pos = format!("{:>3}:{}:{:03}", bar, beat_in_bar, tick_in_beat);
+                                        let hdr = format!("{}  {:>3}B  {}", pos, sx.data.len(),
+                                            sysex_kind(&sx.data));
+                                        let resp = ui.selectable_label(self.sysex_expanded == Some(i), egui::RichText::new(hdr).monospace().size(10.0));
+                                        if resp.clicked() {
+                                            self.sysex_expanded = if self.sysex_expanded == Some(i) { None } else { Some(i) };
+                                        }
+                                        if self.sysex_expanded == Some(i) {
+                                            // hex 展示, 每行 16 字节换行, 等宽小字
+                                            let hex = sx.data.iter().map(|b| format!("{b:02X}")).collect::<Vec<_>>().join(" ");
+                                            for line in hex.as_bytes().chunks(48) {
+                                                let s: String = String::from_utf8_lossy(line).into_owned();
+                                                ui.monospace(egui::RichText::new(s).weak().size(9.0));
+                                            }
+                                        }
+                                    }
                                 }
                             });
                     } else {
@@ -3439,6 +3501,48 @@ mod tests {
         assert_eq!(pans.len(), 2, "应保留 2 个 CC10 (pan), got {pans:?}");
         assert!(pans.contains(&(1, 0, 127)), "tick0 pan=127 应存在, got {pans:?}");
         assert!(pans.contains(&(1, 120, 0)), "tick120 pan=0 应存在 (中途 pan change), got {pans:?}");
+    }
+
+    #[test]
+    fn smf_sysex_flows_into_play_events_and_broadcasts() {
+        // 2026-08-14: SysEx 透传 — SMF 的 SysEx 进入播放事件表 (channel=0xFF 哨兵),
+        // 原始字节原样保留, dispatch 时绕过 mute/part 路由 (全接口广播).
+        let mut data: Vec<u8> = Vec::new();
+        data.extend_from_slice(b"MThd");
+        data.extend_from_slice(&[0, 0, 0, 6, 0, 0, 0, 1, 0, 0x78]); // 1 track, ppq 120
+        data.extend_from_slice(b"MTrk");
+        let mut trk: Vec<u8> = Vec::new();
+        // delta 0: XG parameter change SysEx F0 43 10 4C 00 00 00 7F F7
+        trk.extend_from_slice(&[0x00, 0xF0, 8, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x00, 0x7F, 0xF7]);
+        // delta 0: NoteOn ch1 (必须有音符, 否则 smf_end_tick=0 → tick 取模错乱)
+        trk.extend_from_slice(&[0x00, 0x90, 60, 100]);
+        // delta 120: 第二个 SysEx (tick 120)
+        trk.extend_from_slice(&[0x78, 0xF7, 2, 0x41, 0x42]); // F7 continuation
+        // delta 0: NoteOff
+        trk.extend_from_slice(&[0x00, 0x80, 60, 0]);
+        trk.extend_from_slice(&[0x00, 0xFF, 0x2F, 0x00]);
+        data.extend_from_slice(&(trk.len() as u32).to_be_bytes());
+        data.extend_from_slice(&trk);
+
+        let mut app = XgApp::default();
+        let err = app.load_smf_bytes("sx.mid", &data);
+        assert!(err.is_ok(), "SMF 解析失败: {err:?}");
+        app.build_play_events();
+        // 事件表含 2 个 SysEx 事件, channel=0xFF, 原始字节保留
+        let sx: Vec<(u64, u8, Vec<u8>)> = app.play_events.iter()
+            .filter(|e| e.channel == 0xFF)
+            .map(|e| (e.tick, e.bytes[0], e.bytes.clone()))
+            .collect();
+        assert_eq!(sx.len(), 2, "应保留 2 个 SysEx, got {sx:?}");
+        assert_eq!(sx[0].0, 0, "第一个 SysEx tick 0, got {sx:?}");
+        assert_eq!(sx[0].1, 0xF0, "第一个 SysEx 以 F0 起始, got {sx:?}");
+        assert_eq!(sx[0].2, vec![0xF0, 0x43, 0x10, 0x4C, 0x00, 0x00, 0x00, 0x7F, 0xF7], "字节完整保留");
+        assert_eq!(sx[1].0, 120, "第二个 SysEx tick 120 (F7 continuation), got {sx:?}");
+        assert_eq!(sx[1].1, 0xF7, "F7 continuation 以 F7 起始, got {sx:?}");
+        // channel==0xFF 哨兵: dispatch 的 SysEx 分支先于 mute 检查 → 无条件广播
+        // (构造器直接验证 channel 值)
+        let ev = crate::playback::PlayEvent::sysex(vec![0xF0, 0x43, 0x10], 0);
+        assert_eq!(ev.channel, 0xFF);
     }
 
     #[test]
