@@ -226,7 +226,7 @@ impl XgApp {
 
                 // press/release 沿检测: 上一帧 held(存在於 preview_notes) vs 本帧 key_down
                 {
-                    let ch0 = (ch % 16) as usize;
+                    let ch0 = (ch.saturating_sub(1) % 16) as usize; // 0-based (preview_notes 约定)
                     // 本帧按下集合
                     let now_pressed: Vec<u8> = key_down.iter()
                         .filter(|(_, d)| *d).map(|(p, _)| *p).collect();
@@ -234,13 +234,13 @@ impl XgApp {
                     let held_pitches: Vec<u8> = self.preview_notes[ch0].keys().copied().collect();
                     for p in held_pitches {
                         if !now_pressed.contains(&p) {
-                            self.preview_note(ch, p, 100, false, -1.0);
+                            self.preview_note(ch.saturating_sub(1), p, 100, false, -1.0);
                         }
                     }
                     // 按下: 本帧按下但未 held → NoteOn (t0=-1 按住, 不自动 off)
                     for p in now_pressed {
                         if !self.preview_notes[ch0].contains_key(&p) {
-                            self.preview_note(ch, p, 100, true, -1.0);
+                            self.preview_note(ch.saturating_sub(1), p, 100, true, -1.0);
                         }
                     }
                 }
@@ -293,7 +293,7 @@ impl XgApp {
                 // 2026-08-13 event list 联动: 预取选中行 (只算一次, 避免每 note 全量重算)
                 let sel_note_on: Option<(u8, u64)> = self.event_list_sel.and_then(|sel| {
                     let rows = self.smf.as_ref()
-                        .map(|s| crate::smf::event_list_for_channel(s, ch))
+                        .map(|s| crate::smf::event_list_for_channel(s, ch.saturating_sub(1)))
                         .unwrap_or_default();
                     rows.get(sel).and_then(|row| match row.kind {
                         crate::smf::EventKind::NoteOn { pitch, .. } => Some((pitch, row.tick)),
@@ -332,7 +332,7 @@ impl XgApp {
                     let nr = ui.interact(note_rect, note_id, egui::Sense::click());
                     if nr.clicked() {
                         let now = ui.input(|i| i.time);
-                        self.preview_note(ch, *pitch, *vel, true, now);
+                        self.preview_note(ch.saturating_sub(1), *pitch, *vel, true, now);
                     }
                 }
 

@@ -575,7 +575,8 @@ impl XgApp {
     /// on=true 发 NoteOn 并登记挂音; on=false 发 NoteOff 并移除挂音.
     /// 挂音条目 (pitch → (vel, t0)): t0<0 表示"按住未放"(琴键, 只有 on=false 才 off);
     ///   t0>=0 表示"采样式短音"(note/琴键点击, 由 expire_preview_notes 超时自动 off).
-    /// 尊重 Mute/Solo; native 或 Web MIDI 全静默降级.
+    /// ★ ch 为 0-based MIDI 通道 (0..15; UI 1-based 值在调用处 -1, 与 PlayEvent::note 一致).
+    /// 尊重 Mute/Solo (按 0-based idx 查 16 槽); native 或 Web MIDI 全静默降级.
     pub fn preview_note(&mut self, ch: u8, pitch: u8, vel: u8, on: bool, t0: f64) {
         let idx = (ch % 16) as usize;
         // Mute/Solo: 被静音的通道预览不发声 (与播放输出层一致)

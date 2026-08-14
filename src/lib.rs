@@ -2425,7 +2425,7 @@ impl eframe::App for XgApp {
                             ui.monospace(egui::RichText::new("(no SMF — event list unavailable)").weak().size(10.0));
                         } else {
                             let rows = crate::smf::event_list_for_channel(
-                                self.smf.as_ref().unwrap(), self.cur_pr_channel);
+                                self.smf.as_ref().unwrap(), self.cur_pr_channel.saturating_sub(1));
                             let ch = self.cur_pr_channel;
                             ui.horizontal(|ui| {
                                 ui.monospace(egui::RichText::new(format!("EVENTS (ch {ch})")).strong().size(11.0));
@@ -3876,19 +3876,19 @@ mod tests {
 
     #[test]
     fn preview_note_manages_hanging_and_expiry() {
-        // Playable Piano Roll: preview_note on/off + expire_preview_notes 300ms 短音自动 off
+        // Playable Piano Roll: preview_note(0-based ch) on/off + expire 300ms 短音自动 off
         let mut app = XgApp::default();
-        // 未 muted → preview on 登记挂音 (MIDI ch N → 数组下标 N, 与 playback 一致)
-        app.preview_note(1, 60, 100, true, -1.0); // t0=-1: 按住未放
-        assert_eq!(app.preview_notes[1].get(&60), Some(&(100, -1.0)), "ch1 C4 挂音");
-        app.preview_note(1, 60, 100, false, -1.0); // 松开
-        assert!(!app.preview_notes[1].contains_key(&60), "松开后移除");
+        // 未 muted → preview on 登记挂音 (ch 0-based → 数组下标同)
+        app.preview_note(0, 60, 100, true, -1.0); // ch0(MIDI ch1) t0=-1: 按住未放
+        assert_eq!(app.preview_notes[0].get(&60), Some(&(100, -1.0)), "ch1 C4 挂音");
+        app.preview_note(0, 60, 100, false, -1.0); // 松开
+        assert!(!app.preview_notes[0].contains_key(&60), "松开后移除");
 
         // mute 通道不发声 (preview_note 走 channel_is_effectively_muted 过滤)
-        app.channel_mutes[2] = true;
-        app.preview_note(2, 62, 80, true, -1.0);
-        assert!(!app.preview_notes[2].contains_key(&62), "muted 通道不登记挂音");
-        app.channel_mutes[2] = false;
+        app.channel_mutes[1] = true;
+        app.preview_note(1, 62, 80, true, -1.0);
+        assert!(!app.preview_notes[1].contains_key(&62), "muted 通道不登记挂音");
+        app.channel_mutes[1] = false;
 
         // 采样式短音: t0=now, 300ms 后 expire 自动 off
         app.preview_note(3, 64, 90, true, 0.0); // t0=0
@@ -3908,13 +3908,31 @@ mod tests {
 
     #[test]
     fn preview_note_respects_solo() {
-        // Solo ch2 → 其他通道 preview 静默 (与播放一致; MIDI ch N → 下标 N)
+        // Solo ch1(0-based) → 其他通道 preview 静默 (与播放一致)
         let mut app = XgApp::default();
-        app.channel_solos[2] = true; // solo ch2
-        app.preview_note(1, 60, 100, true, -1.0); // ch1 非 solo → 静默
-        assert!(!app.preview_notes[1].contains_key(&60), "solo ch2 时 ch1 preview 静默");
-        app.preview_note(2, 62, 80, true, -1.0); // ch2 (solo) → 发声
-        assert!(app.preview_notes[2].contains_key(&62), "solo 通道可 preview");
+        app.channel_solos[1] = true; // solo 数组下标1 (MIDI ch2)
+        app.preview_note(0, 60, 100, true, -1.0); // ch0 非 solo → 静默
+        assert!(!app.preview_notes[0].contains_key(&60), "solo ch2 时 ch1 preview 静默");
+        app.preview_note(1, 62, 80, true, -1.0); // ch1 (solo) → 发声
+        assert!(app.preview_notes[1].contains_key(&62), "solo 通道可 preview");
+    }
+
+    #[test]
+    fn preview_note_ui_channel_offsets() {
+        // ★ 回归: UI 选 ch5(1-based) → preview_note 必须发 0-based 4 (0x94), 不能发 5 (0x95 那会串到 MIDI ch6)
+        //   用户 2026-08-14 实测: 选 ch5 渲染正确但点击琴键音色错(串到 ch6) — 根因 preview_note 收了 1-based 没转.
+        //   约定钉死: 调用方(piano_roll)传 0-based; preview_note 直接 PlayEvent::note(ch,..) → 0x90|ch.
+        let app = XgApp::default();
+        // PlayEvent::note 0x90 | ch → ch4→0x94(MIDI ch5), ch5→0x95(MIDI ch6)
+        let ev4 = crate::playback::PlayEvent::note(4, 60, 100, 0, true);
+        let ev5 = crate::playback::PlayEvent::note(5, 60, 100, 0, true);
+        assert_eq!(ev4.bytes[0], 0x94, "UI ch5 → 0x94 (MIDI ch5, 正确)");
+        assert_eq!(ev5.bytes[0], 0x95, "UI ch5 若误传 ch5 → 0x95 (MIDI ch6, 错)");
+        // preview_note 存 preview_notes[idx=ch] — ch0 存在 preview_notes[0]
+        let mut app2 = XgApp::default();
+        app2.preview_note(4, 60, 100, true, -1.0);
+        assert!(app2.preview_notes[4].contains_key(&60), "preview_note(4) 存 preview_notes[4] (0-based)");
+        assert!(!app2.preview_notes[5].contains_key(&60), "绝不该存 index 5 (那是 MIDI ch6)");
     }
 
     #[test]
@@ -3922,18 +3940,19 @@ mod tests {
         // Event List: 只列当前 channel 事件, tick 升序, 同 tick 保序
         use crate::smf::{Smf, TrackEvents, SmfEvent};
         let mut trk = Vec::new();
-        trk.push(SmfEvent::NoteOn { tick: 0, channel: 1, pitch: 60, vel: 100 });
-        trk.push(SmfEvent::NoteOff { tick: 96, channel: 1, pitch: 60 });
-        trk.push(SmfEvent::NoteOn { tick: 192, channel: 2, pitch: 62, vel: 80 }); // 其他通道(不入)
-        trk.push(SmfEvent::Cc { tick: 48, channel: 1, num: 7, val: 100 });
-        trk.push(SmfEvent::Program { tick: 48, channel: 1, program: 5 });
+        // ★ SMF 事件 channel 是 0-based (解析 st&0x0f). 调用方要查真实 MIDI ch5 → 传 4.
+        trk.push(SmfEvent::NoteOn { tick: 0, channel: 4, pitch: 60, vel: 100 });
+        trk.push(SmfEvent::NoteOff { tick: 96, channel: 4, pitch: 60 });
+        trk.push(SmfEvent::NoteOn { tick: 192, channel: 5, pitch: 62, vel: 80 }); // 其他通道(不入)
+        trk.push(SmfEvent::Cc { tick: 48, channel: 4, num: 7, val: 100 });
+        trk.push(SmfEvent::Program { tick: 48, channel: 4, program: 5 });
         trk.push(SmfEvent::Tempo { tick: 0, us_per_qn: 500_000 }); // 全局(不入)
         let smf = Smf { format: 1, ntracks: 1, ppq: 96, tracks: vec![TrackEvents { events: trk }], meta_tempo_count: 1, meta_timesig_count: 0 };
 
-        let rows = crate::smf::event_list_for_channel(&smf, 1);
-        // 顺序: tick0 NoteOn, tick48 Cc, tick48 Program (同tick保序), tick96 NoteOff; 不含 ch2/Tempo
+        // 查真实 MIDI ch5 → 传 0-based 4
+        let rows = crate::smf::event_list_for_channel(&smf, 4);
         use crate::smf::EventKind;
-        assert_eq!(rows.len(), 4, "ch1 应 4 事件, got {}", rows.len());
+        assert_eq!(rows.len(), 4, "ch5 应 4 事件, got {}", rows.len());
         assert_eq!(rows[0].tick, 0);
         assert!(matches!(rows[0].kind, EventKind::NoteOn { pitch: 60, vel: 100 }));
         assert_eq!(rows[1].tick, 48);
@@ -3943,9 +3962,12 @@ mod tests {
         assert_eq!(rows[3].tick, 96);
         assert!(matches!(rows[3].kind, EventKind::NoteOff { pitch: 60 }));
 
-        // ch2 只有 1 事件 (其 NoteOn)
-        let rows2 = crate::smf::event_list_for_channel(&smf, 2);
-        assert_eq!(rows2.len(), 1, "ch2 应 1 事件");
+        // ch6 (0-based 5) → 1 事件
+        let rows2 = crate::smf::event_list_for_channel(&smf, 5);
+        assert_eq!(rows2.len(), 1, "ch6 应 1 事件");
         assert!(matches!(rows2[0].kind, EventKind::NoteOn { pitch: 62, vel: 80 }));
+        // 传 1-based 4 (错误用法) 不该命中 ch5 → 0 事件 (钉死 0-based 约定)
+        let rows3 = crate::smf::event_list_for_channel(&smf, 3);
+        assert!(rows3.is_empty(), "传 3(1-based ch4) 不应命中 MIDI ch5");
     }
 }
